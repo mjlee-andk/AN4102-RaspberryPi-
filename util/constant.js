@@ -1,0 +1,64 @@
+const WINDOW_WIDTH = 807;
+const WINDOW_HEIGHT = 450;
+
+const PARITY_NONE = '0';
+const PARITY_ODD = '1';
+const PARITY_EVEN = '2';
+
+const CRLF = '1';
+const CR = '2';
+
+const RED = '1';
+const YELLOW = '2';
+const BLUE = '3';
+
+const LOCALSTORAGE_KEY_PORT = 'port';
+const LOCALSTORAGE_KEY_BAUDRATE = 'baudrate';
+const LOCALSTORAGE_KEY_DATABITS = 'databits';
+const LOCALSTORAGE_KEY_PARITY = 'parity';
+const LOCALSTORAGE_KEY_STOPBITS = 'stopbits';
+const LOCALSTORAGE_KEY_TERMINATOR = 'terminator';
+
+const ONE_HUNDRED_MS = 100;
+const FIVE_HUNDRED_MS = 500;
+
+const TAB_SERIAL_CONFIG = 'tab_serial_config';
+const TAB_BASIC_LEFT_CONFIG = 'tab_basic_left_config';
+const TAB_BASIC_RIGHT_CONFIG = 'tab_basic_right_config';
+const TAB_EXTERNAL_PRINT_CONFIG = 'tab_external_print_config';
+const TAB_CALIBRATION_CONFIG = 'tab_calibration_config';
+const TAB_CALIBRATION = 'tab_calibration';
+const TAB_INIT = 'tab_init';
+
+const DEFAULT_SERIAL_PORT_WINDOW = 'COM1';
+const DEFAULT_SERIAL_PORT_LINUX = '/dev/tty_AMA0';
+
+module.exports = {
+  WINDOW_WIDTH,
+  WINDOW_HEIGHT,
+  PARITY_NONE,
+  PARITY_ODD,
+  PARITY_EVEN,
+  CRLF,
+  CR,
+  RED,
+  YELLOW,
+  BLUE,
+  LOCALSTORAGE_KEY_PORT,
+  LOCALSTORAGE_KEY_BAUDRATE,
+  LOCALSTORAGE_KEY_DATABITS,
+  LOCALSTORAGE_KEY_PARITY,
+  LOCALSTORAGE_KEY_STOPBITS,
+  LOCALSTORAGE_KEY_TERMINATOR,
+  ONE_HUNDRED_MS,
+  FIVE_HUNDRED_MS,
+  TAB_SERIAL_CONFIG,
+  TAB_BASIC_LEFT_CONFIG,
+  TAB_BASIC_RIGHT_CONFIG,
+  TAB_EXTERNAL_PRINT_CONFIG,
+  TAB_CALIBRATION_CONFIG,
+  TAB_CALIBRATION,
+  TAB_INIT,
+  DEFAULT_SERIAL_PORT_WINDOW,
+  DEFAULT_SERIAL_PORT_LINUX
+}
