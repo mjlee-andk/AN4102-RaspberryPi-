@@ -4,13 +4,19 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder"
+  },
+  "build": {
+      "productName": "AN4102_raspberryPi",
+      "appId": "AN4102"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "electron": "^10.1.3",
+    "electron-builder": "^22.9.1",
     "electron-rebuild": "^1.11.0"
   },
   "dependencies": {
