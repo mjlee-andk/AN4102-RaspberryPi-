@@ -6,10 +6,10 @@ const YELLOW = '#ffff00';
 const BLUE = '#00b8dd';
 
 module.exports = {
-  RED,
-  ORANGE,
-  GREEN,
-  WHITE,
-  YELLOW,
-  BLUE
+    RED,
+    ORANGE,
+    GREEN,
+    WHITE,
+    YELLOW,
+    BLUE
 }

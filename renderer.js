@@ -39,194 +39,194 @@ let key_btn_subweight_list = document.querySelectorAll(".key_btn_subweight");
 let comp_flag = -1; // 현재 선택한 컴퍼레이터 값 구분자. -1이 아무것도 선택하지 않은 상태
 
 comS1Value.addEventListener("click", function(){
-  if(keypad_subweight.style.display == "none") {
-    if(comp_flag != -1) {
-      return;
+    if(keypad_subweight.style.display == "none") {
+        if(comp_flag != -1) {
+            return;
+        }
+        keypad_subweight.style.display = "block";
+        comS1Value.style.color = COLOR['WHITE'];
+        keypad_subweight.style.right = "30px";
+        keypad_subweight.style.left = "auto";
+        comp_flag = 0;
     }
-    keypad_subweight.style.display = "block";
-    comS1Value.style.color = COLOR['WHITE'];
-    keypad_subweight.style.right = "30px";
-    keypad_subweight.style.left = "auto";
-    comp_flag = 0;
-  }
-  else {
-    if(comp_flag != 0) {
-      return;
+    else {
+        if(comp_flag != 0) {
+            return;
+        }
+        keypad_subweight.style.display = "none";
+        comS1Value.style.color = colorName;
+        comp_flag = -1;
     }
-    keypad_subweight.style.display = "none";
-    comS1Value.style.color = colorName;
-    comp_flag = -1;
-  }
 });
 
 comS2Value.addEventListener("click", function(){
-  if(keypad_subweight.style.display == "none") {
-    if(comp_flag != -1) {
-      return;
+    if(keypad_subweight.style.display == "none") {
+        if(comp_flag != -1) {
+            return;
+        }
+        keypad_subweight.style.display = "block";
+        comS2Value.style.color = COLOR['WHITE'];
+        keypad_subweight.style.right = "30px";
+        keypad_subweight.style.left = "auto";
+        comp_flag = 1;
     }
-    keypad_subweight.style.display = "block";
-    comS2Value.style.color = COLOR['WHITE'];
-    keypad_subweight.style.right = "30px";
-    keypad_subweight.style.left = "auto";
-    comp_flag = 1;
-  }
-  else {
-    if(comp_flag != 1) {
-      return;
+    else {
+        if(comp_flag != 1) {
+            return;
+        }
+        keypad_subweight.style.display = "none";
+        comS2Value.style.color = colorName;
+        comp_flag = -1;
     }
-    keypad_subweight.style.display = "none";
-    comS2Value.style.color = colorName;
-    comp_flag = -1;
-  }
 });
 comS3Value.addEventListener("click", function(){
-  if(keypad_subweight.style.display == "none") {
-    if(comp_flag != -1) {
-      return;
+    if(keypad_subweight.style.display == "none") {
+        if(comp_flag != -1) {
+            return;
+        }
+        keypad_subweight.style.display = "block";
+        comS3Value.style.color = COLOR['WHITE'];
+        keypad_subweight.style.right = "30px";
+        keypad_subweight.style.left = "auto";
+        comp_flag = 2;
     }
-    keypad_subweight.style.display = "block";
-    comS3Value.style.color = COLOR['WHITE'];
-    keypad_subweight.style.right = "30px";
-    keypad_subweight.style.left = "auto";
-    comp_flag = 2;
-  }
-  else {
-    if(comp_flag != 2) {
-      return;
+    else {
+        if(comp_flag != 2) {
+            return;
+        }
+        keypad_subweight.style.display = "none";
+        comS3Value.style.color = colorName;
+        comp_flag = -1;
     }
-    keypad_subweight.style.display = "none";
-    comS3Value.style.color = colorName;
-    comp_flag = -1;
-  }
 });
 comS4Value.addEventListener("click", function(){
-  if(keypad_subweight.style.display == "none") {
-    if(comp_flag != -1) {
-      return;
+    if(keypad_subweight.style.display == "none") {
+        if(comp_flag != -1) {
+            return;
+        }
+        keypad_subweight.style.display = "block";
+        keypad_subweight.style.right = "auto";
+        keypad_subweight.style.left = "30px";
+        comS4Value.style.color = COLOR['WHITE'];
+        comp_flag = 3;
     }
-    keypad_subweight.style.display = "block";
-    keypad_subweight.style.right = "auto";
-    keypad_subweight.style.left = "30px";
-    comS4Value.style.color = COLOR['WHITE'];
-    comp_flag = 3;
-  }
-  else {
-    if(comp_flag != 3) {
-      return;
+    else {
+        if(comp_flag != 3) {
+            return;
+        }
+        keypad_subweight.style.display = "none";
+        comS4Value.style.color = colorName;
+        comp_flag = -1;
     }
-    keypad_subweight.style.display = "none";
-    comS4Value.style.color = colorName;
-    comp_flag = -1;
-  }
 });
 comS5Value.addEventListener("click", function(){
-  if(keypad_subweight.style.display == "none") {
-    if(comp_flag != -1) {
-      return;
+    if(keypad_subweight.style.display == "none") {
+        if(comp_flag != -1) {
+            return;
+        }
+        keypad_subweight.style.display = "block";
+        keypad_subweight.style.right = "auto";
+        keypad_subweight.style.left = "30px";
+        comS5Value.style.color = COLOR['WHITE'];
+        comp_flag = 4;
     }
-    keypad_subweight.style.display = "block";
-    keypad_subweight.style.right = "auto";
-    keypad_subweight.style.left = "30px";
-    comS5Value.style.color = COLOR['WHITE'];
-    comp_flag = 4;
-  }
-  else {
-    if(comp_flag != 4) {
-      return;
+    else {
+        if(comp_flag != 4) {
+            return;
+        }
+        keypad_subweight.style.display = "none";
+        comS5Value.style.color = colorName;
+        comp_flag = -1;
     }
-    keypad_subweight.style.display = "none";
-    comS5Value.style.color = colorName;
-    comp_flag = -1;
-  }
 });
 
 key_subweight_list.forEach((item, index) => {
-  item.addEventListener("click", (event) => {
-    let comp_value;
-    if(comp_flag == 0) {
-      comp_value = comS1Value;
-    }
-    else if(comp_flag == 1) {
-      comp_value = comS2Value;
-    }
-    else if(comp_flag == 2) {
-      comp_value = comS3Value;
-    }
-    else if(comp_flag == 3) {
-      comp_value = comS4Value;
-    }
-    else if(comp_flag == 4) {
-      comp_value = comS5Value;
-    }
+    item.addEventListener("click", (event) => {
+        let comp_value;
+        if(comp_flag == 0) {
+            comp_value = comS1Value;
+        }
+        else if(comp_flag == 1) {
+            comp_value = comS2Value;
+        }
+        else if(comp_flag == 2) {
+            comp_value = comS3Value;
+        }
+        else if(comp_flag == 3) {
+            comp_value = comS4Value;
+        }
+        else if(comp_flag == 4) {
+            comp_value = comS5Value;
+        }
 
-    let numBoxValue = comp_value.innerHTML;
-    let numBoxLength = comp_value.innerHTML.length;
-    let keyValue = item.innerHTML;
+        let numBoxValue = comp_value.innerHTML;
+        let numBoxLength = comp_value.innerHTML.length;
+        let keyValue = item.innerHTML;
 
-    // 최대 6자리까지 입력가능
-    if(numBoxLength >= 6) {
-      return;
-    }
+        // 최대 6자리까지 입력가능
+        if(numBoxLength >= 6) {
+            return;
+        }
 
-    // 현재 값이 0인 경우
-    if(numBoxValue == 0) {
-      comp_value.innerHTML = keyValue;
-    }
-    // 현재 값이 0이 아닌 경우
-    else {
-      comp_value.innerHTML = comp_value.innerHTML + keyValue;
-    }
-  })
+        // 현재 값이 0인 경우
+        if(numBoxValue == 0) {
+            comp_value.innerHTML = keyValue;
+        }
+        // 현재 값이 0이 아닌 경우
+        else {
+            comp_value.innerHTML = comp_value.innerHTML + keyValue;
+        }
+    })
 })
 
 key_btn_subweight_list.forEach((item, index) => {
-  item.addEventListener("click", (event) => {
-    let comp_value;
-    if(comp_flag == 0) {
-      comp_value = comS1Value;
-    }
-    else if(comp_flag == 1) {
-      comp_value = comS2Value;
-    }
-    else if(comp_flag == 2) {
-      comp_value = comS3Value;
-    }
-    else if(comp_flag == 3) {
-      comp_value = comS4Value;
-    }
-    else if(comp_flag == 4) {
-      comp_value = comS5Value;
-    }
+    item.addEventListener("click", (event) => {
+        let comp_value;
+        if(comp_flag == 0) {
+            comp_value = comS1Value;
+        }
+        else if(comp_flag == 1) {
+            comp_value = comS2Value;
+        }
+        else if(comp_flag == 2) {
+            comp_value = comS3Value;
+        }
+        else if(comp_flag == 3) {
+            comp_value = comS4Value;
+        }
+        else if(comp_flag == 4) {
+            comp_value = comS5Value;
+        }
 
-    let numBoxValue = comp_value.innerHTML;
-    let inputValLength = comp_value.innerHTML.length;
-    let keyValue = item.innerHTML;
+        let numBoxValue = comp_value.innerHTML;
+        let inputValLength = comp_value.innerHTML.length;
+        let keyValue = item.innerHTML;
 
-    if(keyValue == '삭제'){
-      if(inputValLength <= 0) {
-        return;
-      }
-      comp_value.innerHTML = comp_value.innerHTML.substring(0, inputValLength - 1);
-    }
-    else if(keyValue == '확인'){
-      if(inputValLength == 0) {
-        alert('값을 입력해주세요.');
-        return;
-      }
-      setCompValue(comp_flag, comp_value.innerHTML);
-      keypad_subweight.style.display = "none";
-      comp_value.style.color = colorName;
-      comp_flag = -1;
-    }
-  })
+        if(keyValue == '삭제'){
+            if(inputValLength <= 0) {
+                return;
+            }
+            comp_value.innerHTML = comp_value.innerHTML.substring(0, inputValLength - 1);
+        }
+        else if(keyValue == '확인'){
+            if(inputValLength == 0) {
+                alert('값을 입력해주세요.');
+                return;
+            }
+            setCompValue(comp_flag, comp_value.innerHTML);
+            keypad_subweight.style.display = "none";
+            comp_value.style.color = colorName;
+            comp_flag = -1;
+        }
+    })
 });
 
 let setCompValue = function(flag, value) {
-  let comp_value = {
-    flag: flag,
-    value:value
-  }
-  ipcRenderer.send('set_comp_value', comp_value);
+    let comp_value = {
+        flag: flag,
+        value:value
+    }
+    ipcRenderer.send('set_comp_value', comp_value);
 }
 
 // 메인 동작 관련 커맨드 버튼
@@ -238,106 +238,104 @@ let printButton = document.getElementById("print");
 let onOffButton = document.getElementById("onOff");
 
 openPCConfigWindowButton.addEventListener('click', function(){
-  console.log('openPCConfigWindowButton');
-  ipcRenderer.send('open_pc_config_window', 'ok');
+    console.log('openPCConfigWindowButton');
+    ipcRenderer.send('open_pc_config_window', 'ok');
 })
 
 openConfigWindowButton.addEventListener('click', function(){
-  console.log('openConfigWindowButton');
-  ipcRenderer.send('open_config_window', 'ok');
+    console.log('openConfigWindowButton');
+    ipcRenderer.send('open_config_window', 'ok');
 })
 
 closeMainWindowButton.addEventListener('click', function(){
-  console.log('closeMainWindowButton');
+    console.log('closeMainWindowButton');
 
-  ipcRenderer.send('set_stream_mode', 'ok');
-  closeWindow();
+    ipcRenderer.send('set_stream_mode', 'ok');
+    closeWindow();
 })
 
 ipcRenderer.on('set_font_color', (event, data) => {
-  setFontColor(data)
+    setFontColor(data)
 });
 
 let setFontColor = function(color) {
+    if(color == RED) {
+        colorName = COLOR['RED'];
+    }
+    else if(color == YELLOW) {
+        colorName = COLOR['YELLOW'];
+    }
+    else {
+        colorName = COLOR['BLUE'];
+    }
+    displayMsg.style.color = colorName;
+    unitTag.style.color = colorName;
 
-  if(color == RED) {
-    colorName = COLOR['RED'];
-  }
-  else if(color == YELLOW) {
-    colorName = COLOR['YELLOW'];
-  }
-  else {
-    colorName = COLOR['BLUE'];
-  }
-  displayMsg.style.color = colorName;
-  unitTag.style.color = colorName;
-
-  for(i = 0; i < subWeight.length; i++) {
-    subWeight[i].style.color = colorName;
-  }
+    for(i = 0; i < subWeight.length; i++) {
+        subWeight[i].style.color = colorName;
+    }
 }
 
 ipcRenderer.on('rx_data', (event, data) => {
-  displayMsg.innerHTML = data.displayMsg;
+    displayMsg.innerHTML = data.displayMsg;
 
-  // 단위 표시
-  if(data.unit == 1) {
-    unitTag.innerHTML = 'g';
-  }
-  else if(data.unit == 2) {
-    unitTag.innerHTML = 'kg';
-  }
-  else if(data.unit == 3) {
-    unitTag.innerHTML = 't';
-  }
-  else {
-    unitTag.innerHTML = '';
-  }
+    // 단위 표시
+    if(data.unit == 1) {
+        unitTag.innerHTML = 'g';
+    }
+    else if(data.unit == 2) {
+        unitTag.innerHTML = 'kg';
+    }
+    else if(data.unit == 3) {
+        unitTag.innerHTML = 't';
+    }
+    else {
+        unitTag.innerHTML = '';
+    }
 
-  // 상태 표시
-  if(data.isStable) {
-    labelStableClass.style.color = colorName;
-  }
-  else {
-    labelStableClass.style.color = COLOR['WHITE'];
-  }
+    // 상태 표시
+    if(data.isStable) {
+        labelStableClass.style.color = colorName;
+    }
+    else {
+        labelStableClass.style.color = COLOR['WHITE'];
+    }
 
-  if(data.isHold) {
-    labelHoldClass.style.color = colorName;
-  }
-  else {
-    labelHoldClass.style.color = COLOR['WHITE'];
-  }
+    if(data.isHold) {
+        labelHoldClass.style.color = colorName;
+    }
+    else {
+        labelHoldClass.style.color = COLOR['WHITE'];
+    }
 
-  if(data.isZero) {
-    labelZeroClass.style.color = colorName;
-  }
-  else {
-    labelZeroClass.style.color = COLOR['WHITE'];
-  }
+    if(data.isZero) {
+        labelZeroClass.style.color = colorName;
+    }
+    else {
+        labelZeroClass.style.color = COLOR['WHITE'];
+    }
 
-  if(data.isNet) {
-    labelNetClass.style.color = colorName;
-  }
-  else {
-    labelNetClass.style.color = COLOR['WHITE'];
-  }
+    if(data.isNet) {
+        labelNetClass.style.color = colorName;
+    }
+    else {
+        labelNetClass.style.color = COLOR['WHITE'];
+    }
 
-  // 컴퍼레이터 설정
-  if(data.comparator) {
-    comS1Title.innerHTML = data.s1_title;
-    comS2Title.innerHTML = data.s2_title;
-    comS3Title.innerHTML = data.s3_title;
-    comS4Title.innerHTML = data.s4_title;
-    comS5Title.innerHTML = data.s5_title;
+    // 컴퍼레이터 설정
+    if(data.comparator) {
+        comS1Title.innerHTML = data.s1_title;
+        comS2Title.innerHTML = data.s2_title;
+        comS3Title.innerHTML = data.s3_title;
+        comS4Title.innerHTML = data.s4_title;
+        comS5Title.innerHTML = data.s5_title;
 
-    comS1Value.innerHTML = data.s1_value;
-    comS2Value.innerHTML = data.s2_value;
-    comS3Value.innerHTML = data.s3_value;
-    comS4Value.innerHTML = data.s4_value;
-    comS5Value.innerHTML = data.s5_value;
-  }
-
+        comS1Value.innerHTML = data.s1_value;
+        comS2Value.innerHTML = data.s2_value;
+        comS3Value.innerHTML = data.s3_value;
+        comS4Value.innerHTML = data.s4_value;
+        comS5Value.innerHTML = data.s5_value;
+    }
 })
 
 ipcRenderer.on('print', (event, data) => {
@@ -345,75 +343,75 @@ ipcRenderer.on('print', (event, data) => {
 });
 
 ipcRenderer.on('main_button_active', (event, isActive) => {
-  // 프로그램 ON 상태
-  if(!isActive) {
-    setClearTareButton.disabled = true;
-    setZeroTareButton.disabled = true;
-    setGrossNetButton.disabled = true;
-    setHoldButton.disabled = true;
-    printButton.disabled = true;
-    openConfigWindowButton.disabled = true;
-  }
-  // 프로그램 OFF 상태
-  else {
-    setClearTareButton.disabled = false;
-    setZeroTareButton.disabled = false;
-    setGrossNetButton.disabled = false;
-    setHoldButton.disabled = false;
-    printButton.disabled = false;
-    openConfigWindowButton.disabled = false;
-  }
+    // 프로그램 ON 상태
+    if(!isActive) {
+        setClearTareButton.disabled = true;
+        setZeroTareButton.disabled = true;
+        setGrossNetButton.disabled = true;
+        setHoldButton.disabled = true;
+        printButton.disabled = true;
+        openConfigWindowButton.disabled = true;
+    }
+    // 프로그램 OFF 상태
+    else {
+        setClearTareButton.disabled = false;
+        setZeroTareButton.disabled = false;
+        setGrossNetButton.disabled = false;
+        setHoldButton.disabled = false;
+        printButton.disabled = false;
+        openConfigWindowButton.disabled = false;
+    }
 })
 
 setClearTareButton.addEventListener('click', function(){
-  ipcRenderer.send('set_clear_tare', 'ok');
+      ipcRenderer.send('set_clear_tare', 'ok');
 })
 
 setZeroTareButton.addEventListener('click', function(){
-  ipcRenderer.send('set_zero_tare', 'ok');
+      ipcRenderer.send('set_zero_tare', 'ok');
 })
 
 setGrossNetButton.addEventListener('click', function(){
-  ipcRenderer.send('set_gross_net', 'ok');
+      ipcRenderer.send('set_gross_net', 'ok');
 })
 
 setHoldButton.addEventListener('click', function(){
-  ipcRenderer.send('set_hold', 'ok');
+      ipcRenderer.send('set_hold', 'ok');
 })
 
 printButton.addEventListener('click', function(){
-  ipcRenderer.send('print', 'ok');
+    ipcRenderer.send('print', 'ok');
 })
 
 onOffButton.addEventListener('click', function(){
-  setOnOffView();
+    setOnOffView();
 })
 
 let closeWindow = function() {
-  ipcRenderer.send('window_close', 'main');
+    ipcRenderer.send('window_close', 'main');
 }
 
 let setOnOffView = function() {
-  let onoffLabel = onOffButton.innerHTML;
+    let onoffLabel = onOffButton.innerHTML;
 
-  // 프로그램 시작
-  if(onoffLabel == 'ON') {
-    onOffButton.innerHTML = 'OFF';
-    openPCConfigWindowButton.disabled = true;
-  }
-  // 프로그램 종료
-  else {
-    onOffButton.innerHTML = 'ON';
-    openPCConfigWindowButton.disabled = false;
+    // 프로그램 시작
+    if(onoffLabel == 'ON') {
+        onOffButton.innerHTML = 'OFF';
+        openPCConfigWindowButton.disabled = true;
+    }
+    // 프로그램 종료
+    else {
+        onOffButton.innerHTML = 'ON';
+        openPCConfigWindowButton.disabled = false;
 
-    displayMsg.innerHTML = '888888';
-    unitTag.innerHTML = '';
+        displayMsg.innerHTML = '888888';
+        unitTag.innerHTML = '';
 
-    labelStableClass.style.color = COLOR['WHITE'];
-    labelHoldClass.style.color = COLOR['WHITE'];
-    labelZeroClass.style.color = COLOR['WHITE'];
-    labelNetClass.style.color = COLOR['WHITE'];
-  }
+        labelStableClass.style.color = COLOR['WHITE'];
+        labelHoldClass.style.color = COLOR['WHITE'];
+        labelZeroClass.style.color = COLOR['WHITE'];
+        labelNetClass.style.color = COLOR['WHITE'];
+    }
 
-  ipcRenderer.send('on_off', onoffLabel);
+    ipcRenderer.send('on_off', onoffLabel);
 }
