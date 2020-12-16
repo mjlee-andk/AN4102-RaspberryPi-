@@ -1,270 +1,163 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>AN4102(RaspberryPi) 기기설정</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>AN4102(RaspberryPi) 기기설정</title>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <script>
-      window.onload = function() {
-        require('../logic/pcconfig');
-      }
-    </script>
-    <style>
-      @font-face {
-        font-family: 'SegmentA1';
-        src: url(./fonts/SEA_____.TTF) format('truetype');
-      }
-      body {
-        background-color: #d4cfbb;
-        padding: 20px;
-      }
-
-      .upper_container {
-        padding-left: 10px;
-        padding-right: 10px;
-        padding-top: 10px;
-      }
-
-      .upper_container span {
-        font-size: 30px;
-      }
-
-      .logo {
-        width: auto;
-        height: auto;
-        max-width: 120px;
-        max-height: 120px;
-      }
-      .button_container {
-        display: inline-block;
-        float: right;
-      }
-
-      .button_container button {
-        width: 80px;
-        height: 50px;
-        background-color: #000000;
-        color: #ffffff;
-        border: solid 2px #ffffff;
-        border-radius: 12px;
-      }
-
-      .main_container {
-        background-color: #000000;
-        border-radius: 35px;
-        margin-top: 20px;
-        padding-bottom: 15px;
-        padding-top: 10px;
-        font-size: 20px;
-      }
-
-      .main_display {
-        color: #00b8dd;
-        text-align: center;
-      }
-
-      .main_weight {
-        display: inline-block;
-        text-align: right;
-        width: 80%;
-      }
-
-      .main_unit {
-        display: inline-block;
-        width: 10%;
-      }
-
-      .row_container {
-        padding-top: 10px;
-      }
-
-      .row_container div {
-        display: inline-block;
-      }
-
-      .row_title {
-        color: #ffffff;
-        width: 20%;
-        margin-left: 40px;
-      }
-
-      .row_content {
-        color: #ffffff;
-        width: 70%;
-      }
-
-      .row_item {
-        width: 30%;
-      }
-
-      #displayMsg {
-        font-family: SegmentA1;
-        font-size: 128px;
-      }
-      #unit {
-        font-size: 40px;
-        font-weight: bold;
-      }
-
-      select {
-        width: 50%;
-        height: 30px;
-        padding-left: 5px;
-        font-size: 15px;
-        color: black;
-        border-radius:3px;
-        border: 1px solid black;
-      }
-    </style>
-  </head>
-  <body>
-    <!--Header-->
-    <div>
-      <div class="upper_container">
-        <span>DEVICE PROTOCOL</span>
-        <!--Button Container-->
-        <div class="button_container">
-          <button type="button" target="_blank" id="pcConfigOkButton">CONFIRM</button>
-          <button type="button" target="_blank" id="pcConfigCloseButton">BACK</button>
+        <script>
+            window.onload = function() {
+                require('../logic/pcconfig');
+            }
+        </script>
+        <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    </head>
+    <body>
+        <!--Header-->
+        <div>
+            <div class="upper_container">
+                <span class="upper_title">DEVICE PROTOCOL</span>
+                <!--Button Container-->
+                <div class="button_container">
+                    <button type="button" target="_blank" id="pcConfigOkButton">CONFIRM</button>
+                    <button type="button" target="_blank" id="pcConfigCloseButton">BACK</button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <!--Body-->
-    <div>
-      <div class="main_container">
-        <div class="row_container">
-          <div class="row_title">
-            <span>Port</span>
-          </div>
-          <div class="row_content">
-            <select id="portSelect">
-            </select>
-          </div>
+        <!--Body-->
+        <div>
+            <div class="main_container">
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Port</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="portSelect">
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Baudrate</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="baudrateSelect">
+                            <option value="24">2400</option>
+                            <option value="48">4800</option>
+                            <option value="96">9600</option>
+                            <option value="192">19200</option>
+                            <option value="384">38400</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Databits</span>
+                    </div>
+                    <div class="row_content">
+                        <div class="row_item">
+                            <input type="radio" name="dataBitsRadios" id="dataBitsRadios1" value="7">
+                            <label for="dataBitsRadios1">
+                            7bits
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="dataBitsRadios" id="dataBitsRadios2" value="8">
+                            <label for="dataBitsRadios2">
+                            8bits
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Parity</span>
+                    </div>
+                    <div class="row_content">
+                        <div class="row_item">
+                            <input class="form-check-input" type="radio" name="parityRadios" id="parityRadios1" value="0">
+                            <label class="form-check-label" for="parityRadios1">
+                            None
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input class="form-check-input" type="radio" name="parityRadios" id="parityRadios2" value="1">
+                            <label class="form-check-label" for="parityRadios2">
+                            Odd
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input class="form-check-input" type="radio" name="parityRadios" id="parityRadios3" value="2">
+                            <label class="form-check-label" for="parityRadios3">
+                            Even
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Stopbits</span>
+                    </div>
+                    <div class="row_content">
+                        <div class="row_item">
+                            <input type="radio" name="stopbitsRadios" id="stopbitsRadios1" value="1">
+                            <label for="stopbitsRadios1">
+                            1bit
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="stopbitsRadios" id="stopbitsRadios2" value="2">
+                            <label for="stopbitsRadios2">
+                            2bits
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Terminator</span>
+                    </div>
+                    <div class="row_content">
+                        <div class="row_item">
+                            <input type="radio" name="terminatorRadios" id="terminatorRadios1" value="1">
+                            <label for="terminatorRadios1">
+                            CRLF
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="terminatorRadios" id="terminatorRadios2" value="2">
+                            <label for="terminatorRadios2">
+                            CR
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Font Color</span>
+                    </div>
+                    <div class="row_content">
+                        <div class="row_item">
+                            <input type="radio" name="fontColorRadios" id="fontColorRadios1" value="1">
+                            <label for="fontColorRadios1" style="color:#ff0000">
+                            Red
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="fontColorRadios" id="fontColorRadios2" value="2">
+                            <label for="fontColorRadios2" style="color:#ffff00">
+                            YELLOW
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="fontColorRadios" id="fontColorRadios3" value="3">
+                            <label for="fontColorRadios3" style="color:#00b8dd">
+                            Blue
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>Baudrate</span>
-          </div>
-          <div class="row_content">
-            <select id="baudrateSelect">
-                <option value="24">2400</option>
-                <option value="48">4800</option>
-                <option value="96">9600</option>
-                <option value="192">19200</option>
-                <option value="384">38400</option>
-            </select>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>Databits</span>
-          </div>
-          <div class="row_content">
-            <div class="row_item">
-              <input type="radio" name="dataBitsRadios" id="dataBitsRadios1" value="7">
-              <label for="dataBitsRadios1">
-                7bits
-              </label>
-            </div>
-            <div class="row_item">
-              <input type="radio" name="dataBitsRadios" id="dataBitsRadios2" value="8">
-              <label for="dataBitsRadios2">
-                8bits
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>Parity</span>
-          </div>
-          <div class="row_content">
-            <div class="row_item">
-              <input class="form-check-input" type="radio" name="parityRadios" id="parityRadios1" value="0">
-              <label class="form-check-label" for="parityRadios1">
-                None
-              </label>
-            </div>
-            <div class="row_item">
-              <input class="form-check-input" type="radio" name="parityRadios" id="parityRadios2" value="1">
-              <label class="form-check-label" for="parityRadios2">
-                Odd
-              </label>
-            </div>
-            <div class="row_item">
-              <input class="form-check-input" type="radio" name="parityRadios" id="parityRadios3" value="2">
-              <label class="form-check-label" for="parityRadios3">
-                Even
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>Stopbits</span>
-          </div>
-          <div class="row_content">
-            <div class="row_item">
-              <input type="radio" name="stopbitsRadios" id="stopbitsRadios1" value="1">
-              <label for="stopbitsRadios1">
-                1bit
-              </label>
-            </div>
-            <div class="row_item">
-              <input type="radio" name="stopbitsRadios" id="stopbitsRadios2" value="2">
-              <label for="stopbitsRadios2">
-                2bits
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>Terminator</span>
-          </div>
-          <div class="row_content">
-            <div class="row_item">
-              <input type="radio" name="terminatorRadios" id="terminatorRadios1" value="1">
-              <label for="terminatorRadios1">
-                CRLF
-              </label>
-            </div>
-            <div class="row_item">
-              <input type="radio" name="terminatorRadios" id="terminatorRadios2" value="2">
-              <label for="terminatorRadios2">
-                CR
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>Font Color</span>
-          </div>
-          <div class="row_content">
-            <div class="row_item">
-              <input type="radio" name="fontColorRadios" id="fontColorRadios1" value="1">
-              <label for="fontColorRadios1" style="color:#ff0000">
-                Red
-              </label>
-            </div>
-            <div class="row_item">
-              <input type="radio" name="fontColorRadios" id="fontColorRadios2" value="2">
-              <label for="fontColorRadios2" style="color:#ffff00">
-                YELLOW
-              </label>
-            </div>
-            <div class="row_item">
-              <input type="radio" name="fontColorRadios" id="fontColorRadios3" value="3">
-              <label for="fontColorRadios3" style="color:#00b8dd">
-                Blue
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </body>
+    </body>
 </html>

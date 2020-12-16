@@ -1,764 +1,595 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>AN4102(RaspberryPi) 설정</title>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>AN4102(RaspberryPi) 설정</title>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <script>
+            window.onload = function() {
+                require('../logic/config');
+            }
+        </script>
+        <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="../css/tenkey.css"/>
 
-    <script>
-      window.onload = function() {
-        require('../logic/config');
-      }
-    </script>
+        <!--슬라이더 css-->
+        <style>
+          .slider {
+            -webkit-appearance: none;
+            width: 80%;
+            height: 25px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+          }
 
-    <!--기본 css-->
-    <style>
-      @font-face {
-        font-family: 'SegmentA1';
-        src: url(./fonts/SEA_____.TTF) format('truetype');
-      }
-      body {
-        background-color: #d4cfbb;
-        padding: 20px;
-      }
+          .slider:hover {
+            opacity: 1;
+          }
 
-      .upper_container {
-        padding-left: 10px;
-        padding-right: 10px;
-        padding-top: 10px;
-      }
+          .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #4CAF50;
+            cursor: pointer;
+          }
 
-      .upper_container .upper_title {
-        font-size: 30px;
-      }
+          .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            background: #4CAF50;
+            cursor: pointer;
+          }
+        </style>
 
-      .logo {
-        width: auto;
-        height: auto;
-        max-width: 120px;
-        max-height: 120px;
-      }
-      .button_container {
-        display: flex;
-        float: right;
-      }
+        <!--토글 버튼 css-->
+        <style>
+          .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 30px;
+            vertical-align:middle;
+          }
 
-      .button_container button {
-        width: 80px;
-        height: 50px;
-        background-color: #000000;
-        color: #ffffff;
-        border: solid 2px #ffffff;
-        border-radius: 12px;
-      }
+          /* Hide default HTML checkbox */
+          .switch input {display:none;}
 
-      .main_container {
-        background-color: #000000;
-        border-radius: 35px;
-        margin-top: 20px;
-        padding-bottom: 15px;
-        padding-top: 10px;
-        font-size: 20px;
-      }
+          /* The slider */
+          .toggle_slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            margin-left: 0px !important;
+          }
 
-      .main_display {
-        color: #00b8dd;
-        text-align: center;
-      }
+          .toggle_slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+          }
 
-      .main_weight {
-        display: inline-block;
-        text-align: right;
-        width: 80%;
-      }
+          input:checked + .toggle_slider {
+            background-color: #2196F3;
+          }
 
-      .main_unit {
-        display: inline-block;
-        width: 10%;
-      }
+          input:focus + .toggle_slider {
+            box-shadow: 0 0 1px #2196F3;
+          }
 
-      .row_container {
-        padding-top: 10px;
-        display: flex;
-      }
+          input:checked + .toggle_slider:before {
+            -webkit-transform: translateX(22px);
+            -ms-transform: translateX(22px);
+            transform: translateX(22px);
+          }
 
-      .row_container div {
-        display: flex;
-        align-items: center;
-      }
+          /* Rounded sliders */
+          .toggle_slider.round {
+            border-radius: 34px;
+          }
 
-      .row_title {
-        color: #ffffff;
-        width: 25%;
-        margin-left: 40px;
-      }
-
-      .row_content {
-        /* color: #00b8dd; */
-        color: #ffffff;
-        width: 65%;
-      }
-
-      .row_content span {
-        margin-left: 10px;
-      }
-
-      .row_item {
-        width: 30%;
-      }
-
-      #displayMsg {
-        font-family: SegmentA1;
-        font-size: 128px;
-      }
-      #unit {
-        font-size: 40px;
-        font-weight: bold;
-      }
-      .bottom_btn_container {
-        /* margin-top: 15px; */
-        display: flex;
-        /* justify-content: center; */
-        position: fixed;
-        bottom: 0;
-        margin-bottom: 20px;
-        /* width: 100%; */
-      }
-
-      .btn_frame {
-          display: inline-block;
-          margin-left: 12px;
-          margin-right: 15px;
-      }
-
-      .btn_frame button {
-        width: 80px;
-        height: 70px;
-        background-color: #000000;
-        color: #ffffff;
-        border: solid 1px #000000;
-        border-radius: 12px;
-      }
-
-      select {
-        width: 50%;
-        height: 30px;
-        padding-left: 5px;
-        font-size: 15px;
-        color: black;
-        border-radius:3px;
-        border: 1px solid black;
-      }
-    </style>
-
-    <!--슬라이더 css-->
-    <style>
-      .slider {
-        -webkit-appearance: none;
-        width: 80%;
-        height: 25px;
-        background: #d3d3d3;
-        outline: none;
-        opacity: 0.7;
-        -webkit-transition: .2s;
-        transition: opacity .2s;
-      }
-
-      .slider:hover {
-        opacity: 1;
-      }
-
-      .slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 25px;
-        height: 25px;
-        background: #4CAF50;
-        cursor: pointer;
-      }
-
-      .slider::-moz-range-thumb {
-        width: 25px;
-        height: 25px;
-        background: #4CAF50;
-        cursor: pointer;
-      }
-    </style>
-
-    <!--토글 버튼 css-->
-    <style>
-      .switch {
-        position: relative;
-        display: inline-block;
-        width: 52px;
-        height: 30px;
-        vertical-align:middle;
-      }
-
-      /* Hide default HTML checkbox */
-      .switch input {display:none;}
-
-      /* The slider */
-      .toggle_slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        -webkit-transition: .4s;
-        transition: .4s;
-        margin-left: 0px !important;
-      }
-
-      .toggle_slider:before {
-        position: absolute;
-        content: "";
-        height: 22px;
-        width: 22px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
-      }
-
-      input:checked + .toggle_slider {
-        background-color: #2196F3;
-      }
-
-      input:focus + .toggle_slider {
-        box-shadow: 0 0 1px #2196F3;
-      }
-
-      input:checked + .toggle_slider:before {
-        -webkit-transform: translateX(22px);
-        -ms-transform: translateX(22px);
-        transform: translateX(22px);
-      }
-
-      /* Rounded sliders */
-      .toggle_slider.round {
-        border-radius: 34px;
-      }
-
-      .toggle_slider.round:before {
-        border-radius: 50%;
-      }
-    </style>
-
-    <!--TEN KEY css-->
-    <style>
-      .keypad {
-        position: absolute;
-        top: 50px;
-        right: 30px;
-      }
-      #keyboard {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-      #keyboard li {
-        float: left;
-        margin: 0 5px 5px 0;
-        width: 70px;
-        height: 70px;
-        font-size: 30px;
-        line-height: 60px;
-        text-align: center;
-        background: #fff;
-        border: 1px solid #f9f9f9;
-        border-radius: 5px;
-      }
-      .clearl {
-        clear: left;
-      }
-    </style>
-  </head>
-  <body>
-    <!--Header-->
-    <div>
-      <div class="upper_container">
-        <span class="upper_title">CONFIG</span>
-        <span class="ml-3">ROM Ver. </span><span id="romVer"></span>
-        <!--Button Container-->
-        <div class="button_container">
-          <button type="button" target="_blank" id="configOk">CONFIRM</button>
-          <button type="button" target="_blank" id="closeConfigWindow">BACK</button>
-        </div>
-      </div>
-    </div>
-
-    <!--Body-->
-    <div>
-      <!--통신설정-->
-      <div id="serialDiv" class="main_container" style="display:block">
-        <div class="row_container">
-          <div class="row_title">
-            <span>Baudrate</span>
-          </div>
-          <div class="row_content">
-            <select id="baudrateSelect">
-                <option value="24">2400</option>
-                <option value="48">4800</option>
-                <option value="96">9600</option>
-                <option value="192">19200</option>
-                <option value="384">38400</option>
-            </select>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>Databits</span>
-          </div>
-          <div class="row_content">
-            <div class="row_item">
-              <input type="radio" name="dataBitsRadios" id="dataBitsRadios1" value="7">
-              <label for="dataBitsRadios1">
-                7bits
-              </label>
+          .toggle_slider.round:before {
+            border-radius: 50%;
+          }
+        </style>
+    </head>
+    <body>
+        <!--Header-->
+        <div>
+            <div class="upper_container">
+                <span class="upper_title">CONFIG</span>
+                <span>ROM Ver. </span><span id="romVer"></span>
+                <!--Button Container-->
+                <div class="button_container">
+                    <button type="button" target="_blank" id="configOk">CONFIRM</button>
+                    <button type="button" target="_blank" id="closeConfigWindow">BACK</button>
+                </div>
             </div>
-            <div class="row_item">
-              <input type="radio" name="dataBitsRadios" id="dataBitsRadios2" value="8">
-              <label for="dataBitsRadios2">
-                8bits
-              </label>
+        </div>
+
+        <!--Body-->
+        <div>
+            <!--통신설정-->
+            <div id="serialDiv" class="main_container" style="display:block">
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Baudrate</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="baudrateSelect">
+                            <option value="24">2400</option>
+                            <option value="48">4800</option>
+                            <option value="96">9600</option>
+                            <option value="192">19200</option>
+                            <option value="384">38400</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Databits</span>
+                    </div>
+                    <div class="row_content">
+                        <div class="row_item">
+                            <input type="radio" name="dataBitsRadios" id="dataBitsRadios1" value="7">
+                            <label for="dataBitsRadios1">
+                            7bits
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="dataBitsRadios" id="dataBitsRadios2" value="8">
+                            <label for="dataBitsRadios2">
+                            8bits
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Parity</span>
+                    </div>
+                    <div class="row_content">
+                        <div class="row_item">
+                            <input type="radio" name="parityRadios" id="parityRadios1" value="0">
+                            <label for="parityRadios1">
+                            None
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="parityRadios" id="parityRadios2" value="1">
+                            <label for="parityRadios2">
+                            Odd
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="parityRadios" id="parityRadios3" value="2">
+                            <label for="parityRadios3">
+                            Even
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Stopbits</span>
+                    </div>
+                    <div class="row_content">
+                        <div class="row_item">
+                            <input type="radio" name="stopbitsRadios" id="stopbitsRadios1" value="1">
+                            <label for="stopbitsRadios1">
+                            1bit
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="stopbitsRadios" id="stopbitsRadios2" value="2">
+                            <label for="stopbitsRadios2">
+                            2bits
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Terminator</span>
+                    </div>
+                    <div class="row_content">
+                        <div class="row_item">
+                            <input type="radio" name="terminatorRadios" id="terminatorRadios1" value="1">
+                            <label for="terminatorRadios1">
+                            CRLF
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="terminatorRadios" id="terminatorRadios2" value="2">
+                            <label for="terminatorRadios2">
+                            CR
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>Parity</span>
-          </div>
-          <div class="row_content">
-            <div class="row_item">
-              <input type="radio" name="parityRadios" id="parityRadios1" value="0">
-              <label for="parityRadios1">
-                None
-              </label>
+
+            <!--기본설정 좌(I)-->
+            <div id="basicLeftDiv" class="main_container" style="display:none;">
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>디지털필터</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="digitalFilterSelect">
+                            <option value="0">없음</option>
+                            <option value="1">2.5Hz</option>
+                            <option value="2">2.0Hz</option>
+                            <option value="3">1.5Hz</option>
+                            <option value="4">1.0Hz</option>
+                            <option value="5">0.7Hz</option>
+                            <option value="6">0.5Hz</option>
+                            <option value="7">0.35Hz</option>
+                            <option value="8">0.25Hz</option>
+                            <option value="9">0.20Hz</option>
+                            <option value="10">0.15Hz</option>
+                            <option value="11">0.10Hz</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>홀드모드</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="holdModeSelect">
+                            <option value="0">홀드하지 않음</option>
+                            <option value="1">샘플 홀드</option>
+                            <option value="2">피크 홀드</option>
+                            <option value="3">버튼 홀드</option>
+                            <option value="4">양극성, 피크 홀드</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>평균화 시간</span>
+                    </div>
+                    <div class="row_content">
+                        <input type="range" min="0" max="99" class="slider" id="averageTimeSlider">
+                        <span id="averageTimeSliderValue"></span>
+                    </div>
+                </div>
             </div>
-            <div class="row_item">
-              <input type="radio" name="parityRadios" id="parityRadios2" value="1">
-              <label for="parityRadios2">
-                Odd
-              </label>
+
+            <!--기본설정 우(II)-->
+            <div id="basicRightDiv" class="main_container" style="display:none;">
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>제로 확보 범위</span>
+                    </div>
+                    <div class="row_content">
+                        <input type="range" min="0" max="100" class="slider" id="zeroRangeSlider">
+                        <span id="zeroRangeSliderValue"></span>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>영점 트래킹 시간</span>
+                    </div>
+                    <div class="row_content">
+                        <input type="range" min="0" max="50" class="slider" id="zeroTrackingTimeSlider">
+                        <span id="zeroTrackingTimeSliderValue"></span>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>영점 트래킹 폭</span>
+                    </div>
+                    <div class="row_content">
+                        <input type="range" min="0" max="99" class="slider" id="zeroTrackingWidthSlider">
+                        <span id="zeroTrackingWidthSliderValue"></span>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>파워 온 제로</span>
+                    </div>
+                    <div class="row_content">
+                        <label class="switch" for="powerOnZeroToggle">
+                        <input type="checkbox" id="powerOnZeroToggle">
+                        <span class="toggle_slider round"></span>
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="row_item">
-              <input type="radio" name="parityRadios" id="parityRadios3" value="2">
-              <label for="parityRadios3">
-                Even
-              </label>
+
+            <!--외부출력-->
+            <div id="externalPrintDiv" class="main_container" style="display:none;">
+                <div class="keypad" id="keypad_config" style="display:none;">
+                    <ul id="keyboard">
+                        <li class="key_config">1</li>
+                        <li class="key_config">2</li>
+                        <li class="key_config">3</li>
+
+                        <li class="key_config clearl">4</li>
+                        <li class="key_config">5</li>
+                        <li class="key_config">6</li>
+
+                        <li class="key_config clearl">7</li>
+                        <li class="key_config ">8</li>
+                        <li class="key_config">9</li>
+
+                        <li class="key_btn_config clearl">+/-</li>
+                        <li class="key_config">0</li>
+                        <li class="key_btn_config">삭제</li>
+                        <li class="key_btn_config">확인</li>
+                    </ul>
+                </div>
+                <div class="keypad" id="keypad_nearzero" style="display:none;">
+                    <ul id="keyboard">
+                        <li class="key_nearzero">1</li>
+                        <li class="key_nearzero">2</li>
+                        <li class="key_nearzero">3</li>
+
+                        <li class="key_nearzero clearl">4</li>
+                        <li class="key_nearzero">5</li>
+                        <li class="key_nearzero">6</li>
+
+                        <li class="key_nearzero clearl">7</li>
+                        <li class="key_nearzero ">8</li>
+                        <li class="key_nearzero">9</li>
+
+                        <li class="key_btn_nearzero clearl">+/-</li>
+                        <li class="key_nearzero">0</li>
+                        <li class="key_btn_nearzero">삭제</li>
+                        <li class="key_btn_nearzero">확인</li>
+                    </ul>
+                </div>
+
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>출력조건</span>
+                    </div>
+                    <div class="row_content">
+                        <div class="row_item">
+                            <input type="radio" name="printConditionRadios" id="printConditionRadios1" value="0" checked="">
+                            <label for="printConditionRadios1">
+                            설정값 초과
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="printConditionRadios" id="printConditionRadios2" value="1">
+                            <label for="printConditionRadios2">
+                            설정값 미만
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>설정값</span>
+                    </div>
+                    <div class="row_content">
+                        <input class="form-control w-25 d-inline-block" id="configValueText">
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>비교모드</span>
+                    </div>
+                    <div class="row_content">
+                        <div class="row_item">
+                            <input type="radio" name="comparatorModeRadios" id="comparatorModeRadios1" value="0" checked="">
+                            <label for="comparatorModeRadios1">
+                            비교X
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="comparatorModeRadios" id="comparatorModeRadios2" value="1">
+                            <label for="comparatorModeRadios2">
+                            영점 부근 이외
+                            </label>
+                        </div>
+                        <div class="row_item">
+                            <input type="radio" name="comparatorModeRadios" id="comparatorModeRadios3" value="2">
+                            <label for="comparatorModeRadios3">
+                            항상
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>영점부근비교</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="nearZeroText">
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>Stopbits</span>
-          </div>
-          <div class="row_content">
-            <div class="row_item">
-              <input type="radio" name="stopbitsRadios" id="stopbitsRadios1" value="1">
-              <label for="stopbitsRadios1">
-                1bit
-              </label>
+
+            <!--교정설정-->
+            <div id="calibrationConfigDiv" class="main_container" style="display:none;">
+                <div class="keypad" id="keypad_capa" style="display:none;">
+                    <ul id="keyboard">
+                        <li class="key_capa">1</li>
+                        <li class="key_capa">2</li>
+                        <li class="key_capa">3</li>
+
+                        <li class="key_capa clearl">4</li>
+                        <li class="key_capa">5</li>
+                        <li class="key_capa">6</li>
+
+                        <li class="key_capa clearl">7</li>
+                        <li class="key_capa ">8</li>
+                        <li class="key_capa">9</li>
+
+                        <li class="key_btn_capa clearl"></li>
+                        <li class="key_capa">0</li>
+                        <li class="key_btn_capa">삭제</li>
+                        <li class="key_btn_capa">확인</li>
+                    </ul>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>CAPA(최대용량)</span>
+                    </div>
+                    <div class="row_content">
+                        <input class="form-control w-25 d-inline-block" id="capaText">
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>DIV(최소눈금)</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="divSelect" class="custom-select mr-sm-2">
+                            <option value="1">1눈금</option>
+                            <option value="2">2눈금</option>
+                            <option value="5">5눈금</option>
+                            <option value="10">10눈금</option>
+                            <option value="20">20눈금</option>
+                            <option value="50">50눈금</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>소수점</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="decimalPointSelect" class="custom-select mr-sm-2">
+                            <option value="0">1234</option>
+                            <option value="1">123.4</option>
+                            <option value="2">12.34</option>
+                            <option value="3">1.234</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>단위</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="unitSelect" class="custom-select mr-sm-2">
+                            <option value="0">없음</option>
+                            <option value="1">그램(g)</option>
+                            <option value="2">킬로그램(kg)</option>
+                            <option value="3">톤(t)</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="row_item">
-              <input type="radio" name="stopbitsRadios" id="stopbitsRadios2" value="2">
-              <label for="stopbitsRadios2">
-                2bits
-              </label>
+
+            <!--교정(CAL0, CALF)-->
+            <div id="calDiv" class="main_container" style="display:none;">
+                <div class="keypad" id="keypad_span" style="display:none;">
+                    <ul id="keyboard">
+                        <li class="key_span">1</li>
+                        <li class="key_span">2</li>
+                        <li class="key_span">3</li>
+
+                        <li class="key_span clearl">4</li>
+                        <li class="key_span">5</li>
+                        <li class="key_span">6</li>
+
+                        <li class="key_span clearl">7</li>
+                        <li class="key_span ">8</li>
+                        <li class="key_span">9</li>
+
+                        <li class="key_btn_span clearl">+/-</li>
+                        <li class="key_span">0</li>
+                        <li class="key_btn_span">삭제</li>
+                        <li class="key_btn_span">확인</li>
+                    </ul>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <button id="calZeroButton">CAL 0</button>
+                        <h4 class="mb-3" id="checkCalZero"></h4>
+                    </div>
+                    <div class="row_content">
+                        <span>무부하 상태에서 </br>"CAL 0" 버튼을 클릭합니다.</span>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <button id="calSpanButton">CAL F</button>
+                        <h4 class="mb-3" id="checkCalSpan"></h4>
+                    </div>
+                    <div class="row_content">
+                        <span>SPAN 값을 입력하고 로드셀에 </br>분동을 올린 후 "CAL F" 버튼을 클릭합니다.</span>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>입력하기</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="spanValueText">
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>Terminator</span>
-          </div>
-          <div class="row_content">
-            <div class="row_item">
-              <input type="radio" name="terminatorRadios" id="terminatorRadios1" value="1">
-              <label for="terminatorRadios1">
-                CRLF
-              </label>
+
+            <!--초기화-->
+            <div id="initDiv" class="main_container" style="display:none;">
+                <div class="row_container">
+                    <div class="row_title">
+                        <button id="initFunctionFButton">F펑션</br>초기화</button>
+                    </div>
+                    <div class="row_content">
+                        <span>통신/기본(좌)/외부출력 초기화</span>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <button class="btn btn-primary mr-3" id="initConfigButton">모든 설정</br>초기화</button>
+                    </div>
+                    <div class="row_content">
+                        <span>통신/기본/외부출력/교정 초기화</span>
+                    </div>
+                </div>
             </div>
-            <div class="row_item">
-              <input type="radio" name="terminatorRadios" id="terminatorRadios2" value="2">
-              <label for="terminatorRadios2">
-                CR
-              </label>
+        </div>
+
+        <!--Footer-->
+        <div class="bottom_container">
+            <div class="bottom_btn_container">
+                <div class="btn_frame">
+                    <button type="button" id="serialConfigButton">SERIAL</br>CONFIG</button>
+                </div>
+                <div class="btn_frame">
+                    <button type="button" id="basicLeftConfigButton">BASIC</br>I</button>
+                </div>
+                <div class="btn_frame">
+                    <button type="button" id="basicRightConfigButton">BASIC</br>II</button>
+                </div>
+                <div class="btn_frame">
+                    <button type="button" id="externalPrintConfigButton">EXTERNAL</button>
+                </div>
+                <div class="btn_frame">
+                    <button type="button" id="calibrationConfigButton">CAL</br>CONFIG</button>
+                </div>
+                <div class="btn_frame">
+                    <button type="button" id="calButton">CAL</button>
+                </div>
+                <div class="btn_frame">
+                    <button type="button" id="initButton">INIT</button>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-
-      <!--기본설정 좌(I)-->
-      <div id="basicLeftDiv" class="main_container" style="display:none;">
-        <div class="row_container">
-          <div class="row_title">
-            <span>디지털필터</span>
-          </div>
-          <div class="row_content">
-            <select id="digitalFilterSelect">
-                <option value="0">없음</option>
-                <option value="1">2.5Hz</option>
-                <option value="2">2.0Hz</option>
-                <option value="3">1.5Hz</option>
-                <option value="4">1.0Hz</option>
-                <option value="5">0.7Hz</option>
-                <option value="6">0.5Hz</option>
-                <option value="7">0.35Hz</option>
-                <option value="8">0.25Hz</option>
-                <option value="9">0.20Hz</option>
-                <option value="10">0.15Hz</option>
-                <option value="11">0.10Hz</option>
-            </select>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>홀드모드</span>
-          </div>
-          <div class="row_content">
-            <select id="holdModeSelect">
-                <option value="0">홀드하지 않음</option>
-                <option value="1">샘플 홀드</option>
-                <option value="2">피크 홀드</option>
-                <option value="3">버튼 홀드</option>
-                <option value="4">양극성, 피크 홀드</option>
-            </select>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>평균화 시간</span>
-          </div>
-          <div class="row_content">
-            <input type="range" min="0" max="99" class="slider" id="averageTimeSlider">
-            <span id="averageTimeSliderValue"></span>
-          </div>
-        </div>
-      </div>
-
-      <!--기본설정 우(II)-->
-      <div id="basicRightDiv" class="main_container" style="display:none;">
-        <div class="row_container">
-          <div class="row_title">
-            <span>제로 확보 범위</span>
-          </div>
-          <div class="row_content">
-            <input type="range" min="0" max="100" class="slider" id="zeroRangeSlider">
-            <span id="zeroRangeSliderValue"></span>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>영점 트래킹 시간</span>
-          </div>
-          <div class="row_content">
-            <input type="range" min="0" max="50" class="slider" id="zeroTrackingTimeSlider">
-            <span id="zeroTrackingTimeSliderValue"></span>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>영점 트래킹 폭</span>
-          </div>
-          <div class="row_content">
-            <input type="range" min="0" max="99" class="slider" id="zeroTrackingWidthSlider">
-            <span id="zeroTrackingWidthSliderValue"></span>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>파워 온 제로</span>
-          </div>
-          <div class="row_content">
-            <label class="switch" for="powerOnZeroToggle">
-              <input type="checkbox" id="powerOnZeroToggle">
-              <span class="toggle_slider round"></span>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <!--외부출력-->
-      <div id="externalPrintDiv" class="main_container" style="display:none;">
-        <div class="keypad" id="keypad_config" style="display:none;">
-            <ul id="keyboard">
-                <li class="key_config">1</li>
-                <li class="key_config">2</li>
-                <li class="key_config">3</li>
-
-                <li class="key_config clearl">4</li>
-                <li class="key_config">5</li>
-                <li class="key_config">6</li>
-
-                <li class="key_config clearl">7</li>
-                <li class="key_config ">8</li>
-                <li class="key_config">9</li>
-
-                <li class="key_btn_config clearl">+/-</li>
-                <li class="key_config">0</li>
-                <li class="key_btn_config">삭제</li>
-                <li class="key_btn_config">확인</li>
-            </ul>
-        </div>
-        <div class="keypad" id="keypad_nearzero" style="display:none;">
-            <ul id="keyboard">
-                <li class="key_nearzero">1</li>
-                <li class="key_nearzero">2</li>
-                <li class="key_nearzero">3</li>
-
-                <li class="key_nearzero clearl">4</li>
-                <li class="key_nearzero">5</li>
-                <li class="key_nearzero">6</li>
-
-                <li class="key_nearzero clearl">7</li>
-                <li class="key_nearzero ">8</li>
-                <li class="key_nearzero">9</li>
-
-                <li class="key_btn_nearzero clearl">+/-</li>
-                <li class="key_nearzero">0</li>
-                <li class="key_btn_nearzero">삭제</li>
-                <li class="key_btn_nearzero">확인</li>
-            </ul>
-        </div>
-
-        <div class="row_container">
-          <div class="row_title">
-            <span>출력조건</span>
-          </div>
-          <div class="row_content">
-            <div class="row_item">
-              <input type="radio" name="printConditionRadios" id="printConditionRadios1" value="0" checked="">
-              <label for="printConditionRadios1">
-                설정값 초과
-              </label>
-            </div>
-            <div class="row_item">
-              <input type="radio" name="printConditionRadios" id="printConditionRadios2" value="1">
-              <label for="printConditionRadios2">
-                설정값 미만
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>설정값</span>
-          </div>
-          <div class="row_content">
-            <input class="form-control w-25 d-inline-block" id="configValueText">
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>비교모드</span>
-          </div>
-          <div class="row_content">
-            <div class="row_item">
-              <input type="radio" name="comparatorModeRadios" id="comparatorModeRadios1" value="0" checked="">
-              <label for="comparatorModeRadios1">
-                비교X
-              </label>
-            </div>
-            <div class="row_item">
-              <input type="radio" name="comparatorModeRadios" id="comparatorModeRadios2" value="1">
-              <label for="comparatorModeRadios2">
-                영점 부근 이외
-              </label>
-            </div>
-            <div class="row_item">
-              <input type="radio" name="comparatorModeRadios" id="comparatorModeRadios3" value="2">
-              <label for="comparatorModeRadios3">
-                항상
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>영점부근비교</span>
-          </div>
-          <div class="row_content">
-            <input id="nearZeroText">
-          </div>
-        </div>
-      </div>
-
-      <!--교정설정-->
-      <div id="calibrationConfigDiv" class="main_container" style="display:none;">
-        <div class="keypad" id="keypad_capa" style="display:none;">
-            <ul id="keyboard">
-                <li class="key_capa">1</li>
-                <li class="key_capa">2</li>
-                <li class="key_capa">3</li>
-
-                <li class="key_capa clearl">4</li>
-                <li class="key_capa">5</li>
-                <li class="key_capa">6</li>
-
-                <li class="key_capa clearl">7</li>
-                <li class="key_capa ">8</li>
-                <li class="key_capa">9</li>
-
-                <li class="key_btn_capa clearl"></li>
-                <li class="key_capa">0</li>
-                <li class="key_btn_capa">삭제</li>
-                <li class="key_btn_capa">확인</li>
-            </ul>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>CAPA(최대용량)</span>
-          </div>
-          <div class="row_content">
-            <input class="form-control w-25 d-inline-block" id="capaText">
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>DIV(최소눈금)</span>
-          </div>
-          <div class="row_content">
-            <select id="divSelect" class="custom-select mr-sm-2">
-                <option value="1">1눈금</option>
-                <option value="2">2눈금</option>
-                <option value="5">5눈금</option>
-                <option value="10">10눈금</option>
-                <option value="20">20눈금</option>
-                <option value="50">50눈금</option>
-            </select>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>소수점</span>
-          </div>
-          <div class="row_content">
-            <select id="decimalPointSelect" class="custom-select mr-sm-2">
-                <option value="0">1234</option>
-                <option value="1">123.4</option>
-                <option value="2">12.34</option>
-                <option value="3">1.234</option>
-            </select>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>단위</span>
-          </div>
-          <div class="row_content">
-            <select id="unitSelect" class="custom-select mr-sm-2">
-                <option value="0">없음</option>
-                <option value="1">그램(g)</option>
-                <option value="2">킬로그램(kg)</option>
-                <option value="3">톤(t)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!--교정(CAL0, CALF)-->
-      <div id="calDiv" class="main_container" style="display:none;">
-        <div class="keypad" id="keypad_span" style="display:none;">
-            <ul id="keyboard">
-                <li class="key_span">1</li>
-                <li class="key_span">2</li>
-                <li class="key_span">3</li>
-
-                <li class="key_span clearl">4</li>
-                <li class="key_span">5</li>
-                <li class="key_span">6</li>
-
-                <li class="key_span clearl">7</li>
-                <li class="key_span ">8</li>
-                <li class="key_span">9</li>
-
-                <li class="key_btn_span clearl">+/-</li>
-                <li class="key_span">0</li>
-                <li class="key_btn_span">삭제</li>
-                <li class="key_btn_span">확인</li>
-            </ul>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <button id="calZeroButton">CAL 0</button>
-            <h4 class="mb-3" id="checkCalZero"></h4>
-          </div>
-          <div class="row_content">
-            <span>무부하 상태에서 </br>"CAL 0" 버튼을 클릭합니다.</span>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <button id="calSpanButton">CAL F</button>
-            <h4 class="mb-3" id="checkCalSpan"></h4>
-          </div>
-          <div class="row_content">
-            <span>SPAN 값을 입력하고 로드셀에 </br>분동을 올린 후 "CAL F" 버튼을 클릭합니다.</span>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <span>입력하기</span>
-          </div>
-          <div class="row_content">
-            <input id="spanValueText">
-          </div>
-        </div>
-      </div>
-
-      <!--초기화-->
-      <div id="initDiv" class="main_container" style="display:none;">
-        <div class="row_container">
-          <div class="row_title">
-            <button id="initFunctionFButton">F펑션</br>초기화</button>
-          </div>
-          <div class="row_content">
-            <span>통신/기본(좌)/외부출력 초기화</span>
-          </div>
-        </div>
-        <div class="row_container">
-          <div class="row_title">
-            <button class="btn btn-primary mr-3" id="initConfigButton">모든 설정</br>초기화</button>
-          </div>
-          <div class="row_content">
-            <span>통신/기본/외부출력/교정 초기화</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!--Footer-->
-    <div>
-      <div class="bottom_btn_container">
-        <div class="btn_frame">
-          <button type="button" id="serialConfigButton">SERIAL</br>CONFIG</button>
-        </div>
-        <div class="btn_frame">
-          <button type="button" id="basicLeftConfigButton">BASIC</br>I</button>
-        </div>
-        <div class="btn_frame">
-          <button type="button" id="basicRightConfigButton">BASIC</br>II</button>
-        </div>
-        <div class="btn_frame">
-          <button type="button" id="externalPrintConfigButton">EXTERNAL</button>
-        </div>
-        <div class="btn_frame">
-          <button type="button" id="calibrationConfigButton">CAL</br>CONFIG</button>
-        </div>
-        <div class="btn_frame">
-          <button type="button" id="calButton">CAL</button>
-        </div>
-        <div class="btn_frame">
-          <button type="button" id="initButton">INIT</button>
-        </div>
-      </div>
-    </div>
-  </body>
+    </body>
 </html>

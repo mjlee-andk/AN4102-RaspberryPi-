@@ -3,10 +3,12 @@ const remote = require('electron').remote;
 const { RED, YELLOW } = require('./util/constant');
 const COLOR = require('./util/color');
 
+
+let colorName = '';
+
 // 메인 화면 상단 버튼
 let openPCConfigWindowButton = document.getElementById("openPCConfigWindow");
 let openConfigWindowButton = document.getElementById("openConfigWindow");
-// const openInfoWindowButton = document.getElementById("openInfoWindow");
 let closeMainWindowButton = document.getElementById("closeMainWindow");
 // 계량값 표시부
 let displayMsg = document.getElementById("displayMsg");
@@ -17,7 +19,7 @@ let labelHoldClass = document.getElementById("state_hold");
 let labelZeroClass = document.getElementById("state_zero");
 let labelNetClass = document.getElementById("state_net");
 
-let subDisplay = document.getElementsByClassName("sub_display");
+let subWeight = document.querySelectorAll(".sub_weight span");
 // 컴퍼레이터 설정값
 let comS1Title = document.getElementById("s1_title");
 let comS1Value = document.getElementById("s1_value");
@@ -30,6 +32,203 @@ let comS4Value = document.getElementById("s4_value");
 let comS5Title = document.getElementById("s5_title");
 let comS5Value = document.getElementById("s5_value");
 
+// 컴퍼레이터 키패드
+let keypad_subweight = document.getElementById("keypad_subweight");
+let key_subweight_list = document.querySelectorAll(".key_subweight");
+let key_btn_subweight_list = document.querySelectorAll(".key_btn_subweight");
+let comp_flag = -1; // 현재 선택한 컴퍼레이터 값 구분자. -1이 아무것도 선택하지 않은 상태
+
+comS1Value.addEventListener("click", function(){
+  if(keypad_subweight.style.display == "none") {
+    if(comp_flag != -1) {
+      return;
+    }
+    keypad_subweight.style.display = "block";
+    comS1Value.style.color = COLOR['WHITE'];
+    keypad_subweight.style.right = "30px";
+    keypad_subweight.style.left = "auto";
+    comp_flag = 0;
+  }
+  else {
+    if(comp_flag != 0) {
+      return;
+    }
+    keypad_subweight.style.display = "none";
+    comS1Value.style.color = colorName;
+    comp_flag = -1;
+  }
+});
+
+comS2Value.addEventListener("click", function(){
+  if(keypad_subweight.style.display == "none") {
+    if(comp_flag != -1) {
+      return;
+    }
+    keypad_subweight.style.display = "block";
+    comS2Value.style.color = COLOR['WHITE'];
+    keypad_subweight.style.right = "30px";
+    keypad_subweight.style.left = "auto";
+    comp_flag = 1;
+  }
+  else {
+    if(comp_flag != 1) {
+      return;
+    }
+    keypad_subweight.style.display = "none";
+    comS2Value.style.color = colorName;
+    comp_flag = -1;
+  }
+});
+comS3Value.addEventListener("click", function(){
+  if(keypad_subweight.style.display == "none") {
+    if(comp_flag != -1) {
+      return;
+    }
+    keypad_subweight.style.display = "block";
+    comS3Value.style.color = COLOR['WHITE'];
+    keypad_subweight.style.right = "30px";
+    keypad_subweight.style.left = "auto";
+    comp_flag = 2;
+  }
+  else {
+    if(comp_flag != 2) {
+      return;
+    }
+    keypad_subweight.style.display = "none";
+    comS3Value.style.color = colorName;
+    comp_flag = -1;
+  }
+});
+comS4Value.addEventListener("click", function(){
+  if(keypad_subweight.style.display == "none") {
+    if(comp_flag != -1) {
+      return;
+    }
+    keypad_subweight.style.display = "block";
+    keypad_subweight.style.right = "auto";
+    keypad_subweight.style.left = "30px";
+    comS4Value.style.color = COLOR['WHITE'];
+    comp_flag = 3;
+  }
+  else {
+    if(comp_flag != 3) {
+      return;
+    }
+    keypad_subweight.style.display = "none";
+    comS4Value.style.color = colorName;
+    comp_flag = -1;
+  }
+});
+comS5Value.addEventListener("click", function(){
+  if(keypad_subweight.style.display == "none") {
+    if(comp_flag != -1) {
+      return;
+    }
+    keypad_subweight.style.display = "block";
+    keypad_subweight.style.right = "auto";
+    keypad_subweight.style.left = "30px";
+    comS5Value.style.color = COLOR['WHITE'];
+    comp_flag = 4;
+  }
+  else {
+    if(comp_flag != 4) {
+      return;
+    }
+    keypad_subweight.style.display = "none";
+    comS5Value.style.color = colorName;
+    comp_flag = -1;
+  }
+});
+
+key_subweight_list.forEach((item, index) => {
+  item.addEventListener("click", (event) => {
+    let comp_value;
+    if(comp_flag == 0) {
+      comp_value = comS1Value;
+    }
+    else if(comp_flag == 1) {
+      comp_value = comS2Value;
+    }
+    else if(comp_flag == 2) {
+      comp_value = comS3Value;
+    }
+    else if(comp_flag == 3) {
+      comp_value = comS4Value;
+    }
+    else if(comp_flag == 4) {
+      comp_value = comS5Value;
+    }
+
+    let numBoxValue = comp_value.innerHTML;
+    let numBoxLength = comp_value.innerHTML.length;
+    let keyValue = item.innerHTML;
+
+    // 최대 6자리까지 입력가능
+    if(numBoxLength >= 6) {
+      return;
+    }
+
+    // 현재 값이 0인 경우
+    if(numBoxValue == 0) {
+      comp_value.innerHTML = keyValue;
+    }
+    // 현재 값이 0이 아닌 경우
+    else {
+      comp_value.innerHTML = comp_value.innerHTML + keyValue;
+    }
+  })
+})
+
+key_btn_subweight_list.forEach((item, index) => {
+  item.addEventListener("click", (event) => {
+    let comp_value;
+    if(comp_flag == 0) {
+      comp_value = comS1Value;
+    }
+    else if(comp_flag == 1) {
+      comp_value = comS2Value;
+    }
+    else if(comp_flag == 2) {
+      comp_value = comS3Value;
+    }
+    else if(comp_flag == 3) {
+      comp_value = comS4Value;
+    }
+    else if(comp_flag == 4) {
+      comp_value = comS5Value;
+    }
+
+    let numBoxValue = comp_value.innerHTML;
+    let inputValLength = comp_value.innerHTML.length;
+    let keyValue = item.innerHTML;
+
+    if(keyValue == '삭제'){
+      if(inputValLength <= 0) {
+        return;
+      }
+      comp_value.innerHTML = comp_value.innerHTML.substring(0, inputValLength - 1);
+    }
+    else if(keyValue == '확인'){
+      if(inputValLength == 0) {
+        alert('값을 입력해주세요.');
+        return;
+      }
+      setCompValue(comp_flag, comp_value.innerHTML);
+      keypad_subweight.style.display = "none";
+      comp_value.style.color = colorName;
+      comp_flag = -1;
+    }
+  })
+});
+
+let setCompValue = function(flag, value) {
+  let comp_value = {
+    flag: flag,
+    value:value
+  }
+  ipcRenderer.send('set_comp_value', comp_value);
+}
+
 // 메인 동작 관련 커맨드 버튼
 let setClearTareButton = document.getElementById("setClearTare");
 let setZeroTareButton = document.getElementById("setZeroTare");
@@ -37,8 +236,6 @@ let setGrossNetButton = document.getElementById("setGrossNet");
 let setHoldButton = document.getElementById("setHold");
 let printButton = document.getElementById("print");
 let onOffButton = document.getElementById("onOff");
-
-let colorName = '';
 
 openPCConfigWindowButton.addEventListener('click', function(){
   console.log('openPCConfigWindowButton');
@@ -49,20 +246,6 @@ openConfigWindowButton.addEventListener('click', function(){
   console.log('openConfigWindowButton');
   ipcRenderer.send('open_config_window', 'ok');
 })
-
-// openInfoWindowButton.addEventListener('click', function(){
-//   setTimeout(function(){
-//     openInfoWindowButton.blur();
-//   }, 200)
-//   // TODO 다이얼로그 삭제 후 remote 없앨것
-//   remote.dialog.showMessageBox({type: 'info', title: '정보', message: '준비중입니다.'});
-//   return;
-//   console.log('openInfoWindowButton');
-//   setTimeout(function(){
-//     openInfoWindowButton.blur();
-//   }, 200)
-//   ipcRenderer.send('open_info_window', 'ok');
-// })
 
 closeMainWindowButton.addEventListener('click', function(){
   console.log('closeMainWindowButton');
@@ -89,8 +272,8 @@ let setFontColor = function(color) {
   displayMsg.style.color = colorName;
   unitTag.style.color = colorName;
 
-  for(i = 0; i < subDisplay.length; i++) {
-    subDisplay[i].style.color = colorName;
+  for(i = 0; i < subWeight.length; i++) {
+    subWeight[i].style.color = colorName;
   }
 }
 
@@ -116,28 +299,28 @@ ipcRenderer.on('rx_data', (event, data) => {
     labelStableClass.style.color = colorName;
   }
   else {
-    labelStableClass.style.color = COLOR.WHITE;
+    labelStableClass.style.color = COLOR['WHITE'];
   }
 
   if(data.isHold) {
     labelHoldClass.style.color = colorName;
   }
   else {
-    labelHoldClass.style.color = COLOR.WHITE;
+    labelHoldClass.style.color = COLOR['WHITE'];
   }
 
   if(data.isZero) {
     labelZeroClass.style.color = colorName;
   }
   else {
-    labelZeroClass.style.color = COLOR.WHITE;
+    labelZeroClass.style.color = COLOR['WHITE'];
   }
 
   if(data.isNet) {
     labelNetClass.style.color = colorName;
   }
   else {
-    labelNetClass.style.color = COLOR.WHITE;
+    labelNetClass.style.color = COLOR['WHITE'];
   }
 
   // 컴퍼레이터 설정
@@ -226,10 +409,10 @@ let setOnOffView = function() {
     displayMsg.innerHTML = '888888';
     unitTag.innerHTML = '';
 
-    labelStableClass.style.color = 'white';
-    labelHoldClass.style.color = 'white';
-    labelZeroClass.style.color = 'white';
-    labelNetClass.style.color = 'white';
+    labelStableClass.style.color = COLOR['WHITE'];
+    labelHoldClass.style.color = COLOR['WHITE'];
+    labelZeroClass.style.color = COLOR['WHITE'];
+    labelNetClass.style.color = COLOR['WHITE'];
   }
 
   ipcRenderer.send('on_off', onoffLabel);

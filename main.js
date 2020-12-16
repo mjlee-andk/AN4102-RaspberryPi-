@@ -205,6 +205,40 @@ const commandOk = function() {
   })
 }
 
+ipcMain.on('set_comp_value', (event, data) => {
+  console.log('set comparator value');
+  console.log(data);
+  console.log(data['flag']);
+  console.log(data['value']);
+
+  // // 커맨드 모드로 진입
+  // let command = 'F206,2' + '\r\n';
+  // sp.write(command, function(err){
+  //   if(err) {
+  //     console.log(err.message);
+  //     return;
+  //   }
+  //
+  //   // 변경하려는 컴퍼레이터 값 변경
+  //   command = '' + '\r\n';
+  //   sp.write(command, function(err){
+  //     if(err) {
+  //       console.log(err.message)
+  //       return;
+  //     }
+  //
+  //     // 변경 완료 후 스트림 모드로 진입
+  //     command = 'F206,1' + '\r\n';
+  //     sp.write(command, function(err){
+  //       if(err) {
+  //         console.log(err.message)
+  //         return;
+  //       }
+  //     })
+  //   })
+  // });
+})
+
 ipcMain.on('commandOk', (event, arg) => {
   console.log('command ok');
 
@@ -1504,16 +1538,6 @@ const startProgram = function() {
       changeMainButtonActive(isOpen);
     });
   });
-
-  // const lineStream = sp.pipe(new Readline({ delimiter: pcConfig.terminator == CRLF ? '\r\n' : '\r' }));
-  // lineStream.on('data', function(rx) {
-  //   readHeader(rx);
-  //   win.webContents.send('rx_data', scale);
-  //   // console.log(rx);
-  //   scale.waiting_sec = 0;
-  //   isOpen = true;
-  //   changeMainButtonActive(isOpen);
-  // });
 
   // server2 = testfunc(lineStream);
   //

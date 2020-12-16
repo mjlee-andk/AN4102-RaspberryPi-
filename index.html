@@ -1,263 +1,141 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>AN4102(RaspberryPi)</title>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- <link type="text/css" href="./css/neumorphism.css" rel="stylesheet">     -->
-    <script>
-      window.onload = function() {
-        require('./renderer')
-      }
-    </script>
-
-    <style>
-      @font-face {
-        font-family: 'SegmentA1';
-        src: url(./fonts/SEA_____.TTF) format('truetype');
-      }
-      body {
-        background-color: #d4cfbb;
-        padding: 13px;
-      }
-
-      .upper_container {
-        padding-left: 10px;
-        padding-right: 10px;
-        padding-top: 10px;
-      }
-
-      .logo {
-        width: auto;
-        height: auto;
-        max-width: 120px;
-        max-height: 120px;
-      }
-      .button_container {
-        display: inline-block;
-        float: right;
-      }
-
-      .button_container button {
-        width: 80px;
-        height: 50px;
-        background-color: #000000;
-        color: #ffffff;
-        border: solid 2px #ffffff;
-        border-radius: 12px;
-      }
-
-      .main_container {
-        background-color: #000000;
-        border-radius: 35px;
-        margin-top: 20px;
-        padding-bottom: 10px;
-      }
-
-      .main_state {
-        display: inline-block;
-        width: 20%;
-        font-size: 21px;
-        /* padding-top: 8px; */
-        /* margin-left: 35px; */
-      }
-
-      .main_state div {
-        /* display: inline-block;
-        margin-left: 30px; */
-        font-weight: bold;
-        margin-bottom: 7px;
-      }
-
-      .main_display {
-        text-align: center;
-      }
-
-      .main_weight {
-        /* color: #00b8dd; */
-        display: inline-block;
-        text-align: right;
-        width: 60%;
-      }
-
-      .main_unit {
-        /* color: #00b8dd; */
-        display: inline-block;
-        width: 10%;
-      }
-
-      .hi_lo {
-        display: inline-block;
-        margin-right: 15px;
-        width: 5%;
-        font-size: 25px;
-      }
-
-      .hi_lo div{
-        margin-bottom: 12px;
-      }
-
-      .sub_display {
-        /* color: #00b8dd; */
-        text-align: center;
-      }
-      .sub_weight {
-        display: inline-block;
-        font-family: SegmentA1;
-        margin-left: 15px;
-        margin-right: 15px;
-        font-size: 30px;
-        width: 12%;
-      }
-
-      .sub_weight .title {
-        text-align: left !important;
-        height: 30px;
-      }
-
-      /* .sub_value {
-        height: 10px;
-      } */
-
-      #displayMsg {
-        font-family: SegmentA1;
-        font-size: 140px;
-      }
-      #unit {
-        font-size: 40px;
-        /* font-weight: bold; */
-      }
-
-      .bottom_btn_container {
-        margin-top: 15px;
-        display: flex;
-        justify-content: center;
-      }
-
-      .btn_frame {
-          display: inline-block;
-          margin-left: 15px;
-          margin-right: 15px;
-      }
-
-      .btn_frame button {
-        width: 80px;
-        height: 70px;
-        background-color: #000000;
-        color: #ffffff;
-        border: solid 1px #000000;
-        border-radius: 12px;
-      }
-    </style>
-  </head>
-  <body>
-    <!--Header-->
-    <div>
-      <!--Image Container-->
-      <div class="upper_container">
-        <img class="logo" src="./img/A&D_DiscoverPrecision_RGB.png">
-        <!--Button Container-->
-        <div class="button_container">
-          <button type="button" target="_blank" id="openPCConfigWindow">DEVICE</button>
-          <button type="button" target="_blank" id="openConfigWindow" disabled>SET</button>
-          <button type="button" target="_blank" id="closeMainWindow">CLOSE</button>
-          <!-- <button target="_blank" id="openInfoWindow">정보</button> -->
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <title>AN4102(RaspberryPi)</title>
+        <script>
+            window.onload = function() {
+                require('./renderer')
+            }
+        </script>
+        <link rel="stylesheet" type="text/css" href="./css/index.css"/>
+        <link rel="stylesheet" type="text/css" href="./css/tenkey.css"/>
+    </head>
+    <body>
+        <!--Header-->
+        <div>
+            <!--Image Container-->
+            <div class="upper_container">
+                <img class="logo" src="./img/A&D_DiscoverPrecision_RGB.png">
+                <!--Button Container-->
+                <div class="button_container">
+                    <button type="button" target="_blank" id="openPCConfigWindow">DEVICE</button>
+                    <button type="button" target="_blank" id="openConfigWindow" disabled>SET</button>
+                    <button type="button" target="_blank" id="closeMainWindow">CLOSE</button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <!--Body-->
-    <div>
-      <div class="main_container">
-        <!--주 계량값 표시부-->
-        <div class="main_display">
-          <!--상태표시창(STABLE, ZERO, NET, HOLD)-->
-          <div class="main_state">
-            <div id="state_stable" style="color:#ffffff">STABLE</div>
-            <div id="state_zero" style="color:#ffffff">ZERO</div>
-            <div id="state_net" style="color:#ffffff">NET</div>
-            <div id="state_hold" style="color:#ffffff">HOLD</div>
-          </div>
-          <div class="main_weight">
-            <span id="displayMsg">888888</span>
-          </div>
-          <div class="main_unit">
-            <span id="unit"></span>
-          </div>
-          <div class="hi_lo">
-            <div id="hi" style="color:#ff0000">HI</div>
-            <div id="lo" style="color:#ffa500">LO</div>
-            <div id="ok" style="color:#6fb842">OK</div>
-          </div>
+        <!--Body-->
+        <div>
+            <div class="main_container">
+                <div class="keypad" id="keypad_subweight" style="display:none;">
+                    <ul id="keyboard">
+                        <li class="key_subweight">1</li>
+                        <li class="key_subweight">2</li>
+                        <li class="key_subweight">3</li>
+
+                        <li class="key_subweight clearl">4</li>
+                        <li class="key_subweight">5</li>
+                        <li class="key_subweight">6</li>
+
+                        <li class="key_subweight clearl">7</li>
+                        <li class="key_subweight ">8</li>
+                        <li class="key_subweight">9</li>
+
+                        <li class="key_btn_subweight clearl">삭제</li>
+                        <li class="key_subweight">0</li>
+                        <li class="key_btn_subweight">확인</li>
+                    </ul>
+                </div>
+                <!--주 계량값 표시부-->
+                <div class="main_display">
+                    <!--상태표시창(STABLE, ZERO, NET, HOLD)-->
+                    <div class="main_state">
+                        <div id="state_stable" style="color:#ffffff">STABLE</div>
+                        <div id="state_zero" style="color:#ffffff">ZERO</div>
+                        <div id="state_net" style="color:#ffffff">NET</div>
+                        <div id="state_hold" style="color:#ffffff">HOLD</div>
+                    </div>
+                    <div class="main_weight">
+                        <span id="displayMsg">888888</span>
+                    </div>
+                    <div class="main_unit">
+                        <span id="unit"></span>
+                    </div>
+                    <div class="hi_lo">
+                        <div id="hi" style="color:#ff0000">HI</div>
+                        <div id="lo" style="color:#ffa500">LO</div>
+                        <div id="ok" style="color:#6fb842">OK</div>
+                    </div>
+                </div>
+                <!--서브 계량값 표시부-->
+                <div class="sub_display">
+                    <div class="sub_weight">
+                        <div class="title">
+                            <span id="s1_title">s1</span>
+                        </div>
+                        <div class="sub_value">
+                            <span id="s1_value">888888</span>
+                        </div>
+                    </div>
+                    <div class="sub_weight">
+                        <div class="title">
+                            <span id="s2_title">s2</span>
+                        </div>
+                        <div class="sub_value">
+                            <span id="s2_value">888888</span>
+                        </div>
+                    </div>
+                    <div class="sub_weight">
+                        <div class="title">
+                            <span id="s3_title">s3</span>
+                        </div>
+                        <div class="sub_value">
+                            <span id="s3_value">888888</span>
+                        </div>
+                    </div>
+                    <div class="sub_weight">
+                        <div class="title">
+                            <span id="s4_title">s4</span>
+                        </div>
+                        <div class="sub_value">
+                            <span id="s4_value">888888</span>
+                        </div>
+                    </div>
+                    <div class="sub_weight">
+                        <div class="title">
+                            <span id="s5_title">s5</span>
+                        </div>
+                        <div class="sub_value">
+                            <span id="s5_value">888888</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!--서브 계량값 표시부-->
-        <div class="sub_display">
-          <div class="sub_weight">
-            <div class="title">
-              <span id="s1_title">s1</span>
+        <!--Footer-->
+        <div class="bottom_container">
+            <div class="bottom_btn_container">
+                <div class="btn_frame">
+                    <button class="button" type="button" id="setClearTare" disabled>CLEAR</br>TARE</button>
+                </div>
+                <div class="btn_frame">
+                    <button class="button" type="button" id="setZeroTare" disabled>ZERO</br>TARE</button>
+                </div>
+                <div class="btn_frame">
+                    <button class="button" type="button" id="setGrossNet" disabled>GROSS</br>NET</button>
+                </div>
+                <div class="btn_frame">
+                    <button class="button" type="button" id="setHold" disabled>HOLD</button>
+                </div>
+                <div class="btn_frame">
+                    <button class="button" type="button" id="print" disabled>PRINT</button>
+                </div>
+                <div class="btn_frame">
+                    <button class="button" type="button" id="onOff">ON</button>
+                </div>
             </div>
-            <div class="sub_value">
-              <span id="s1_value">888888</span>
-            </div>
-          </div>
-          <div class="sub_weight">
-            <div class="title">
-              <span id="s2_title">s2</span>
-            </div>
-            <div class="sub_value">
-              <span id="s2_value">888888</span>
-            </div>
-          </div>
-          <div class="sub_weight">
-            <div class="title">
-              <span id="s3_title">s3</span>
-            </div>
-            <div class="sub_value">
-              <span id="s3_value">888888</span>
-            </div>
-          </div>
-          <div class="sub_weight">
-            <div class="title">
-              <span id="s4_title">s4</span>
-            </div>
-            <div class="sub_value">
-              <span id="s4_value">888888</span>
-            </div>
-          </div>
-          <div class="sub_weight">
-            <div class="title">
-              <span id="s5_title">s5</span>
-            </div>
-            <div class="sub_value">
-              <span id="s5_value">888888</span>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-    <!--Footer-->
-    <div>
-      <div class="bottom_btn_container">
-        <div class="btn_frame">
-          <button class="button" type="button" id="setClearTare" disabled>CLEAR</br>TARE</button>
-        </div>
-        <div class="btn_frame">
-          <button class="button" type="button" id="setZeroTare" disabled>ZERO</br>TARE</button>
-        </div>
-        <div class="btn_frame">
-          <button class="button" type="button" id="setGrossNet" disabled>GROSS</br>NET</button>
-        </div>
-        <div class="btn_frame">
-          <button class="button" type="button" id="setHold" disabled>HOLD</button>
-        </div>
-        <div class="btn_frame">
-          <button class="button" type="button" id="print" disabled>PRINT</button>
-        </div>
-        <div class="btn_frame">
-          <button class="button" type="button" id="onOff">ON</button>
-        </div>
-      </div>
-    </div>
-  </body>
+    </body>
 </html>

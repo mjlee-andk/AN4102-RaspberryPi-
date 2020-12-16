@@ -1,0 +1,25 @@
+.keypad {
+    position: absolute;
+    top: 50px;
+    right: 30px;
+}
+#keyboard {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+#keyboard li {
+    float: left;
+    margin: 0 5px 5px 0;
+    width: 70px;
+    height: 70px;
+    font-size: 30px;
+    line-height: 60px;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #f9f9f9;
+    border-radius: 5px;
+}
+.clearl {
+    clear: left;
+}
