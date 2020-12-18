@@ -1,31 +1,31 @@
 {
-  "name": "AN4102_RaspberryPi",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron .",
-    "pack": "electron-builder"
-  },
-  "build": {
-      "productName": "AN4102_raspberryPi",
-      "appId": "AN4102"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "electron": "^10.1.3",
-    "electron-builder": "^22.9.1",
-    "electron-rebuild": "^1.11.0"
-  },
-  "dependencies": {
-    "bootstrap": "^4.5.0",
-    "electron-store": "^5.2.0",
-    "ethernet-ip": "^1.2.5",
-    "jquery": "^3.5.1",
-    "kioskboard": "^1.3.3",
-    "remote-serial-port-client": "^0.4.0",
-    "serialport": "^9.0.0"
-  }
+    "name": "AN4102_RaspberryPi",
+    "version": "1.0.0",
+    "description": "",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "pack": "electron-builder"
+    },
+    "build": {
+        "productName": "AN4102_raspberryPi",
+        "appId": "AN4102"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "electron": "^10.1.3",
+        "electron-builder": "^22.9.1",
+        "electron-rebuild": "^1.11.0"
+    },
+    "dependencies": {
+        "bootstrap": "^4.5.0",
+        "electron-store": "^5.2.0",
+        "ethernet-ip": "^1.2.5",
+        "jquery": "^3.5.1",
+        "kioskboard": "^1.3.3",
+        "remote-serial-port-client": "^0.4.0",
+        "serialport": "^9.0.0"
+    }
 }

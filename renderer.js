@@ -224,7 +224,7 @@ key_btn_subweight_list.forEach((item, index) => {
 let setCompValue = function(flag, value) {
     let comp_value = {
         flag: flag,
-        value:value
+        value: value
     }
     ipcRenderer.send('set_comp_value', comp_value);
 }
@@ -322,7 +322,7 @@ ipcRenderer.on('rx_data', (event, data) => {
         labelNetClass.style.color = COLOR['WHITE'];
     }
 
-    // 컴퍼레이터 설정
+    // 컴퍼레이터 초기 설정
     if(data.comparator) {
         comS1Title.innerHTML = data.s1_title;
         comS2Title.innerHTML = data.s2_title;
@@ -340,6 +340,14 @@ ipcRenderer.on('rx_data', (event, data) => {
 
 ipcRenderer.on('print', (event, data) => {
 
+});
+
+ipcRenderer.on('set_comp_value', (event, data) => {
+    comS1Value.innerHTML = data.s1_value;
+    comS2Value.innerHTML = data.s2_value;
+    comS3Value.innerHTML = data.s3_value;
+    comS4Value.innerHTML = data.s4_value;
+    comS5Value.innerHTML = data.s5_value;
 });
 
 ipcRenderer.on('main_button_active', (event, isActive) => {

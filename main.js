@@ -38,6 +38,8 @@ let externalPrintConfig = new externalPrintConfigFlag();
 let calibrationConfig = new calibrationConfigFlag();
 let currentPlatform;
 
+let decimalPoint = 0;
+
 const createWindow = function() {
     // 브라우저 창을 생성합니다.
     win = new BrowserWindow({
@@ -156,7 +158,7 @@ const pcConfigGetLocalStorage = function(event) {
 const setStreamMode = function() {
     console.log('set stream mode');
     // 201204 AD모듈 붙이면서 스트림 모드 명령어 F205,1로 변경됨
-    const command = 'F206,1' + '\r\n';
+    const command = 'F205,1' + '\r\n';
     sp.write(command, function(err){
         if(err) {
             console.log(err.message);
@@ -168,7 +170,7 @@ const setStreamMode = function() {
 const setCommandMode = function() {
     console.log('set command mode');
     // 201204 AD모듈 붙이면서 커맨드 모드 명령어 F205,2로 변경됨
-    const command = 'F206,2' + '\r\n';
+    const command = 'F205,2' + '\r\n';
     sp.write(command, function(err){
         if(err) {
             console.log(err.message);
@@ -194,8 +196,6 @@ const rssetCommand = function() {
 
 const commandOk = function() {
     let command = 'OK' + '\r\n';
-    scale.comparator = false;
-    scale.comparator_mode = 0;
     sp.write(command, function(err){
         if(err) {
             console.log(err.message)
@@ -206,35 +206,81 @@ const commandOk = function() {
 
 ipcMain.on('set_comp_value', (event, data) => {
     console.log('set comparator value');
-    console.log(data);
-    console.log(data['flag']);
-    console.log(data['value']);
+    console.log('flag: ', data['flag']);
+    console.log('value: ', data['value']);
+
+    let compFlag = data['flag'];
+    let compValue = data['value'];
 
     // 커맨드 모드로 진입
-    let command = 'F206,2' + '\r\n';
+    let command = 'F205,2' + '\r\n';
     sp.write(command, function(err){
         if(err) {
             console.log(err.message);
             return;
         }
 
-        // 변경하려는 컴퍼레이터 값 변경
-        command = '' + '\r\n';
-        sp.write(command, function(err){
-            if(err) {
-                console.log(err.message)
-                return;
-            }
+        // 데이터 총 7바이트 전송
+        command = 'WDS' + (compFlag+1).toString() + ',' ;
 
-            // 변경 완료 후 스트림 모드로 진입
-            command = 'F206,1' + '\r\n';
+        // 부호 결정
+        if(compValue > 0) {
+            command = command + '+';
+        }
+        else {
+            command = command + '-';
+        }
+
+        // 부호 제외 6자리 맞추기
+        let compValueLength = compValue.toString().length;
+        let sendValue = compValue.toString();
+
+        for(let i = 0; i < 6 - compValueLength; i++) {
+            sendValue = '0' + sendValue;
+        }
+
+        command = command + sendValue + '\r\n';
+
+        console.log('this is command', command);
+
+        setTimeout(function(){
             sp.write(command, function(err){
                 if(err) {
                     console.log(err.message)
                     return;
                 }
+                console.log('send comparator command');
+
+                setTimeout(function(){
+                    if(compFlag == 0) {
+                        scale.s1_value = compValue;
+                    }
+                    if(compFlag == 1) {
+                        scale.s2_value = compValue;
+                    }
+                    if(compFlag == 2) {
+                        scale.s3_value = compValue;
+                    }
+                    if(compFlag == 3) {
+                        scale.s4_value = compValue;
+                    }
+                    if(compFlag == 4) {
+                        scale.s5_value = compValue;
+                    }
+
+                    // 변경 완료 후 스트림 모드로 진입
+                    command = 'F205,1' + '\r\n';
+                    sp.write(command, function(err){
+                        if(err) {
+                            console.log(err.message)
+                            return;
+                        }
+                        console.log('return stream mode');
+                        scale.comparator = true;
+                    })
+                }, FIVE_HUNDRED_MS)
             })
-        })
+        }, FIVE_HUNDRED_MS)
     });
 })
 
@@ -242,12 +288,20 @@ ipcMain.on('commandOk', (event, arg) => {
     console.log('command ok');
 })
 
-const readHeader = function(rx) {
-    // TODO trim을 하는게 맞는건지 판단 필요
-    // rx = rx.trim();
+let convertComparatorValue = function(value, dp) {
+    let result;
+    result = value.toString().replace('.', '');
+    result =
+    Number(
+        result.slice(0, result.length-dp)
+        + '.'
+        + result.slice(result.length-dp)
+    ).toFixed(dp);
 
-    // TODO console 지우기
-    // console.log(rx);
+    return result;
+}
+
+const readHeader = function(rx) {
     const header1bit = rx.substr(0, 1);
     const header2bit = rx.substr(0, 2);
     const header3bit = rx.substr(0, 3);
@@ -287,6 +341,53 @@ const readHeader = function(rx) {
         return;
     }
 
+    // 기기 시작시 컴퍼레이터 초기값 설정
+    if(scale.comparator) {
+        const data = rx.substr(6,6);
+        let value = '';
+        value = Number(data).toString();
+
+        if(header4bit == 'RDS1') {
+            scale.s1_value = value;
+            scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
+        }
+        else if(header4bit == 'RDS2') {
+            scale.s2_value = value;
+            scale.s2_value = convertComparatorValue(scale.s2_value, decimalPoint);
+        }
+        else if(header4bit == 'RDS3') {
+            scale.s3_value = value;
+            scale.s3_value = convertComparatorValue(scale.s3_value, decimalPoint);
+        }
+        else if(header4bit == 'RDS4') {
+            scale.s4_value = value;
+            scale.s4_value = convertComparatorValue(scale.s4_value, decimalPoint);
+        }
+        else if(header4bit == 'RDS5') {
+            scale.s5_value = value;
+            scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
+
+            setTimeout(function(){
+                commandOk();
+            }, FIVE_HUNDRED_MS);
+        }
+        else {
+            scale.comparator = false;
+            scale.comparator_mode = 0;
+
+            scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
+            scale.s2_value = convertComparatorValue(scale.s2_value, decimalPoint);
+            scale.s3_value = convertComparatorValue(scale.s3_value, decimalPoint);
+            scale.s4_value = convertComparatorValue(scale.s4_value, decimalPoint);
+            scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
+
+            win.webContents.send('set_comp_value', scale);
+
+            console.log('decimal point: ', decimalPoint);
+            console.log(scale.s1_value);
+        }
+    }
+
     // 컴퍼레이터 모드 진입
     if(header3bit == 'COM') {
         console.log('comparator mode')
@@ -300,38 +401,6 @@ const readHeader = function(rx) {
             scale.s3_title = 'pl';
             scale.s4_title = 'ov';
             scale.s5_title = 'ud';
-        }
-    }
-
-    if(scale.comparator) {
-        // 데이터 소수점 포맷 체크
-        const data = rx.substr(6,7);
-        let value = '';
-        value = Number(data).toString();
-
-        const pointPos = data.indexOf('.');
-        if(pointPos > 0) {
-            value = Number(data).toFixed(6-pointPos).toString();
-        }
-
-
-        if(header4bit == 'RDS1') {
-            scale.s1_value = value;
-        }
-        if(header4bit == 'RDS2') {
-            scale.s2_value = value;
-        }
-        if(header4bit == 'RDS3') {
-            scale.s3_value = value;
-        }
-        if(header4bit == 'RDS4') {
-            scale.s4_value = value;
-        }
-        if(header4bit == 'RDS5') {
-            scale.s5_value = value;
-            setTimeout(function(){
-                commandOk();
-            }, FIVE_HUNDRED_MS);
         }
     }
 
@@ -542,11 +611,11 @@ const readHeader = function(rx) {
                 serialConfig.stopbits = data;
             }
 
-            if(header4bit == 'F205') {
-                console.log('success F205');
-                serialConfig.terminator = data;
-                console.log(serialConfig);
-            }
+            // if(header4bit == 'F205') {
+            //     console.log('success F205');
+            //     serialConfig.terminator = data;
+            //     console.log(serialConfig);
+            // }
         }
     }
     // 스트림 데이터
@@ -628,7 +697,8 @@ const makeFormat = function(data) {
 
     const pointPos = value.indexOf('.');
     if(pointPos > 0) {
-        result = Number(value).toFixed(7-pointPos).toString();
+        decimalPoint = 7-pointPos
+        result = Number(value).toFixed(decimalPoint).toString();
     }
 
     scale.isZero = false;
