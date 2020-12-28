@@ -1,10 +1,12 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
-
-const { WINDOW_WIDTH, WINDOW_HEIGHT, FIVE_HUNDRED_MS, PARITY_NONE, PARITY_ODD, PARITY_EVEN, CRLF, RED, WHITE, BLUE, DEFAULT_SERIAL_PORT_WINDOW, DEFAULT_SERIAL_PORT_LINUX } = require('./util/constant');
-const { scaleFlag, uartFlag, basicConfigFlag, externalPrintConfigFlag, calibrationConfigFlag } = require('./util/flag');
 const Store = require('electron-store'); // localStorage에 사용
+
+const log = require('electron-log');
+
+const { WINDOW_WIDTH, WINDOW_HEIGHT, ONE_HUNDRED_MS, FIVE_HUNDRED_MS, PARITY_NONE, PARITY_ODD, PARITY_EVEN, CRLF, RED, WHITE, BLUE, DEFAULT_SERIAL_PORT_WINDOW, DEFAULT_SERIAL_PORT_LINUX } = require('./util/constant');
+const { scaleFlag, uartFlag, basicConfigFlag, externalPrintConfigFlag, calibrationConfigFlag } = require('./util/flag');
 
 const os = require('os');
 const platforms = {
@@ -41,6 +43,7 @@ let currentPlatform;
 let decimalPoint = 0;
 
 const createWindow = function() {
+    log.info('function: createWindow');
     // 브라우저 창을 생성합니다.
     win = new BrowserWindow({
         width: WINDOW_WIDTH,
@@ -51,21 +54,19 @@ const createWindow = function() {
         },
         frame: false,
         fullscreen: false
-        // fullscreen: true
     })
     win.loadFile('index.html');
-    // win.webContents.openDevTools();
 
     win.webContents.on('did-finish-load', () => {
         pcConfigGetLocalStorage();
     })
 
     currentPlatform = platformsNames[os.platform()];
-
-    console.log(currentPlatform);
+    log.info('OS:', currentPlatform);
 }
 
 const openConfigWindow = function() {
+    log.info('function: openConfigWindow');
     // 브라우저 창을 생성합니다.
     configWin = new BrowserWindow({
         parent: win,
@@ -76,14 +77,10 @@ const openConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        // fullscreen: true
         fullscreen: false
     })
 
-
     configWin.loadFile('view/config.html');
-    // configWin.webContents.openDevTools();
-
     configWin.webContents.on('did-finish-load', () => {
         setTimeout(function() {
             getSerialConfig();
@@ -93,6 +90,7 @@ const openConfigWindow = function() {
 }
 
 const openPCConfigWindow = function() {
+    log.info('function: openPCConfigWindow');
     // 브라우저 창을 생성합니다.
     pcConfigWin = new BrowserWindow({
         parent: win,
@@ -103,12 +101,10 @@ const openPCConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        // fullscreen: true
         fullscreen: false
     })
 
     pcConfigWin.loadFile('view/pcconfig.html');
-    // pcConfigWin.webContents.openDevTools();
 
     // PC설정 화면 로드 완료되면 포트 목록 호출 및 PC설정 데이터 전송
     pcConfigWin.webContents.on('did-finish-load', () => {
@@ -123,6 +119,7 @@ const openPCConfigWindow = function() {
 }
 
 const pcConfigGetLocalStorage = function(event) {
+    log.info('function: pcConfigGetLocalStorage');
     const localStorage = new Store();
     if(localStorage.get('pc_config') == undefined) {
         if(currentPlatform == 'WINDOWS') {
@@ -156,24 +153,26 @@ const pcConfigGetLocalStorage = function(event) {
 }
 
 const setStreamMode = function() {
-    console.log('set stream mode');
+    log.info('function: setStreamMode');
     // 201204 AD모듈 붙이면서 스트림 모드 명령어 F205,1로 변경됨
     const command = 'F205,1' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message);
+            log.error('command: F205,1');
+            log.error(err);
             return;
         }
     });
 }
 
 const setCommandMode = function() {
-    console.log('set command mode');
+    log.info('function: setCommandMode');
     // 201204 AD모듈 붙이면서 커맨드 모드 명령어 F205,2로 변경됨
     const command = 'F205,2' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message);
+            log.error('command: F205,2');
+            log.error(err);
             return;
         }
         openConfigWindow();
@@ -181,12 +180,14 @@ const setCommandMode = function() {
 }
 
 const rssetCommand = function() {
+    log.info('function: rssetCommand');
     let command = 'RSSET' + '\r\n';
 
     scale.f = true;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: RSSET');
+            log.error(err);
             serialConfig = new uartFlag();
             configWin.webContents.send('set_serial_config_data', 'fail');
             return;
@@ -195,28 +196,30 @@ const rssetCommand = function() {
 }
 
 const commandOk = function() {
+    log.info('function: commandOk');
     let command = 'OK' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: OK');
+            log.error(err);
             return;
         }
     })
 }
 
 ipcMain.on('set_comp_value', (event, data) => {
-    console.log('set comparator value');
-    console.log('flag: ', data['flag']);
-    console.log('value: ', data['value']);
+    log.info('ipcMain.on: set_comp_value');
 
     let compFlag = data['flag'];
     let compValue = data['value'];
 
     // 커맨드 모드로 진입
+    log.info('command: F205,2');
     let command = 'F205,2' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message);
+            log.error('command: F205,2');
+            log.error(err);
             return;
         }
 
@@ -233,7 +236,7 @@ ipcMain.on('set_comp_value', (event, data) => {
 
         // 부호 제외 6자리 맞추기
         let compValueLength = compValue.toString().length;
-        let sendValue = compValue.toString();
+        let sendValue = compValue.toString().replace('.', '');
 
         for(let i = 0; i < 6 - compValueLength; i++) {
             sendValue = '0' + sendValue;
@@ -241,15 +244,14 @@ ipcMain.on('set_comp_value', (event, data) => {
 
         command = command + sendValue + '\r\n';
 
-        console.log('this is command', command);
-
         setTimeout(function(){
+            log.info('command: WDS');
             sp.write(command, function(err){
                 if(err) {
-                    console.log(err.message)
+                    log.error('command: WDS');
+                    log.error(err);
                     return;
                 }
-                console.log('send comparator command');
 
                 setTimeout(function(){
                     if(compFlag == 0) {
@@ -269,26 +271,28 @@ ipcMain.on('set_comp_value', (event, data) => {
                     }
 
                     // 변경 완료 후 스트림 모드로 진입
+                    log.info('command: F205,1');
                     command = 'F205,1' + '\r\n';
                     sp.write(command, function(err){
                         if(err) {
-                            console.log(err.message)
+                            log.error('command: F205,1');
+                            log.error(err);
                             return;
                         }
-                        console.log('return stream mode');
                         scale.comparator = true;
                     })
-                }, FIVE_HUNDRED_MS)
+                }, ONE_HUNDRED_MS)
             })
-        }, FIVE_HUNDRED_MS)
+        }, ONE_HUNDRED_MS)
     });
 })
 
 ipcMain.on('commandOk', (event, arg) => {
-    console.log('command ok');
+    log.info('ipcMain.on: commandOk');
 })
 
 let convertComparatorValue = function(value, dp) {
+    log.info('function: convertComparatorValue');
     let result;
     result = value.toString().replace('.', '');
     result =
@@ -324,7 +328,8 @@ const readHeader = function(rx) {
 
         sp.close(function(err){
             if(err) {
-                console.log(err.message)
+                log.error('error: INFOK/INCOK');
+                log.error(err);
                 return;
             }
             configWin.webContents.send('init_finish', 'ok');
@@ -349,48 +354,47 @@ const readHeader = function(rx) {
 
         if(header4bit == 'RDS1') {
             scale.s1_value = value;
-            scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
+            // scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
         }
         else if(header4bit == 'RDS2') {
             scale.s2_value = value;
-            scale.s2_value = convertComparatorValue(scale.s2_value, decimalPoint);
+            // scale.s2_value = convertComparatorValue(scale.s2_value, decimalPoint);
         }
         else if(header4bit == 'RDS3') {
             scale.s3_value = value;
-            scale.s3_value = convertComparatorValue(scale.s3_value, decimalPoint);
+            // scale.s3_value = convertComparatorValue(scale.s3_value, decimalPoint);
         }
         else if(header4bit == 'RDS4') {
             scale.s4_value = value;
-            scale.s4_value = convertComparatorValue(scale.s4_value, decimalPoint);
+            // scale.s4_value = convertComparatorValue(scale.s4_value, decimalPoint);
         }
         else if(header4bit == 'RDS5') {
             scale.s5_value = value;
-            scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
+            // scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
 
             setTimeout(function(){
                 commandOk();
-            }, FIVE_HUNDRED_MS);
+            }, ONE_HUNDRED_MS);
         }
         else {
             scale.comparator = false;
             scale.comparator_mode = 0;
+            makeFormat(rx);
 
-            scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
-            scale.s2_value = convertComparatorValue(scale.s2_value, decimalPoint);
-            scale.s3_value = convertComparatorValue(scale.s3_value, decimalPoint);
-            scale.s4_value = convertComparatorValue(scale.s4_value, decimalPoint);
-            scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
+            setTimeout(function(){
+                scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
+                scale.s2_value = convertComparatorValue(scale.s2_value, decimalPoint);
+                scale.s3_value = convertComparatorValue(scale.s3_value, decimalPoint);
+                scale.s4_value = convertComparatorValue(scale.s4_value, decimalPoint);
+                scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
 
-            win.webContents.send('set_comp_value', scale);
-
-            console.log('decimal point: ', decimalPoint);
-            console.log(scale.s1_value);
+                win.webContents.send('set_comp_value', scale);
+            }, ONE_HUNDRED_MS);
         }
     }
 
     // 컴퍼레이터 모드 진입
     if(header3bit == 'COM') {
-        console.log('comparator mode')
         scale.comparator = true;
         scale.comparator_mode = Number(rx.substr(4,2));
 
@@ -413,7 +417,6 @@ const readHeader = function(rx) {
         (header7bit == 'CALSPAN'))
     {
         scale.cf = false;
-        console.log('scale cf');
 
         if(header2bit == 'CF') {
             const data = Number(rx.substr(5,7));
@@ -495,16 +498,12 @@ const readHeader = function(rx) {
         (header5bit == 'SETOK'))
     {
         scale.f = false;
-        console.log('scale f');
 
         if(header5bit == 'STOOK') {
-            console.log('STOOK');
             rssetCommand();
         }
 
         if(header5bit == 'SETOK') {
-            console.log('SETOK');
-
             const localStorage = new Store();
 
             localStorage.set('pc_config.baudrate', serialConfig.baudrate);
@@ -524,16 +523,17 @@ const readHeader = function(rx) {
             try {
                 sp.close(function(err){
                     if(err) {
-                        console.log(err.message)
+                        log.error('error: SETOK');
+                        log.error(err);
                         return;
                     }
-                    console.log('closed');
+                    log.info('closed');
                     startProgram();
                 });
             }
             catch(e) {
-                console.log(e);
-                console.log('Cannot open port.');
+                log.error('Cannot open port.');
+                log.error(e);
             }
         }
 
@@ -586,7 +586,7 @@ const readHeader = function(rx) {
             }
 
             if(header4bit == 'F201') {
-                console.log('success F201');
+                log.info('F201');
 
                 serialConfig.baudrate = pcConfig.baudrate;
                 serialConfig.databits = Number(pcConfig.databits);
@@ -597,17 +597,17 @@ const readHeader = function(rx) {
             }
 
             if(header4bit == 'F202') {
-                console.log('success F202');
+                log.info('success F202');
                 serialConfig.databits = data;
             }
 
             if(header4bit == 'F203') {
-                console.log('success F203');
+                log.info('success F203');
                 serialConfig.parity = data;
             }
 
             if(header4bit == 'F204') {
-                console.log('success F204');
+                log.info('success F204');
                 serialConfig.stopbits = data;
             }
 
@@ -685,6 +685,7 @@ const readHeader = function(rx) {
 }
 
 const makeFormat = function(data) {
+    // log.info('function: makeFormat');
     let result = '';
     if(data == '' || data == undefined){
         return result;
@@ -720,18 +721,19 @@ const makeFormat = function(data) {
 }
 
 const getRomVer = function() {
-    console.log('get_device_rom_ver');
+    log.info('function: getRomVer');
     let command = '?VER' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message);
+            log.error('command: ?VER');
+            log.error(err);
             return;
         }
     });
 }
 
 const setSerialConfig = function(data) {
-    console.log('set_serial_config');
+    log.info('function: setSerialConfig');
 
     let arg = '';
     if(data.baudrate.length == 2) {
@@ -743,12 +745,13 @@ const setSerialConfig = function(data) {
 
     arg = arg + data.databits + data.parity + data.stopbits + data.terminator;
 
-    console.log('set_device_serial_data');
+    log.info('command: RSSTO');
     let command = 'RSSTO,' + arg + '\r\n';
     scale.f = true;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: RSSTO');
+            log.error(err);
             serialConfig = new uartFlag();
             configWin.webContents.send('set_serial_config_data', 'fail');
             return;
@@ -757,50 +760,55 @@ const setSerialConfig = function(data) {
 }
 
 const getSerialConfig = function() {
-    console.log('get_serial_config');
+    log.info('function: getSerialConfig');
 
-    console.log('get_device_baudrate');
+    log.info('command: ?F201');
     let command = '?F201' + '\r\n';
     scale.f = true;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message);
+            log.error('command: ?F201');
+            log.error(err);
             serialConfig = new uartFlag();
             return;
         }
-        console.log('get_device_databits');
+        log.info('command: ?F202');
         command = '?F202' + '\r\n';
         scale.f = true;
         sp.write(command, function(err){
             if(err) {
-                console.log(err.message)
+                log.error('command: ?F202');
+                log.error(err);
                 serialConfig = new uartFlag();
                 return;
             }
-            console.log('get_device_parity');
+            log.info('command: ?F203');
             command = '?F203' + '\r\n';
             scale.f = true;
             sp.write(command, function(err){
                 if(err) {
-                    console.log(err.message)
+                    log.error('command: ?F203');
+                    log.error(err);
                     serialConfig = new uartFlag();
                     return;
                 }
-                console.log('get_device_stopbits');
+                log.info('command: ?F204');
                 command = '?F204' + '\r\n';
                 scale.f = true;
                 sp.write(command, function(err){
                     if(err) {
-                        console.log(err.message)
+                        log.error('command: ?F204');
+                        log.error(err);
                         serialConfig = new uartFlag();
                         return;
                     }
-                    console.log('get_device_terminator');
+                    log.info('command: ?F205');
                     command = '?F205' + '\r\n';
                     scale.f = true;
                     sp.write(command, function(err){
                         if(err) {
-                            console.log(err.message)
+                            log.error('command: ?F205');
+                            log.error(err);
                             serialConfig = new uartFlag();
                             return;
                         }
@@ -812,37 +820,40 @@ const getSerialConfig = function() {
 }
 
 const setBasicLeftConfig = function(data) {
-    console.log('set_basic_left_config');
+    log.info('function: setBasicLeftConfig');
 
-    console.log('set_device_digital_filter');
+    log.info('command: F001');
     let command = 'F001,' + data.digitalFilter.toString() + '\r\n';
     scale.f = true;
     basicConfig.isRead = false;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: F001');
+            log.error(err);
             return;
         }
 
         setTimeout(function(){
-            console.log('set_device_hold_mode');
+            log.info('command: F002');
             command = 'F002,' + data.holdMode.toString() + '\r\n';
             scale.f = true;
             basicConfig.isRead = false;
             sp.write(command, function(err){
                 if(err) {
-                    console.log(err.message)
+                    log.error('command: F002');
+                    log.error(err);
                     return;
                 }
 
                 setTimeout(function(){
-                    console.log('set_device_average_time');
+                    log.info('command: F003');
                     command = 'F003,' + data.averageTime.toString() + '\r\n';
                     scale.f = true;
                     basicConfig.isRead = false;
                     sp.write(command, function(err){
                         if(err) {
-                            console.log(err.message)
+                            log.error('command: F003');
+                            log.error(err);
                             return;
                         }
                     })
@@ -853,33 +864,36 @@ const setBasicLeftConfig = function(data) {
 }
 
 const getBasicLeftConfig = function() {
-    console.log('get_basic_left_config');
+    log.info('function: getBasicLeftConfig');
 
-    console.log('get_device_digital_filter');
+    log.info('command: ?F001');
     let command = '?F001' + '\r\n';
     scale.f = true;
     basicConfig.isRead = true;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: ?F001');
+            log.error(err);
             return;
         }
-        console.log('get_device_hold_mode');
+        log.info('command: ?F002');
         command = '?F002' + '\r\n';
         scale.f = true;
         basicConfig.isRead = true;
         sp.write(command, function(err){
             if(err) {
-                console.log(err.message)
+                log.error('command: ?F002');
+                log.error(err);
                 return;
             }
-            console.log('get_device_average_time');
+            log.info('command: ?F003');
             command = '?F003' + '\r\n';
             scale.f = true;
             basicConfig.isRead = true;
             sp.write(command, function(err){
                 if(err) {
-                    console.log(err.message)
+                    log.error('command: ?F003');
+                    log.error(err);
                     return;
                 }
             })
@@ -888,48 +902,52 @@ const getBasicLeftConfig = function() {
 }
 
 const setBasicRightConfig = function(data) {
-    console.log('set_basic_right_config');
+    log.info('function: setBasicRightConfig');
 
-    console.log('set_device_zero_range');
+    log.info('command: CF05');
     let command = 'CF05,' + data.zeroRange + '\r\n';
     scale.cf = true;
     basicConfig.isRead = false;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: CF05');
+            log.error(err);
             return;
         }
 
         setTimeout(function(){
-            console.log('set_device_zero_tracking_time');
+            log.info('command: CF06');
             command = 'CF06,' + data.zeroTrackingTime + '\r\n';
             scale.cf = true;
             basicConfig.isRead = false;
             sp.write(command, function(err){
                 if(err) {
-                    console.log(err.message)
+                    log.error('command: CF06');
+                    log.error(err);
                     return;
                 }
 
                 setTimeout(function(){
-                    console.log('set_device_zero_tracking_width');
+                    log.info('command: CF07');
                     command = 'CF07,' + data.zeroTrackingWidth + '\r\n';
                     scale.cf = true;
                     basicConfig.isRead = false;
                     sp.write(command, function(err){
                         if(err) {
-                            console.log(err.message)
+                            log.error('command: CF07');
+                            log.error(err);
                             return;
                         }
 
                         setTimeout(function(){
-                            console.log('set_device_power_on_zero');
+                            log.info('command: CF08');
                             command = 'CF08,' + data.powerOnZero + '\r\n';
                             scale.cf = true;
                             basicConfig.isRead = false;
                             sp.write(command, function(err){
                                 if(err) {
-                                    console.log(err.message)
+                                    log.error('command: CF08');
+                                    log.error(err);
                                     return;
                                 }
                             })
@@ -942,43 +960,46 @@ const setBasicRightConfig = function(data) {
 }
 
 const getBasicRightConfig = function() {
-    console.log('get_basic_right_config');
+    log.info('function: getBasicRightConfig');
 
-    console.log('get_device_zero_range');
+    log.info('command: ?CF05');
     let command = '?CF05' + '\r\n';
     scale.cf = true;
     basicConfig.isRead = true;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: ?CF05');
+            log.error(err);
             return;
         }
-        console.log('get_device_zero_tracking_time');
+        log.info('command: ?CF06');
         command = '?CF06' + '\r\n';
         scale.cf = true;
         basicConfig.isRead = true;
         sp.write(command, function(err){
             if(err) {
-                console.log(err.message)
+                log.error('command: ?CF06');
+                log.error(err);
                 return;
             }
-            console.log('get_device_zero_tracking_width');
+            log.info('command: ?CF07');
             command = '?CF07' + '\r\n';
             scale.cf = true;
             basicConfig.isRead = true;
             sp.write(command, function(err){
                 if(err) {
-                    console.log(err.message)
+                    log.error('command: ?CF07');
+                    log.error(err);
                     return;
                 }
-
-                console.log('get_device_power_on_zero');
+                log.info('command: ?CF08');
                 command = '?CF08' + '\r\n';
                 scale.cf = true;
                 basicConfig.isRead = true;
                 sp.write(command, function(err){
                     if(err) {
-                        console.log(err.message)
+                        log.error('command: ?CF08');
+                        log.error(err);
                         return;
                     }
                 })
@@ -988,45 +1009,49 @@ const getBasicRightConfig = function() {
 }
 
 const setExternalPrintConfig = function(data) {
-    console.log('set_external_print_config');
+    log.info('function: setExternalPrintConfig');
 
-    console.log('set_device_print_condition');
+    log.info('command: F101');
     let command = 'F101,' + data.printCondition + '\r\n';
     scale.f = true;
     externalPrintConfig.isRead = false;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: F101');
+            log.error(err);
             return;
         }
         setTimeout(function(){
-            console.log('set_device_config_value');
+            log.info('command: F102');
             command = 'F102,' + data.configValue + '\r\n';
             scale.f = true;
             externalPrintConfig.isRead = false;
             sp.write(command, function(err){
                 if(err) {
-                    console.log(err.message)
+                    log.error('command: F102');
+                    log.error(err);
                     return;
                 }
                 setTimeout(function(){
-                    console.log('set_device_comparator_mode');
+                    log.info('command: F103');
                     command = 'F103,' + data.comparatorMode + '\r\n';
                     scale.f = true;
                     externalPrintConfig.isRead = false;
                     sp.write(command, function(err){
                         if(err) {
-                            console.log(err.message)
+                            log.error('command: F103');
+                            log.error(err);
                             return;
                         }
                         setTimeout(function(){
-                            console.log('set_device_near_zero');
+                            log.info('command: F104');
                             command = 'F104,' + data.nearZero + '\r\n';
                             scale.f = true;
                             externalPrintConfig.isRead = false;
                             sp.write(command, function(err){
                                 if(err) {
-                                    console.log(err.message)
+                                    log.error('command: F104');
+                                    log.error(err);
                                     return;
                                 }
                             })
@@ -1039,42 +1064,46 @@ const setExternalPrintConfig = function(data) {
 }
 
 const getExternalPrintConfig = function() {
-    console.log('get_external_print_config');
+    log.info('function: setCalibrationConfig');
 
-    console.log('get_device_print_condition');
+    log.info('command: ?F101');
     let command = '?F101' + '\r\n';
     scale.f = true;
     externalPrintConfig.isRead = true;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: ?F101');
+            log.error(err);
             return;
         }
-        console.log('get_device_config_value');
+        log.info('command: ?F102');
         command = '?F102' + '\r\n';
         scale.f = true;
         externalPrintConfig.isRead = true;
         sp.write(command, function(err){
             if(err) {
-                console.log(err.message)
+                log.error('command: ?F102');
+                log.error(err);
                 return;
             }
-            console.log('get_device_comparator_mode');
+            log.info('command: ?F103');
             command = '?F103' + '\r\n';
             scale.f = true;
             externalPrintConfig.isRead = true;
             sp.write(command, function(err){
                 if(err) {
-                    console.log(err.message)
+                    log.error('command: ?F103');
+                    log.error(err);
                     return;
                 }
-                console.log('get_device_near_zero');
+                log.info('command: ?F104');
                 command = '?F104' + '\r\n';
                 scale.f = true;
                 externalPrintConfig.isRead = true;
                 sp.write(command, function(err){
                     if(err) {
-                        console.log(err.message)
+                        log.error('command: ?F104');
+                        log.error(err);
                         return;
                     }
                 })
@@ -1084,45 +1113,49 @@ const getExternalPrintConfig = function() {
 }
 
 const setCalibrationConfig = function(data) {
-    console.log('set_calibration_config');
+    log.info('function: setCalibrationConfig');
 
-    console.log('set_device_capa');
+    log.info('command: CF03');
     let command = 'CF03,' + data.capa + '\r\n';
     scale.cf = true;
     calibrationConfig.isRead = false;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: CF03');
+            log.error(err);
             return;
         }
         setTimeout(function(){
-            console.log('set_device_div');
+            log.info('command: CF02');
             command = 'CF02,' + data.div + '\r\n';
             scale.cf = true;
             calibrationConfig.isRead = false;
             sp.write(command, function(err){
                 if(err) {
-                    console.log(err.message)
+                    log.error('command: CF02');
+                    log.error(err);
                     return;
                 }
                 setTimeout(function(){
-                    console.log('set_device_decimal_point');
+                    log.info('command: CF01');
                     command = 'CF01,' + data.decimalPoint + '\r\n';
                     scale.cf = true;
                     calibrationConfig.isRead = false;
                     sp.write(command, function(err){
                         if(err) {
-                            console.log(err.message)
+                            log.error('command: CF01');
+                            log.error(err);
                             return;
                         }
                         setTimeout(function(){
-                            console.log('set_device_unit');
+                            log.info('command: CF09');
                             command = 'CF09,' + data.unit + '\r\n';
                             scale.cf = true;
                             calibrationConfig.isRead = false;
                             sp.write(command, function(err){
                                 if(err) {
-                                    console.log(err.message)
+                                    log.error('command: CF09');
+                                    log.error(err);
                                     return;
                                 }
                             })
@@ -1135,43 +1168,47 @@ const setCalibrationConfig = function(data) {
 }
 
 const getCalibrationConfig = function() {
-    console.log('get_calibration_config');
+    log.info('function: getCalibrationConfig');
 
-    console.log('get_device_capa');
+    log.info('command: ?CF03');
     let command = '?CF03' + '\r\n';
     scale.cf = true;
     calibrationConfig.isRead = true;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: ?CF03');
+            log.error(err);
             return;
         }
-        console.log('get_device_div');
+        log.info('command: ?CF02');
         command = '?CF02' + '\r\n';
         scale.cf = true;
         calibrationConfig.isRead = true;
         sp.write(command, function(err){
             if(err) {
-                console.log(err.message)
+                log.error('command: ?CF02');
+                log.error(err);
                 return;
             }
-            console.log('get_device_decimal_point');
+            log.info('command: ?CF01');
             command = '?CF01' + '\r\n';
             scale.cf = true;
             calibrationConfig.isRead = true;
             sp.write(command, function(err){
                 if(err) {
-                    console.log(err.message)
+                    log.error('command: ?CF01');
+                    log.error(err);
                     return;
                 }
 
-                console.log('get_device_unit');
+                log.info('command: ?CF09');
                 command = '?CF09' + '\r\n';
                 scale.cf = true;
                 calibrationConfig.isRead = true;
                 sp.write(command, function(err){
                     if(err) {
-                        console.log(err.message)
+                        log.error('command: ?CF09');
+                        log.error(err);
                         return;
                     }
                 })
@@ -1181,14 +1218,13 @@ const getCalibrationConfig = function() {
 }
 
 const setCalZero = function() {
-    console.log('set_cal_zero');
-
-    console.log('set_device_cal_zero');
+    log.info('function: setCalZero');
     let command = 'CALZERO' + '\r\n';
     scale.cf = true;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: CALZERO');
+            log.error(err);
             configWin.webContents.send('set_cal_zero', 'fail');
             return;
         }
@@ -1196,14 +1232,13 @@ const setCalZero = function() {
 }
 
 const setCalSpan = function() {
-    console.log('set_cal_span');
-
-    console.log('set_device_cal_span');
+    log.info('function: setCalSpan');
     let command = 'CALSPAN' + '\r\n';
     scale.cf = true;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: setCalSpan');
+            log.error(err);
             configWin.webContents.send('set_cal_span', 'fail');
             return;
         }
@@ -1211,55 +1246,59 @@ const setCalSpan = function() {
 }
 
 const setSpanValue = function(data) {
-    console.log('set_span_value');
-
+    log.info('function: setSpanValue');
     let command = 'CF04,' + data + '\r\n';
     scale.cf = true;
     calibrationConfig.isRead = false;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: setSpanValue');
+            log.error(err);
             return;
         }
     })
 }
 
 const getCal = function() {
-    console.log('get_cal');
-
-    console.log('get_device_span_value');
+    log.info('function: getCal');
     let command = '?CF04' + '\r\n';
     scale.cf = true;
     calibrationConfig.isRead = true;
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: getCal');
+            log.error(err);
             return;
         }
     })
 }
 
 const initFunctionF = function() {
+    log.info('function: initFunctionF');
     let command = 'INF' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: initFunctionF');
+            log.error(err);
             return;
         }
     });
 }
 
 const initConfig = function() {
+    log.info('function: initConfig');
     let command = 'INC' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: initconfig');
+            log.error(err);
             return;
         }
     });
 }
 
 const openPort = function() {
+    log.info('function: openPort');
     try {
         let parity = 'none';
         if(pcConfig.parity == PARITY_ODD) {
@@ -1268,23 +1307,25 @@ const openPort = function() {
         else if(pcConfig.parity == PARITY_EVEN) {
             parity = 'even';
         }
-        console.log(pcConfig);
         sp = new SerialPort(pcConfig.port, {
             baudRate: pcConfig.baudrate * 100,
             dataBits: Number(pcConfig.databits),
             parity: parity,
             stopBits: Number(pcConfig.stopbits)
         });
-
+        log.info('pcConfig');
+        log.info(pcConfig);
         return sp;
     }
     catch(e) {
-        console.log(e);
-        console.log('Cannot open port.');
+        log.error('error: openPort');
+        log.error('Cannot open port.');
+        log.error(e);
     }
 };
 
 const changeMainButtonActive = function(isActive) {
+    log.info('function: changeMainButtonActive');
     win.webContents.send('main_button_active', isActive);
 }
 
@@ -1292,6 +1333,7 @@ let isPause = false;
 let timer;
 
 const confirmConnection = function() {
+    log.info('function: confirmConnection');
     if(isPause) {
         return;
     }
@@ -1310,6 +1352,7 @@ const confirmConnection = function() {
 }
 
 const startWaitTimer = function() {
+    log.info('function: startWaitTimer');
     isPause = false;
     timer = setInterval(function() {
         confirmConnection();
@@ -1317,16 +1360,18 @@ const startWaitTimer = function() {
 }
 
 const stopWaitTimer = function() {
+    log.info('function: stopWaitTimer');
     clearInterval(timer);
     isPause = true;
 }
 
 ipcMain.on('open_pc_config_window', (event, arg) => {
-    console.log('open_pc_config_window');
+    log.info('ipcMain.on: open_pc_config_window');
     openPCConfigWindow();
 })
 
 ipcMain.on('window_close', (event, arg) => {
+    log.info('ipcMain.on: window_close');
     if(arg == 'main') {
         win.close();
     }
@@ -1339,12 +1384,12 @@ ipcMain.on('window_close', (event, arg) => {
 });
 
 ipcMain.on('open_config_window', (event, arg) => {
-    console.log('open_config_window');
+    log.info('ipcMain.on: open_config_window');
     setCommandMode();
 })
 
 ipcMain.on('pc_config_set_data', (event, data) => {
-    console.log('pc_config_set_data');
+    log.info('ipcMain.on: pc_config_set_data');
     pcConfig = data;
 
     const localStorage = new Store();
@@ -1361,55 +1406,48 @@ ipcMain.on('pc_config_set_data', (event, data) => {
 })
 
 ipcMain.on('set_serial_config_data', (event, data) => {
-    console.log('set_serial_config_data');
-
+    log.info('ipcMain.on: set_serial_config_data');
     serialConfig = data;
     setSerialConfig(data);
 })
 
 ipcMain.on('set_basic_left_config_data', (event, data) => {
-    console.log('set_basic_left_config_data');
-
+    log.info('ipcMain.on: set_basic_left_config_data');
     setBasicLeftConfig(data);
 })
 
 ipcMain.on('set_basic_right_config_data', (event, data) => {
-    console.log('set_basic_right_config_data');
-
+    log.info('ipcMain.on: set_basic_right_config_data');
     setBasicRightConfig(data);
 })
 
 ipcMain.on('set_external_print_config_data', (event, data) => {
-    console.log('set_external_print_config_data');
-
+    log.info('ipcMain.on: set_external_print_config_data');
     setExternalPrintConfig(data);
 })
 
 ipcMain.on('set_calibration_config_data', (event, data) => {
-    console.log('set_calibration_config_data');
-
+    log.info('ipcMain.on: set_calibration_config_data');
     setCalibrationConfig(data);
 })
 
 ipcMain.on('set_cal_zero', (event, data) => {
-    console.log('set_cal_zero');
-
+    log.info('ipcMain.on: set_cal_zero');
     setCalZero();
 })
 
 ipcMain.on('set_cal_span', (event, data) => {
-    console.log('set_cal_span');
-
+    log.info('ipcMain.on: set_cal_span');
     setCalSpan();
 })
 
 ipcMain.on('set_span_value_data', (event, data) => {
-    console.log('set_span_value_data');
+    log.info('ipcMain.on: set_span_value_data');
     setSpanValue(data);
 })
 
 ipcMain.on('set_stream_mode', (event, data) => {
-    console.log('set_stream_mode');
+    log.info('ipcMain.on: set_stream_mode');
     if(sp == undefined) {
         return;
     }
@@ -1417,80 +1455,91 @@ ipcMain.on('set_stream_mode', (event, data) => {
 })
 
 ipcMain.on('get_serial_config_data', (event, arg) => {
+    log.info('ipcMain.on: get_serial_config_data');
     getSerialConfig();
 })
 
 ipcMain.on('get_basic_left_config_data', (event, arg) => {
+    log.info('ipcMain.on: get_basic_left_config_data');
     getBasicLeftConfig();
 })
 
 ipcMain.on('get_basic_right_config_data', (event, arg) => {
+    log.info('ipcMain.on: get_basic_right_config_data');
     getBasicRightConfig();
 })
 
 ipcMain.on('get_external_print_config_data', (event, arg) => {
+    log.info('ipcMain.on: get_external_print_config_data');
     getExternalPrintConfig();
 })
 
 ipcMain.on('get_calibration_config_data', (event, arg) => {
+    log.info('ipcMain.on: get_calibration_config_data');
     getCalibrationConfig();
 })
 
 ipcMain.on('get_cal_data', (event, arg) => {
+    log.info('ipcMain.on: get_cal_data');
     getCal();
 });
 
 ipcMain.on('init_function_f', (event, arg) => {
-    console.log('init_function_f');
+    log.info('ipcMain.on: init_function_f');
     initFunctionF();
 })
 
 ipcMain.on('init_config', (event, arg) => {
-    console.log('init_config');
+    log.info('ipcMain.on: init_config');
     initConfig();
 })
 
 ipcMain.on('set_clear_tare', (event, arg) =>{
-    console.log('set_clear_tare');
+    log.info('ipcMain.on: set_clear_tare');
     setClearTare();
 })
 
 ipcMain.on('set_zero_tare', (event, arg) =>{
-    console.log('set_zero_tare');
+    log.info('ipcMain.on: set_zero_tare');
     setZeroTare();
 })
 
 ipcMain.on('set_gross_net', (event, arg) =>{
-    console.log('set_gross_net');
+    log.info('ipcMain.on: set_gross_net');
     setGrossNet();
 })
 
 ipcMain.on('set_hold', (event, arg) =>{
-    console.log('set_hold');
+    log.info('ipcMain.on: set_hold');
     setHold();
 })
 
 let setClearTare = function() {
+    log.info('function: setClearTare');
     const command = 'CT' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
+            log.error('command: cleartare');
+            log.error(err);
             return;
         }
     })
 }
 
 let setZeroTare = function() {
+    log.info('function: setZeroTare');
     const command = 'MZT' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
-            return
+            log.error('command: zerotare');
+            log.error(err);
+            return;
         }
     })
 }
 
 let setGrossNet = function() {
+    log.info('function: setGrossNet');
     let command = 'MN' + '\r\n';
 
     if(scale.isNet) {
@@ -1498,13 +1547,15 @@ let setGrossNet = function() {
     }
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
-            return
+            log.error('command: grossnet');
+            log.error(err);
+            return;
         }
     })
 }
 
 let setHold = function() {
+    log.info('function: setHold');
     let command = 'HS' + '\r\n';
 
     if(scale.isHold) {
@@ -1512,24 +1563,22 @@ let setHold = function() {
     }
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message)
-            return
+            log.error('command: hold');
+            log.error(err);
+            return;
         }
     })
 }
 
 ipcMain.on('print', (event, arg) => {
-    console.log('print');
-    // TODO 프린트 기능 추가 필요
+    log.info('ipcMain.on: print');
     dialog.showMessageBox({type: 'info', title: '프린트', message: '준비중입니다.'});
     return;
 })
 
 ipcMain.on('on_off', (event, arg) => {
-    console.log('on_off');
+    log.info('ipcMain.on: on_off');
     try {
-        let isOpen = false;
-
         // 프로그램 시작
         if(arg == 'ON') {
             startWaitTimer();
@@ -1544,63 +1593,65 @@ ipcMain.on('on_off', (event, arg) => {
         }
     }
     catch(e) {
-        console.log(e);
+        log.error('error: ipcMain.on / on_off');
     }
 })
 
-let net = require('net');
-let testfunc = function(ls) {
-    let server = net.createServer(function(socket) {
-        // connection event
-        console.log('client connect');
-        socket.write('Welcome to Socket Server');
-        // ls.on('data', function(rx) {
-        //     readHeader(rx);
-        //     socket.write(rx + '\r\n');
-        //     win.webContents.send('rx_data', scale);
-        //     // console.log(rx);
-        //     scale.waiting_sec = 0;
-        //     // isOpen = true;
-        //     changeMainButtonActive(true);
-        // });
+// let net = require('net');
+// let testfunc = function(ls) {
+//     let server = net.createServer(function(socket) {
+//         // connection event
+//         console.log('client connect');
+//         socket.write('Welcome to Socket Server');
+//         // ls.on('data', function(rx) {
+//         //     readHeader(rx);
+//         //     socket.write(rx + '\r\n');
+//         //     win.webContents.send('rx_data', scale);
+//         //     // console.log(rx);
+//         //     scale.waiting_sec = 0;
+//         //     // isOpen = true;
+//         //     changeMainButtonActive(true);
+//         // });
+//
+//         socket.on('data', function(chunk) {
+//             let message = chunk.toString();
+//             console.log('client send : ', message);
+//             if(message == 'MZT\r\n') {
+//                 setZeroTare();
+//             }
+//         });
+//
+//         socket.on('end', function() {
+//             console.log('client connection closed');
+//         });
+//     });
+//
+//     return server;
+// }
+//
+// let server2;
 
-        socket.on('data', function(chunk) {
-            let message = chunk.toString();
-            console.log('client send : ', message);
-            if(message == 'MZT\r\n') {
-                setZeroTare();
-            }
-        });
 
-        socket.on('end', function() {
-            console.log('client connection closed');
-        });
-    });
-
-    return server;
-}
-
-let server2;
-
-
-const startProgram = function() {
+let startProgram = function() {
+    log.info('function: startProgram');
     sp = openPort();
 
-    console.log('command start');
+    log.info('command: START');
     // 201208 start 커맨드
     const command = 'START' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            console.log(err.message);
+            log.error('error: command START');
+            log.error(err);
             return;
         }
+        isOpen = true;
+
         const lineStream = sp.pipe(new Readline({ delimiter: pcConfig.terminator == CRLF ? '\r\n' : '\r' }));
         lineStream.on('data', function(rx) {
             readHeader(rx);
             win.webContents.send('rx_data', scale);
-            // console.log(rx);
             scale.waiting_sec = 0;
-            isOpen = true;
             changeMainButtonActive(isOpen);
         });
     });
@@ -1618,7 +1669,8 @@ const startProgram = function() {
     // server2.listen(3100);
 }
 
-const stopProgram = function() {
+let stopProgram = function() {
+    log.info('function: stopProgram');
     scale = new scaleFlag();
 
     if(sp != undefined) {
@@ -1626,10 +1678,10 @@ const stopProgram = function() {
             setStreamMode();
             // server2.close();
             if(err) {
-                console.log(err.message);
+                log.error('error: serialport close');
+                log.error(err);
                 return;
             }
-            console.log('closed');
         });
     }
 

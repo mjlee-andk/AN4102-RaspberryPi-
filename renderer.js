@@ -5,6 +5,7 @@ const COLOR = require('./util/color');
 
 
 let colorName = '';
+let isProgramOn = false;
 
 // 메인 화면 상단 버튼
 let openPCConfigWindowButton = document.getElementById("openPCConfigWindow");
@@ -39,6 +40,10 @@ let key_btn_subweight_list = document.querySelectorAll(".key_btn_subweight");
 let comp_flag = -1; // 현재 선택한 컴퍼레이터 값 구분자. -1이 아무것도 선택하지 않은 상태
 
 comS1Value.addEventListener("click", function(){
+    if(!isProgramOn) {
+        alert('프로그램을 켜주세요.');
+        return;
+    }
     if(keypad_subweight.style.display == "none") {
         if(comp_flag != -1) {
             return;
@@ -58,8 +63,11 @@ comS1Value.addEventListener("click", function(){
         comp_flag = -1;
     }
 });
-
 comS2Value.addEventListener("click", function(){
+    if(!isProgramOn) {
+        alert('프로그램을 켜주세요.');
+        return;
+    }
     if(keypad_subweight.style.display == "none") {
         if(comp_flag != -1) {
             return;
@@ -80,6 +88,10 @@ comS2Value.addEventListener("click", function(){
     }
 });
 comS3Value.addEventListener("click", function(){
+    if(!isProgramOn) {
+        alert('프로그램을 켜주세요.');
+        return;
+    }
     if(keypad_subweight.style.display == "none") {
         if(comp_flag != -1) {
             return;
@@ -100,6 +112,10 @@ comS3Value.addEventListener("click", function(){
     }
 });
 comS4Value.addEventListener("click", function(){
+    if(!isProgramOn) {
+        alert('프로그램을 켜주세요.');
+        return;
+    }
     if(keypad_subweight.style.display == "none") {
         if(comp_flag != -1) {
             return;
@@ -120,6 +136,10 @@ comS4Value.addEventListener("click", function(){
     }
 });
 comS5Value.addEventListener("click", function(){
+    if(!isProgramOn) {
+        alert('프로그램을 켜주세요.');
+        return;
+    }
     if(keypad_subweight.style.display == "none") {
         if(comp_flag != -1) {
             return;
@@ -351,7 +371,7 @@ ipcRenderer.on('set_comp_value', (event, data) => {
 });
 
 ipcRenderer.on('main_button_active', (event, isActive) => {
-    // 프로그램 ON 상태
+    // 프로그램 OFF 상태
     if(!isActive) {
         setClearTareButton.disabled = true;
         setZeroTareButton.disabled = true;
@@ -359,8 +379,9 @@ ipcRenderer.on('main_button_active', (event, isActive) => {
         setHoldButton.disabled = true;
         printButton.disabled = true;
         openConfigWindowButton.disabled = true;
+        isProgramOn = false;
     }
-    // 프로그램 OFF 상태
+    // 프로그램 ON 상태
     else {
         setClearTareButton.disabled = false;
         setZeroTareButton.disabled = false;
@@ -368,6 +389,7 @@ ipcRenderer.on('main_button_active', (event, isActive) => {
         setHoldButton.disabled = false;
         printButton.disabled = false;
         openConfigWindowButton.disabled = false;
+        isProgramOn = true;
     }
 })
 
