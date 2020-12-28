@@ -5,8 +5,7 @@
     "main": "main.js",
     "scripts": {
         "start": "electron .",
-        "pack": "electron-builder",
-        "build:linux": "electron-builder --linux --x64"
+        "pack": "electron-builder"
     },
     "keywords": [],
     "author": "",

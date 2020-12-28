@@ -354,23 +354,18 @@ const readHeader = function(rx) {
 
         if(header4bit == 'RDS1') {
             scale.s1_value = value;
-            // scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
         }
         else if(header4bit == 'RDS2') {
             scale.s2_value = value;
-            // scale.s2_value = convertComparatorValue(scale.s2_value, decimalPoint);
         }
         else if(header4bit == 'RDS3') {
             scale.s3_value = value;
-            // scale.s3_value = convertComparatorValue(scale.s3_value, decimalPoint);
         }
         else if(header4bit == 'RDS4') {
             scale.s4_value = value;
-            // scale.s4_value = convertComparatorValue(scale.s4_value, decimalPoint);
         }
         else if(header4bit == 'RDS5') {
             scale.s5_value = value;
-            // scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
 
             setTimeout(function(){
                 commandOk();
@@ -1346,7 +1341,6 @@ const confirmConnection = function() {
         scale.isZero = false;
         scale.isNet = false;
         scale.isHg = false;
-        changeMainButtonActive(false);
         win.webContents.send('rx_data', scale);
     }
 }
@@ -1645,17 +1639,16 @@ let startProgram = function() {
             log.error(err);
             return;
         }
-        isOpen = true;
 
         const lineStream = sp.pipe(new Readline({ delimiter: pcConfig.terminator == CRLF ? '\r\n' : '\r' }));
         lineStream.on('data', function(rx) {
             readHeader(rx);
             win.webContents.send('rx_data', scale);
             scale.waiting_sec = 0;
-            changeMainButtonActive(isOpen);
         });
     });
 
+    changeMainButtonActive(true);
     // server2 = testfunc(lineStream);
     //
     // server2.on('listening', function() {
