@@ -1591,39 +1591,8 @@ ipcMain.on('on_off', (event, arg) => {
     }
 })
 
-// let net = require('net');
-// let testfunc = function(ls) {
-//     let server = net.createServer(function(socket) {
-//         // connection event
-//         console.log('client connect');
-//         socket.write('Welcome to Socket Server');
-//         // ls.on('data', function(rx) {
-//         //     readHeader(rx);
-//         //     socket.write(rx + '\r\n');
-//         //     win.webContents.send('rx_data', scale);
-//         //     // console.log(rx);
-//         //     scale.waiting_sec = 0;
-//         //     // isOpen = true;
-//         //     changeMainButtonActive(true);
-//         // });
-//
-//         socket.on('data', function(chunk) {
-//             let message = chunk.toString();
-//             console.log('client send : ', message);
-//             if(message == 'MZT\r\n') {
-//                 setZeroTare();
-//             }
-//         });
-//
-//         socket.on('end', function() {
-//             console.log('client connection closed');
-//         });
-//     });
-//
-//     return server;
-// }
-//
-// let server2;
+let net = require('net');
+let server;
 
 
 let startProgram = function() {
@@ -1646,20 +1615,47 @@ let startProgram = function() {
             win.webContents.send('rx_data', scale);
             scale.waiting_sec = 0;
         });
+
+        // TCP/IP 소켓으로 서버 열어서 무선으로 데이터 보내기
+        server = net.createServer(function(socket) {
+            // connection event
+            log.info('client connect');
+            socket.write('Welcome to Socket Server');
+
+            // 계량모듈로부터 받는 데이터 클라이언트로 전송하기
+            lineStream.on('data', function(rx) {
+                socket.write(rx + '\r\n');
+            });
+
+            // 클라이언트에서 보내는 메시지 처리
+            socket.on('data', function(chunk) {
+                let message = chunk.toString();
+                log.info('client send : ', message);
+                if(message == 'MZT\r\n') {
+                    setZeroTare();
+                }
+            });
+
+            socket.on('end', function() {
+                log.info('client connection end');
+            });
+        })
+        .on('listening', function() {
+            log.info('Server is listening');
+        })
+        .on('close', function() {
+            log.info('Server closed');
+        })
+        .on('error', (err) => {
+            log.error('Connection error:', err.message);
+            throw err;
+        })
+        .listen(3100, function(){
+            log.info('listening on 3100...');
+        });
     });
 
     changeMainButtonActive(true);
-    // server2 = testfunc(lineStream);
-    //
-    // server2.on('listening', function() {
-    //     console.log('Server is listening');
-    // });
-    //
-    // server2.on('close', function() {
-    //     console.log('Server closed');
-    // });
-    //
-    // server2.listen(3100);
 }
 
 let stopProgram = function() {
@@ -1669,7 +1665,7 @@ let stopProgram = function() {
     if(sp != undefined) {
         sp.close(function(err){
             setStreamMode();
-            // server2.close();
+            server.close();
             if(err) {
                 log.error('error: serialport close');
                 log.error(err);
