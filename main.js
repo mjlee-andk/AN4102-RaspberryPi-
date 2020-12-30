@@ -4,6 +4,7 @@ const Readline = require('@serialport/parser-readline')
 const Store = require('electron-store'); // localStorage에 사용
 
 const log = require('electron-log');
+const net = require('net');
 
 const { WINDOW_WIDTH, WINDOW_HEIGHT, ONE_HUNDRED_MS, FIVE_HUNDRED_MS, PARITY_NONE, PARITY_ODD, PARITY_EVEN, CRLF, RED, WHITE, BLUE, DEFAULT_SERIAL_PORT_WINDOW, DEFAULT_SERIAL_PORT_LINUX } = require('./util/constant');
 const { scaleFlag, uartFlag, basicConfigFlag, externalPrintConfigFlag, calibrationConfigFlag } = require('./util/flag');
@@ -39,8 +40,8 @@ let basicConfig = new basicConfigFlag();
 let externalPrintConfig = new externalPrintConfigFlag();
 let calibrationConfig = new calibrationConfigFlag();
 let currentPlatform;
-
 let decimalPoint = 0;
+let socketServer;
 
 const createWindow = function() {
     log.info('function: createWindow');
@@ -1591,10 +1592,6 @@ ipcMain.on('on_off', (event, arg) => {
     }
 })
 
-let net = require('net');
-let server;
-
-
 let startProgram = function() {
     log.info('function: startProgram');
     sp = openPort();
@@ -1616,39 +1613,41 @@ let startProgram = function() {
             scale.waiting_sec = 0;
         });
 
-        // TCP/IP 소켓으로 서버 열어서 무선으로 데이터 보내기
-        server = net.createServer(function(socket) {
-            // connection event
+        // TCP/IP 서버 소켓
+        socketServer = net.createServer(function(socket) {
+            let isConnected = true;
+
             log.info('client connect');
             socket.write('Welcome to Socket Server');
 
-            // 계량모듈로부터 받는 데이터 클라이언트로 전송하기
+            // 계량모듈로부터 받는 시리얼 데이터를 클라이언트로 전송하기
             lineStream.on('data', function(rx) {
-                socket.write(rx + '\r\n');
+                if(isConnected){
+                    socket.write(rx + '\r\n');
+                }
             });
 
-            // 클라이언트에서 보내는 메시지 처리
+            // 클라이언트에서 보내는 데이터 처리
             socket.on('data', function(chunk) {
                 let message = chunk.toString();
                 log.info('client send : ', message);
+
+                // ZERO TARE
                 if(message == 'MZT\r\n') {
                     setZeroTare();
                 }
             });
 
+            // 클라이언트와 연결이 해제되었을때
             socket.on('end', function() {
                 log.info('client connection end');
+                isConnected = false;
             });
-        })
-        .on('listening', function() {
-            log.info('Server is listening');
-        })
-        .on('close', function() {
-            log.info('Server closed');
-        })
-        .on('error', (err) => {
-            log.error('Connection error:', err.message);
-            throw err;
+
+            // 연결 에러 있을 때
+            socket.on('error', (err) => {
+                log.error('Connection error:', err.message);
+            });
         })
         .listen(3100, function(){
             log.info('listening on 3100...');
@@ -1664,8 +1663,9 @@ let stopProgram = function() {
 
     if(sp != undefined) {
         sp.close(function(err){
+            socketServer.close();
             setStreamMode();
-            server.close();
+
             if(err) {
                 log.error('error: serialport close');
                 log.error(err);
