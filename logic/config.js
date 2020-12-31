@@ -1,5 +1,5 @@
-const { ipcRenderer } = require('electron')
-const remote = require('electron').remote;
+const { ipcRenderer, remote } = require('electron')
+const log = require('electron-log'); // 로그 기록
 const { TAB_SERIAL_CONFIG, TAB_BASIC_LEFT_CONFIG, TAB_BASIC_RIGHT_CONFIG, TAB_EXTERNAL_PRINT_CONFIG, TAB_CALIBRATION_CONFIG, TAB_CALIBRATION, TAB_INIT } = require('../util/constant');
 const { setSerialConfigData } = require('./serialConfig');
 const { setBasicLeftConfigData, setBasicRightConfigData } = require('./basicConfig');
@@ -13,7 +13,7 @@ require('./init');
 //
 // 화면 상단
 //
-let configOkButton = document.getElementById("configOk");
+const configOkButton = document.getElementById("configOk");
 configOkButton.addEventListener('click', function(){
     if(serialDiv.style.display == displayType) {
         setSerialConfigData();
@@ -34,22 +34,22 @@ configOkButton.addEventListener('click', function(){
     }
 })
 
-let closeConfigWindowButton = document.getElementById("closeConfigWindow");
+const closeConfigWindowButton = document.getElementById("closeConfigWindow");
 closeConfigWindowButton.addEventListener('click', function(){
-    console.log('closeConfigWindowButton');
-
     ipcRenderer.send('set_stream_mode', 'ok');
     closeWindow();
 });
 
-let closeWindow = function() {
+const closeWindow = function() {
+    log.info('function: closeWindow');
+
     ipcRenderer.send('window_close', 'config');
 }
 
-let romVer = document.getElementById("romVer");
+const romVer = document.getElementById("romVer");
 
 ipcRenderer.on('get_rom_ver', (event, data) => {
-    console.log('get_rom_ver');
+    log.info('ipcRenderer.on: get_rom_ver');
 
     romVer.innerHTML = data;
 });
@@ -58,23 +58,25 @@ ipcRenderer.on('get_rom_ver', (event, data) => {
 // 화면 하단
 //
 
-let serialConfigButton = document.getElementById("serialConfigButton");
-let basicLeftConfigButton = document.getElementById("basicLeftConfigButton");
-let basicRightConfigButton = document.getElementById("basicRightConfigButton");
-let externalPrintConfigButton = document.getElementById("externalPrintConfigButton");
-let calibrationConfigButton = document.getElementById("calibrationConfigButton");
-let calButton = document.getElementById("calButton");
-let initButton = document.getElementById("initButton");
+const serialConfigButton = document.getElementById("serialConfigButton");
+const basicLeftConfigButton = document.getElementById("basicLeftConfigButton");
+const basicRightConfigButton = document.getElementById("basicRightConfigButton");
+const externalPrintConfigButton = document.getElementById("externalPrintConfigButton");
+const calibrationConfigButton = document.getElementById("calibrationConfigButton");
+const calButton = document.getElementById("calButton");
+const initButton = document.getElementById("initButton");
 
-let serialDiv = document.getElementById("serialDiv");
-let basicLeftDiv = document.getElementById("basicLeftDiv");
-let basicRightDiv = document.getElementById("basicRightDiv");
-let externalPrintDiv = document.getElementById("externalPrintDiv");
-let calibrationConfigDiv = document.getElementById("calibrationConfigDiv");
-let calDiv = document.getElementById("calDiv");
-let initDiv = document.getElementById("initDiv");
+const serialDiv = document.getElementById("serialDiv");
+const basicLeftDiv = document.getElementById("basicLeftDiv");
+const basicRightDiv = document.getElementById("basicRightDiv");
+const externalPrintDiv = document.getElementById("externalPrintDiv");
+const calibrationConfigDiv = document.getElementById("calibrationConfigDiv");
+const calDiv = document.getElementById("calDiv");
+const initDiv = document.getElementById("initDiv");
 
-let setDivDisplay = function(tab) {
+const setDivDisplay = function(tab) {
+    log.info('function: setDivDisplay');
+
     serialDiv.style.display = "none";
     basicLeftDiv.style.display = "none";
     basicRightDiv.style.display = "none";
@@ -112,7 +114,9 @@ let setDivDisplay = function(tab) {
     }
 }
 
-let setButtonActive = function(tab) {
+const setButtonActive = function(tab) {
+    log.info('function: setButtonActive');
+
     serialConfigButton.classList.remove("active");
     basicLeftConfigButton.classList.remove("active");
     basicRightConfigButton.classList.remove("active");

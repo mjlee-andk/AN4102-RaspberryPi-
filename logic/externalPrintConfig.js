@@ -1,27 +1,27 @@
-const { ipcRenderer } = require('electron')
-const remote = require('electron').remote;
+const { ipcRenderer, remote } = require('electron');
+const log = require('electron-log'); // 로그 기록
 const { FIVE_HUNDRED_MS } = require('../util/constant');
 
 // 외부 출력
-let printConditionRadios1 = document.getElementById("printConditionRadios1");
-let printConditionRadios2 = document.getElementById("printConditionRadios2");
-let configValueText = document.getElementById("configValueText");
+const printConditionRadios1 = document.getElementById("printConditionRadios1");
+const printConditionRadios2 = document.getElementById("printConditionRadios2");
+const configValueText = document.getElementById("configValueText");
 
-let comparatorModeRadios1 = document.getElementById("comparatorModeRadios1");
-let comparatorModeRadios2 = document.getElementById("comparatorModeRadios2");
-let comparatorModeRadios3 = document.getElementById("comparatorModeRadios3");
-let nearZeroText = document.getElementById("nearZeroText");
+const comparatorModeRadios1 = document.getElementById("comparatorModeRadios1");
+const comparatorModeRadios2 = document.getElementById("comparatorModeRadios2");
+const comparatorModeRadios3 = document.getElementById("comparatorModeRadios3");
+const nearZeroText = document.getElementById("nearZeroText");
 
-let keypad_config = document.getElementById("keypad_config");
-let key_config_list = document.querySelectorAll(".key_config");
-let key_btn_config_list = document.querySelectorAll(".key_btn_config");
+const keypad_config = document.getElementById("keypad_config");
+const key_config_list = document.querySelectorAll(".key_config");
+const key_btn_config_list = document.querySelectorAll(".key_btn_config");
 
-let keypad_nearzero = document.getElementById("keypad_nearzero");
-let key_nearzero_list = document.querySelectorAll(".key_nearzero");
-let key_btn_nearzero_list = document.querySelectorAll(".key_btn_nearzero");
+const keypad_nearzero = document.getElementById("keypad_nearzero");
+const key_nearzero_list = document.querySelectorAll(".key_nearzero");
+const key_btn_nearzero_list = document.querySelectorAll(".key_btn_nearzero");
 
 ipcRenderer.on('get_external_print_config_data', (event, data) => {
-    console.log('get_external_print_config_data');
+    log.info('ipcRenderer.on: get_external_print_config_data');
 
     if(data.printCondition == 0) {
         printConditionRadios1.checked = true;
@@ -46,17 +46,17 @@ ipcRenderer.on('get_external_print_config_data', (event, data) => {
 });
 
 ipcRenderer.on('set_external_print_config_data', (event, arg) => {
-    console.log('set external print config ' + arg);
+    log.info('ipcRenderer.on: set_external_print_config_data');
 
     setTimeout(function(){
         ipcRenderer.send('set_stream_mode', 'ok');
-        let window = remote.getCurrentWindow();
+        const window = remote.getCurrentWindow();
         window.close();
     }, FIVE_HUNDRED_MS);
 });
 
-let setExternalPrintConfigData = function() {
-    console.log('setExternalPrintConfigData');
+const setExternalPrintConfigData = function() {
+    log.info('function: setExternalPrintConfigData');
 
     let externalPrintConfigData = {
         printCondition: 0,
@@ -86,6 +86,7 @@ let setExternalPrintConfigData = function() {
 
     externalPrintConfigData.nearZero = nearZeroText.value;
     ipcRenderer.send('set_external_print_config_data', externalPrintConfigData);
+
     return;
 }
 
@@ -100,9 +101,9 @@ configValueText.addEventListener("click", function(){
 
 key_config_list.forEach((item, index) => {
     item.addEventListener("click", (event) => {
-        let numBoxValue = configValueText.value;
-        let numBoxLength = configValueText.value.length;
-        let keyValue = item.innerHTML;
+        const numBoxValue = configValueText.value;
+        const numBoxLength = configValueText.value.length;
+        const keyValue = item.innerHTML;
 
         // 양수일 때
         if(numBoxValue.indexOf('-') == -1) {
@@ -134,8 +135,8 @@ key_config_list.forEach((item, index) => {
 
 key_btn_config_list.forEach((item, index) => {
     item.addEventListener("click", (event) => {
-        let inputValLength = configValueText.value.length;
-        let keyValue = item.innerHTML;
+        const inputValLength = configValueText.value.length;
+        const keyValue = item.innerHTML;
         if(keyValue == '삭제'){
             if(inputValLength > 0){
                 configValueText.value = configValueText.value.substring(0, inputValLength - 1);
@@ -174,9 +175,9 @@ nearZeroText.addEventListener("click", function(){
 
 key_nearzero_list.forEach((item, index) => {
     item.addEventListener("click", (event) => {
-        let numBoxValue = nearZeroText.value;
-        let numBoxLength = nearZeroText.value.length;
-        let keyValue = item.innerHTML;
+        const numBoxValue = nearZeroText.value;
+        const numBoxLength = nearZeroText.value.length;
+        const keyValue = item.innerHTML;
 
         // 양수일 때
         if(numBoxValue.indexOf('-') == -1) {
@@ -208,8 +209,8 @@ key_nearzero_list.forEach((item, index) => {
 
 key_btn_nearzero_list.forEach((item, index) => {
     item.addEventListener("click", (event) => {
-        let inputValLength = nearZeroText.value.length;
-        let keyValue = item.innerHTML;
+        const inputValLength = nearZeroText.value.length;
+        const keyValue = item.innerHTML;
         if(keyValue == '삭제'){
             if(inputValLength > 0){
                 nearZeroText.value = nearZeroText.value.substring(0, inputValLength - 1);

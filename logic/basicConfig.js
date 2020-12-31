@@ -1,19 +1,21 @@
-const { ipcRenderer } = require('electron')
-const remote = require('electron').remote;
+const { ipcRenderer, remote } = require('electron');
+const log = require('electron-log'); // 로그 기록
 const { FIVE_HUNDRED_MS } = require('../util/constant');
 
+//
 // 기본 설정 좌
-let digitalFilterSelect = document.getElementById("digitalFilterSelect");
-let holdModeSelect = document.getElementById("holdModeSelect");
-let averageTimeSlider = document.getElementById('averageTimeSlider');
-let averageTimeSliderValue = document.getElementById('averageTimeSliderValue');
+//
+const digitalFilterSelect = document.getElementById("digitalFilterSelect");
+const holdModeSelect = document.getElementById("holdModeSelect");
+const averageTimeSlider = document.getElementById('averageTimeSlider');
+const averageTimeSliderValue = document.getElementById('averageTimeSliderValue');
 
 averageTimeSlider.oninput = function() {
     averageTimeSliderValue.innerHTML = this.value / 10;
 }
 
 ipcRenderer.on('get_basic_left_config_data', (event, data) => {
-    console.log('get_basic_left_config_data');
+    log.info('ipcRenderer.on: get_basic_left_config_data');
 
     digitalFilterSelect.value = data.digitalFilter;
     holdModeSelect.value = data.holdMode;
@@ -22,40 +24,38 @@ ipcRenderer.on('get_basic_left_config_data', (event, data) => {
 });
 
 ipcRenderer.on('set_basic_left_config_data', (event, data) => {
-    console.log('set basic left config ' + data );
+    log.info('ipcRenderer.on: set_basic_left_config_data');
 
-    setTimeout(function(){
-        ipcRenderer.send('set_stream_mode', 'ok');
-        let window = remote.getCurrentWindow();
-        window.close();
-    }, FIVE_HUNDRED_MS);
+    setStreamMode();
 });
 
-let setBasicLeftConfigData = function() {
-    console.log('setBasicLeftConfigData');
+const setBasicLeftConfigData = function() {
+    log.info('function: setBasicLeftConfigData');
 
-    let basicLeftConfigData = {
+    const basicLeftConfigData = {
         digitalFilter: digitalFilterSelect.options[digitalFilterSelect.selectedIndex].value,
         holdMode: holdModeSelect.options[holdModeSelect.selectedIndex].value,
         averageTime: averageTimeSlider.value
     };
-    console.log(basicLeftConfigData);
 
     ipcRenderer.send('set_basic_left_config_data', basicLeftConfigData);
+
     return;
 }
 
+//
 // 기본 설정 우
-let zeroRangeSlider = document.getElementById("zeroRangeSlider");
-let zeroRangeSliderValue = document.getElementById("zeroRangeSliderValue");
+//
+const zeroRangeSlider = document.getElementById("zeroRangeSlider");
+const zeroRangeSliderValue = document.getElementById("zeroRangeSliderValue");
 
-let zeroTrackingTimeSlider = document.getElementById("zeroTrackingTimeSlider");
-let zeroTrackingTimeSliderValue = document.getElementById("zeroTrackingTimeSliderValue");
+const zeroTrackingTimeSlider = document.getElementById("zeroTrackingTimeSlider");
+const zeroTrackingTimeSliderValue = document.getElementById("zeroTrackingTimeSliderValue");
 
-let zeroTrackingWidthSlider = document.getElementById('zeroTrackingWidthSlider');
-let zeroTrackingWidthSliderValue = document.getElementById("zeroTrackingWidthSliderValue");
+const zeroTrackingWidthSlider = document.getElementById('zeroTrackingWidthSlider');
+const zeroTrackingWidthSliderValue = document.getElementById("zeroTrackingWidthSliderValue");
 
-let powerOnZeroToggle = document.getElementById('powerOnZeroToggle');
+const powerOnZeroToggle = document.getElementById('powerOnZeroToggle');
 
 zeroRangeSlider.oninput = function() {
     zeroRangeSliderValue.innerHTML = this.value;
@@ -70,7 +70,7 @@ zeroTrackingWidthSlider.oninput = function() {
 }
 
 ipcRenderer.on('get_basic_right_config_data', (event, data) => {
-    console.log('get_basic_right_config_data');
+    log.info('ipcRenderer.on: get_basic_right_config_data');
 
     zeroRangeSlider.value = data.zeroRange;
     zeroRangeSliderValue.innerHTML = zeroRangeSlider.value;
@@ -81,28 +81,22 @@ ipcRenderer.on('get_basic_right_config_data', (event, data) => {
     zeroTrackingWidthSlider.value = data.zeroTrackingTime;
     zeroTrackingWidthSliderValue.innerHTML = zeroTrackingWidthSlider.value / 10;
 
-    if(data.powerOnZero == 0) {
-        powerOnZeroToggle.checked = false;
-    }
-    else if(data.powerOnZero == 1) {
+    powerOnZeroToggle.checked = false;
+    if(data.powerOnZero == 1) {
         powerOnZeroToggle.checked = true;
     }
 });
 
 ipcRenderer.on('set_basic_right_config_data', (event, arg) => {
-    console.log('set basic right ' + arg );
+    log.info('ipcRenderer.on: set_basic_right_config_data');
 
-    setTimeout(function(){
-        ipcRenderer.send('set_stream_mode', 'ok');
-        let window = remote.getCurrentWindow();
-        window.close();
-    }, FIVE_HUNDRED_MS);
+    setStreamMode();
 })
 
-let setBasicRightConfigData = function() {
-    console.log('setBasicRightConfigData');
+const setBasicRightConfigData = function() {
+    log.info('function: setBasicRightConfigData');
 
-    let basicRightConfigData = {
+    const basicRightConfigData = {
         zeroRange: zeroRangeSlider.value,
         zeroTrackingTime: zeroTrackingTimeSlider.value,
         zeroTrackingWidth: zeroTrackingWidthSlider.value,
@@ -111,6 +105,16 @@ let setBasicRightConfigData = function() {
 
     ipcRenderer.send('set_basic_right_config_data', basicRightConfigData);
     return;
+}
+
+const setStreamMode = function() {
+    log.info('function: setStreamMode');
+
+    setTimeout(function(){
+        ipcRenderer.send('set_stream_mode', 'ok');
+        const window = remote.getCurrentWindow();
+        window.close();
+    }, FIVE_HUNDRED_MS);
 }
 
 module.exports = {

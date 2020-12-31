@@ -1,18 +1,19 @@
-const { ipcRenderer } = require('electron')
-const remote = require('electron').remote;
+const { ipcRenderer, remote } = require('electron');
+const log = require('electron-log'); // 로그 기록
+// const remote = require('electron').remote;
 
 // 교정
-let spanValueText = document.getElementById("spanValueText");
+const spanValueText = document.getElementById("spanValueText");
 
-let keypad_span = document.getElementById("keypad_span");
-let key_span_list = document.querySelectorAll(".key_span");
-let key_btn_span_list = document.querySelectorAll(".key_btn_span");
+const keypad_span = document.getElementById("keypad_span");
+const key_span_list = document.querySelectorAll(".key_span");
+const key_btn_span_list = document.querySelectorAll(".key_btn_span");
 
-let calZeroButton = document.getElementById("calZeroButton");
-let checkCalZero = document.getElementById("checkCalZero");
+const calZeroButton = document.getElementById("calZeroButton");
+const checkCalZero = document.getElementById("checkCalZero");
 
-let calSpanButton = document.getElementById("calSpanButton");
-let checkCalSpan = document.getElementById("checkCalSpan");
+const calSpanButton = document.getElementById("calSpanButton");
+const checkCalSpan = document.getElementById("checkCalSpan");
 
 calZeroButton.addEventListener('click', function(){
     remote.dialog
@@ -22,17 +23,16 @@ calZeroButton.addEventListener('click', function(){
             message: 'CAL 0를 진행하시겠습니까?',
             buttons: ['ok', 'cancel']
         }).then(result => {
-            console.log(result);
-            let response = result.response;
+            const response = result.response;
             if(response == 0) {
                 ipcRenderer.send('set_cal_zero', 'ok');
             }
             else {
                 checkCalZero.innerHTML = 'NG';
             }
-
         }).catch(err => {
-            console.log(err);
+            log.error('dialog error');
+            log.error(err);
         });
 })
 
@@ -44,8 +44,7 @@ calSpanButton.addEventListener('click', function(){
             message: 'CAL F를 진행하시겠습니까?',
             buttons: ['ok', 'cancel']
         }).then(result => {
-            console.log(result);
-            let response = result.response;
+            const response = result.response;
 
             if(response == 0) {
                 ipcRenderer.send('set_cal_span', 'ok');
@@ -53,14 +52,14 @@ calSpanButton.addEventListener('click', function(){
             else {
                 checkCalSpan.innerHTML = 'NG';
             }
-
         }).catch(err => {
-            console.log(err);
+            log.error('dialog error');
+            log.error(err);
         });
 })
 
 ipcRenderer.on('set_cal_zero', (event, arg) => {
-    console.log('set_cal_zero');
+    log.info('ipcRenderer.on: set_cal_zero');
 
     if(arg == 'ok') {
         checkCalZero.innerHTML = 'OK';
@@ -71,7 +70,7 @@ ipcRenderer.on('set_cal_zero', (event, arg) => {
 });
 
 ipcRenderer.on('set_cal_span', (event, arg) => {
-    console.log('set_cal_span');
+    log.info('ipcRenderer.on: set_cal_span');
 
     if(arg == 'ok') {
         setSpanValue();
@@ -83,12 +82,13 @@ ipcRenderer.on('set_cal_span', (event, arg) => {
 });
 
 ipcRenderer.on('get_cal_data', (event, data) => {
-    console.log('get_cal_data');
+    log.info('ipcRenderer.on: get_cal_data');
+    
     spanValueText.value = data.spanValue;
 });
 
-let setSpanValue = function() {
-    console.log('setSpanValue');
+const setSpanValue = function() {
+    log.info('function: setSpanValue');
 
     ipcRenderer.send('set_span_value_data', spanValueText.value);
     return;
@@ -105,9 +105,9 @@ spanValueText.addEventListener("click", function(){
 
 key_span_list.forEach((item, index) => {
     item.addEventListener("click", (event) => {
-        let numBoxValue = spanValueText.value;
-        let numBoxLength = spanValueText.value.length;
-        let keyValue = item.innerHTML;
+        const numBoxValue = spanValueText.value;
+        const numBoxLength = spanValueText.value.length;
+        const keyValue = item.innerHTML;
 
         // 양수일 때
         if(numBoxValue.indexOf('-') == -1) {
@@ -139,8 +139,8 @@ key_span_list.forEach((item, index) => {
 
 key_btn_span_list.forEach((item, index) => {
     item.addEventListener("click", (event) => {
-        let inputValLength = spanValueText.value.length;
-        let keyValue = item.innerHTML;
+        const inputValLength = spanValueText.value.length;
+        const keyValue = item.innerHTML;
         if(keyValue == '삭제'){
             if(inputValLength > 0){
                 spanValueText.value = spanValueText.value.substring(0, inputValLength - 1);

@@ -1,8 +1,8 @@
-const { ipcRenderer } = require('electron')
-const remote = require('electron').remote;
+const { ipcRenderer, remote } = require('electron')
+// const remote = require('electron').remote;
+const log = require('electron-log'); // 로그 기록
 const { RED, YELLOW } = require('./util/constant');
 const COLOR = require('./util/color');
-
 
 let colorName = '';
 let isProgramOn = false;
@@ -10,7 +10,7 @@ let isProgramOn = false;
 // 메인 화면 상단 버튼
 let openPCConfigWindowButton = document.getElementById("openPCConfigWindow");
 let openConfigWindowButton = document.getElementById("openConfigWindow");
-let closeMainWindowButton = document.getElementById("closeMainWindow");
+const closeMainWindowButton = document.getElementById("closeMainWindow");
 // 계량값 표시부
 let displayMsg = document.getElementById("displayMsg");
 let unitTag = document.getElementById("unit");
@@ -179,9 +179,9 @@ key_subweight_list.forEach((item, index) => {
             comp_value = comS5Value;
         }
 
-        let numBoxValue = comp_value.innerHTML;
-        let numBoxLength = comp_value.innerHTML.length;
-        let keyValue = item.innerHTML;
+        const numBoxValue = comp_value.innerHTML;
+        const numBoxLength = comp_value.innerHTML.length;
+        const keyValue = item.innerHTML;
 
         // 최대 6자리까지 입력가능
         if(numBoxLength >= 6) {
@@ -218,9 +218,9 @@ key_btn_subweight_list.forEach((item, index) => {
             comp_value = comS5Value;
         }
 
-        let numBoxValue = comp_value.innerHTML;
-        let inputValLength = comp_value.innerHTML.length;
-        let keyValue = item.innerHTML;
+        const numBoxValue = comp_value.innerHTML;
+        const inputValLength = comp_value.innerHTML.length;
+        const keyValue = item.innerHTML;
 
         if(keyValue == '삭제'){
             if(inputValLength <= 0) {
@@ -241,8 +241,10 @@ key_btn_subweight_list.forEach((item, index) => {
     })
 });
 
-let setCompValue = function(flag, value) {
-    let comp_value = {
+const setCompValue = function(flag, value) {
+    log.info('function: setCompValue');
+
+    const comp_value = {
         flag: flag,
         value: value
     }
@@ -258,27 +260,27 @@ let printButton = document.getElementById("print");
 let onOffButton = document.getElementById("onOff");
 
 openPCConfigWindowButton.addEventListener('click', function(){
-    console.log('openPCConfigWindowButton');
     ipcRenderer.send('open_pc_config_window', 'ok');
 })
 
 openConfigWindowButton.addEventListener('click', function(){
-    console.log('openConfigWindowButton');
     ipcRenderer.send('open_config_window', 'ok');
 })
 
 closeMainWindowButton.addEventListener('click', function(){
-    console.log('closeMainWindowButton');
-
     ipcRenderer.send('set_stream_mode', 'ok');
     closeWindow();
 })
 
 ipcRenderer.on('set_font_color', (event, data) => {
+    log.info('ipcRenderer.on: set_font_color');
+
     setFontColor(data)
 });
 
-let setFontColor = function(color) {
+const setFontColor = function(color) {
+    log.info('function: setFontColor');
+
     if(color == RED) {
         colorName = COLOR['RED'];
     }
@@ -363,6 +365,8 @@ ipcRenderer.on('print', (event, data) => {
 });
 
 ipcRenderer.on('set_comp_value', (event, data) => {
+    log.info('ipcRenderer.on: set_comp_value');
+
     comS1Value.innerHTML = data.s1_value;
     comS2Value.innerHTML = data.s2_value;
     comS3Value.innerHTML = data.s3_value;
@@ -371,6 +375,8 @@ ipcRenderer.on('set_comp_value', (event, data) => {
 });
 
 ipcRenderer.on('main_button_active', (event, isActive) => {
+    log.info('ipcRenderer.on: main_button_active');
+
     // 프로그램 OFF 상태
     if(!isActive) {
         setClearTareButton.disabled = true;
@@ -417,11 +423,13 @@ onOffButton.addEventListener('click', function(){
     setOnOffView();
 })
 
-let closeWindow = function() {
+const closeWindow = function() {
     ipcRenderer.send('window_close', 'main');
 }
 
-let setOnOffView = function() {
+const setOnOffView = function() {
+    log.info('function: setOnOffView');
+
     let onoffLabel = onOffButton.innerHTML;
 
     // 프로그램 시작

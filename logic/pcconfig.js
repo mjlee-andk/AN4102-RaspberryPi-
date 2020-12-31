@@ -1,9 +1,10 @@
-const { ipcRenderer } = require('electron')
+const { ipcRenderer } = require('electron');
 const { uartFlag } = require('../util/flag');
+const log = require('electron-log'); // 로그 기록
 const { PARITY_NONE, PARITY_ODD, PARITY_EVEN, CRLF, CR, RED, YELLOW, BLUE } = require('../util/constant');
 
-let pcConfigOkButton = document.getElementById("pcConfigOkButton");
-let pcConfigCloseButton = document.getElementById("pcConfigCloseButton");
+const pcConfigOkButton = document.getElementById("pcConfigOkButton");
+const pcConfigCloseButton = document.getElementById("pcConfigCloseButton");
 
 let portSelect = document.getElementById("portSelect");
 let baudrateSelect = document.getElementById("baudrateSelect");
@@ -32,7 +33,7 @@ pcConfigCloseButton.addEventListener('click', function() {
 
 // PC설정 화면 시작시 데이터 받아오기
 ipcRenderer.on('pc_config_get_data', (event, data) => {
-    console.log('pc_config_get_data');
+    log.info('ipcRenderer.on: pc_config_get_data');
 
     portSelect.value = data.port;
     baudrateSelect.value = data.baudrate;
@@ -57,7 +58,8 @@ ipcRenderer.on('pc_config_get_data', (event, data) => {
 
 // Port 리스트 받아오기
 ipcRenderer.on('port_list', (event, data) => {
-    console.log('port_list');
+    log.info('ipcRenderer.on: port_list');
+
     data.forEach(function(item, index, array){
         let objOption = document.createElement("option");
         objOption.text = item.path;
@@ -68,7 +70,9 @@ ipcRenderer.on('port_list', (event, data) => {
 });
 
 // 기기 설정 페이지에서 입력 받은 데이터로 설정하기
-let pcConfigSetData = function() {
+const pcConfigSetData = function() {
+    log.info('function: pcConfigSetData');
+
     let pcConfigNow = new uartFlag('COM1', 24, 8, PARITY_NONE, 1, CRLF, BLUE);
 
     pcConfigNow.port = portSelect.options[portSelect.selectedIndex].value;
@@ -84,9 +88,12 @@ let pcConfigSetData = function() {
 
     pcConfigNow.fontcolor = fontColorRadios1.checked ? fontColorRadios1.value : (fontColorRadios2.checked ? fontColorRadios2.value : fontColorRadios3.value);
     ipcRenderer.send('pc_config_set_data', pcConfigNow);
+
     return;
 }
 
-let closeWindow = function() {
+const closeWindow = function() {
+    log.info('function: closeWindow');
+
     ipcRenderer.send('window_close', 'pc_config');
 }

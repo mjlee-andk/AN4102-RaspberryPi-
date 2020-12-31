@@ -1,15 +1,15 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const SerialPort = require('serialport')
-const Readline = require('@serialport/parser-readline')
-const Store = require('electron-store'); // localStorage에 사용
+const Readline = require('@serialport/parser-readline') // 시리얼 데이터
+const Store = require('electron-store'); // local Storage
 
-const log = require('electron-log');
-const net = require('net');
+const log = require('electron-log'); // 로그 기록
+const net = require('net'); // 소켓 서버통신
 
 const { WINDOW_WIDTH, WINDOW_HEIGHT, ONE_HUNDRED_MS, FIVE_HUNDRED_MS, PARITY_NONE, PARITY_ODD, PARITY_EVEN, CRLF, RED, WHITE, BLUE, DEFAULT_SERIAL_PORT_WINDOW, DEFAULT_SERIAL_PORT_LINUX } = require('./util/constant');
 const { scaleFlag, uartFlag, basicConfigFlag, externalPrintConfigFlag, calibrationConfigFlag } = require('./util/flag');
 
-const os = require('os');
+const os = require('os'); // 운영체제 확인
 const platforms = {
     WINDOWS: 'WINDOWS',
     MAC: 'MAC',

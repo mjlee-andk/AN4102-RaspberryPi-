@@ -7,6 +7,14 @@
         "start": "electron .",
         "pack": "electron-builder"
     },
+    "build": {
+        "linux": {
+            "target": {
+                "target": "appimage",
+                "arch": ["armv7l"]
+            }
+        }
+    },
     "keywords": [],
     "author": "",
     "license": "ISC",

@@ -1,19 +1,21 @@
-const { ipcRenderer } = require('electron')
-const remote = require('electron').remote;
+const { ipcRenderer, remote } = require('electron');
+const log = require('electron-log'); // 로그 기록
+// const remote = require('electron').remote;
 const { FIVE_HUNDRED_MS } = require('../util/constant');
 
 // 교정 설정
-let capaText = document.getElementById("capaText");
-let divSelect = document.getElementById("divSelect");
-let decimalPointSelect = document.getElementById("decimalPointSelect");
-let unitSelect = document.getElementById("unitSelect");
+const capaText = document.getElementById("capaText");
+const divSelect = document.getElementById("divSelect");
+const decimalPointSelect = document.getElementById("decimalPointSelect");
+const unitSelect = document.getElementById("unitSelect");
 
-let keypad_capa = document.getElementById("keypad_capa");
-let key_capa_list = document.querySelectorAll(".key_capa");
-let key_btn_capa_list = document.querySelectorAll(".key_btn_capa");
+const keypad_capa = document.getElementById("keypad_capa");
+const key_capa_list = document.querySelectorAll(".key_capa");
+const key_btn_capa_list = document.querySelectorAll(".key_btn_capa");
 
 ipcRenderer.on('get_calibration_config_data', (event, data) => {
-    console.log('get_calibration_config_data');
+    log.info('ipcRenderer.on: get_calibration_config_data');
+
     capaText.value = data.capa;
     divSelect.value = data.div;
     decimalPointSelect.value = data.decimalPoint;
@@ -21,19 +23,19 @@ ipcRenderer.on('get_calibration_config_data', (event, data) => {
 });
 
 ipcRenderer.on('set_calibration_config_data', (event, arg) => {
-    console.log('set calibration ' + arg );
+    log.info('ipcRenderer.on: set_calibration_config_data');
 
     setTimeout(function(){
         ipcRenderer.send('set_stream_mode', 'ok');
-        let window = remote.getCurrentWindow();
+        const window = remote.getCurrentWindow();
         window.close();
     }, FIVE_HUNDRED_MS);
 });
 
-let setCalibrationConfigData = function() {
-    console.log('setCalibrationConfigData');
+const setCalibrationConfigData = function() {
+    log.info('function: setCalibrationConfigData');
 
-    let calibrationConfigData = {
+    const calibrationConfigData = {
         capa: capaText.value,
         div: divSelect.options[divSelect.selectedIndex].value,
         decimalPoint: decimalPointSelect.options[decimalPointSelect.selectedIndex].value,
@@ -55,9 +57,9 @@ capaText.addEventListener("click", function(){
 
 key_capa_list.forEach((item, index) => {
     item.addEventListener("click", (event) => {
-        let numBoxValue = capaText.value;
-        let numBoxLength = capaText.value.length;
-        let keyValue = item.innerHTML;
+        const numBoxValue = capaText.value;
+        const numBoxLength = capaText.value.length;
+        const keyValue = item.innerHTML;
 
         // 최대 99999까지 입력 가능
         if(numBoxLength <= 4) {
@@ -74,8 +76,8 @@ key_capa_list.forEach((item, index) => {
 
 key_btn_capa_list.forEach((item, index) => {
     item.addEventListener("click", (event) => {
-        let inputValLength = capaText.value.length;
-        let keyValue = item.innerHTML;
+        const inputValLength = capaText.value.length;
+        const keyValue = item.innerHTML;
         if(keyValue == '삭제'){
             if(inputValLength > 0){
                 capaText.value = capaText.value.substring(0, inputValLength - 1);

@@ -1,5 +1,6 @@
-const { ipcRenderer } = require('electron')
-const remote = require('electron').remote;
+const { ipcRenderer, remote } = require('electron');
+// const remote = require('electron').remote;
+const log = require('electron-log'); // 로그 기록
 const { FIVE_HUNDRED_MS } = require('../util/constant');
 const { uartFlag } = require('../util/flag');
 
@@ -18,7 +19,8 @@ let terminatorRadios2 = document.getElementById("terminatorRadios2");
 
 
 ipcRenderer.on('get_serial_config_data', (event, data) => {
-    console.log('get_serial_config_data');
+    log.info('ipcRenderer.on: get_serial_config_data');
+
     baudrateSelect.value = data.baudrate;
     if(data.databits == 7) {
         dataBitsRadios1.checked = true;
@@ -50,16 +52,18 @@ ipcRenderer.on('get_serial_config_data', (event, data) => {
 });
 
 ipcRenderer.on('set_serial_config_data', (event, arg) => {
-    console.log('set serial config ' + arg );
+    log.info('ipcRenderer.on: set_serial_config_data');
 
     setTimeout(function(){
         ipcRenderer.send('set_stream_mode', 'ok');
-        let window = remote.getCurrentWindow();
+        const window = remote.getCurrentWindow();
         window.close();
     }, FIVE_HUNDRED_MS);
 });
 
-let setSerialConfigData = function() {
+const setSerialConfigData = function() {
+    log.info('function: setSerialConfigData');
+
     let serialConfigNow = new uartFlag();
 
     serialConfigNow.baudrate = baudrateSelect.options[baudrateSelect.selectedIndex].value;
