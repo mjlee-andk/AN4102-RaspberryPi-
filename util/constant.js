@@ -12,6 +12,8 @@ const RED = '1';
 const YELLOW = '2';
 const BLUE = '3';
 
+const SERVER_PORT = 3100;
+
 const LOCALSTORAGE_KEY_PORT = 'port';
 const LOCALSTORAGE_KEY_BAUDRATE = 'baudrate';
 const LOCALSTORAGE_KEY_DATABITS = 'databits';
@@ -60,5 +62,6 @@ module.exports = {
     TAB_CALIBRATION,
     TAB_INIT,
     DEFAULT_SERIAL_PORT_WINDOW,
-    DEFAULT_SERIAL_PORT_LINUX
+    DEFAULT_SERIAL_PORT_LINUX,
+    SERVER_PORT
 }

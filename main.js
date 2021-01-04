@@ -6,7 +6,7 @@ const Store = require('electron-store'); // local Storage
 const log = require('electron-log'); // 로그 기록
 const net = require('net'); // 소켓 서버통신
 
-const { WINDOW_WIDTH, WINDOW_HEIGHT, ONE_HUNDRED_MS, FIVE_HUNDRED_MS, PARITY_NONE, PARITY_ODD, PARITY_EVEN, CRLF, RED, WHITE, BLUE, DEFAULT_SERIAL_PORT_WINDOW, DEFAULT_SERIAL_PORT_LINUX } = require('./util/constant');
+const { WINDOW_WIDTH, WINDOW_HEIGHT, ONE_HUNDRED_MS, FIVE_HUNDRED_MS, PARITY_NONE, PARITY_ODD, PARITY_EVEN, CRLF, RED, WHITE, BLUE, DEFAULT_SERIAL_PORT_WINDOW, DEFAULT_SERIAL_PORT_LINUX, SERVER_PORT } = require('./util/constant');
 const { scaleFlag, uartFlag, basicConfigFlag, externalPrintConfigFlag, calibrationConfigFlag } = require('./util/flag');
 
 const os = require('os'); // 운영체제 확인
@@ -292,7 +292,7 @@ ipcMain.on('commandOk', (event, arg) => {
     log.info('ipcMain.on: commandOk');
 })
 
-let convertComparatorValue = function(value, dp) {
+const convertComparatorValue = function(value, dp) {
     log.info('function: convertComparatorValue');
     let result;
     result = value.toString().replace('.', '');
@@ -375,7 +375,8 @@ const readHeader = function(rx) {
         else {
             scale.comparator = false;
             scale.comparator_mode = 0;
-            makeFormat(rx);
+
+            getDecimalPoint(rx.substr(6,8));
 
             setTimeout(function(){
                 scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
@@ -680,8 +681,20 @@ const readHeader = function(rx) {
     }
 }
 
+const getDecimalPoint = function(value) {
+    if(value == '') {
+        return;
+    }
+    let result = '';
+    const pointPos = value.indexOf('.');
+    if(pointPos > 0) {
+        decimalPoint = 7-pointPos
+        result = Number(value).toFixed(decimalPoint).toString();
+    }
+    return result;
+}
+
 const makeFormat = function(data) {
-    // log.info('function: makeFormat');
     let result = '';
     if(data == '' || data == undefined){
         return result;
@@ -690,17 +703,14 @@ const makeFormat = function(data) {
     const value = data.substr(6,8);
     const unit = data.substr(14,2).trim();
 
-    result = Number(value).toString();
+    // result = Number(value).toString();
+    result = getDecimalPoint(value);
 
-    const pointPos = value.indexOf('.');
-    if(pointPos > 0) {
-        decimalPoint = 7-pointPos
-        result = Number(value).toFixed(decimalPoint).toString();
-    }
-
-    scale.isZero = false;
     if(result.substr(0,1).includes('0')) {
         scale.isZero = true;
+    }
+    else {
+        scale.isZero = false;
     }
 
     scale.unit = unit.length;
@@ -1343,6 +1353,7 @@ const confirmConnection = function() {
         scale.isNet = false;
         scale.isHg = false;
         win.webContents.send('rx_data', scale);
+        // console.log('confirm::::::::', scale.s1_value);
     }
 }
 
@@ -1610,6 +1621,7 @@ let startProgram = function() {
         lineStream.on('data', function(rx) {
             readHeader(rx);
             win.webContents.send('rx_data', scale);
+            // console.log('lineStream::::::::', scale.s1_value);
             scale.waiting_sec = 0;
         });
 
@@ -1632,10 +1644,10 @@ let startProgram = function() {
                 let message = chunk.toString();
                 log.info('client send : ', message);
 
-                // ZERO TARE
-                if(message == 'MZT\r\n') {
-                    setZeroTare();
-                }
+                // // ZERO TARE
+                // if(message == 'MZT\r\n') {
+                //     setZeroTare();
+                // }
             });
 
             // 클라이언트와 연결이 해제되었을때
@@ -1649,7 +1661,7 @@ let startProgram = function() {
                 log.error('Connection error:', err.message);
             });
         })
-        .listen(3100, function(){
+        .listen(SERVER_PORT, function(){
             log.info('listening on 3100...');
         });
     });
@@ -1659,7 +1671,7 @@ let startProgram = function() {
 
 let stopProgram = function() {
     log.info('function: stopProgram');
-    scale = new scaleFlag();
+    // scale = new scaleFlag();
 
     if(sp != undefined) {
         sp.close(function(err){
