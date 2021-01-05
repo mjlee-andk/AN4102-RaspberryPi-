@@ -251,6 +251,9 @@ const setCompValue = function(flag, value) {
     ipcRenderer.send('set_comp_value', comp_value);
 }
 
+// 2단 투입 시작 버튼
+let startButton = document.getElementById("start");
+
 // 메인 동작 관련 커맨드 버튼
 let setClearTareButton = document.getElementById("setClearTare");
 let setZeroTareButton = document.getElementById("setZeroTare");
@@ -379,6 +382,7 @@ ipcRenderer.on('main_button_active', (event, isActive) => {
 
     // 프로그램 OFF 상태
     if(!isActive) {
+        startButton.disabled = true;
         setClearTareButton.disabled = true;
         setZeroTareButton.disabled = true;
         setGrossNetButton.disabled = true;
@@ -389,6 +393,7 @@ ipcRenderer.on('main_button_active', (event, isActive) => {
     }
     // 프로그램 ON 상태
     else {
+        startButton.disabled = false;
         setClearTareButton.disabled = false;
         setZeroTareButton.disabled = false;
         setGrossNetButton.disabled = false;
@@ -397,6 +402,10 @@ ipcRenderer.on('main_button_active', (event, isActive) => {
         openConfigWindowButton.disabled = false;
         isProgramOn = true;
     }
+})
+
+startButton.addEventListener('click', function(){
+      ipcRenderer.send('start', 'ok');
 })
 
 setClearTareButton.addEventListener('click', function(){

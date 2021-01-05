@@ -1293,7 +1293,7 @@ const initFunctionF = function() {
 
 const initConfig = function() {
     log.info('function: initConfig');
-    let command = 'INC' + '\r\n';
+    const command = 'INC' + '\r\n';
     sp.write(command, function(err){
         if(err) {
             log.error('command: initconfig');
@@ -1500,6 +1500,11 @@ ipcMain.on('init_config', (event, arg) => {
     initConfig();
 })
 
+ipcMain.on('start', (event, arg) =>{
+    log.info('ipcMain.on: start');
+    start();
+})
+
 ipcMain.on('set_clear_tare', (event, arg) =>{
     log.info('ipcMain.on: set_clear_tare');
     setClearTare();
@@ -1520,7 +1525,20 @@ ipcMain.on('set_hold', (event, arg) =>{
     setHold();
 })
 
-let setClearTare = function() {
+// 2단 투입 시작
+const start = function() {
+    log.info('function: start');
+    const command = 'SW1' + '\r\n';
+    sp.write(command, function(err){
+        if(err) {
+            log.error('command: SW1');
+            log.error(err);
+            return;
+        }
+    })
+}
+
+const setClearTare = function() {
     log.info('function: setClearTare');
     const command = 'CT' + '\r\n';
     sp.write(command, function(err){
@@ -1532,7 +1550,7 @@ let setClearTare = function() {
     })
 }
 
-let setZeroTare = function() {
+const setZeroTare = function() {
     log.info('function: setZeroTare');
     const command = 'MZT' + '\r\n';
     sp.write(command, function(err){
@@ -1544,7 +1562,7 @@ let setZeroTare = function() {
     })
 }
 
-let setGrossNet = function() {
+const setGrossNet = function() {
     log.info('function: setGrossNet');
     let command = 'MN' + '\r\n';
 
@@ -1560,7 +1578,7 @@ let setGrossNet = function() {
     })
 }
 
-let setHold = function() {
+const setHold = function() {
     log.info('function: setHold');
     let command = 'HS' + '\r\n';
 
@@ -1603,7 +1621,7 @@ ipcMain.on('on_off', (event, arg) => {
     }
 })
 
-let startProgram = function() {
+const startProgram = function() {
     log.info('function: startProgram');
     sp = openPort();
 
@@ -1669,7 +1687,7 @@ let startProgram = function() {
     changeMainButtonActive(true);
 }
 
-let stopProgram = function() {
+const stopProgram = function() {
     log.info('function: stopProgram');
     // scale = new scaleFlag();
 
