@@ -1,5 +1,4 @@
 const { ipcRenderer, remote } = require('electron');
-// const remote = require('electron').remote;
 const log = require('electron-log'); // 로그 기록
 const { FIVE_HUNDRED_MS } = require('../util/constant');
 const { uartFlag } = require('../util/flag');

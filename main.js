@@ -6,7 +6,7 @@ const Store = require('electron-store'); // local Storage
 const log = require('electron-log'); // 로그 기록
 const net = require('net'); // 소켓 서버통신
 
-const { WINDOW_WIDTH, WINDOW_HEIGHT, ONE_HUNDRED_MS, FIVE_HUNDRED_MS, PARITY_NONE, PARITY_ODD, PARITY_EVEN, CRLF, RED, WHITE, BLUE, DEFAULT_SERIAL_PORT_WINDOW, DEFAULT_SERIAL_PORT_LINUX, SERVER_PORT } = require('./util/constant');
+const { WINDOW_WIDTH, WINDOW_HEIGHT, ONE_HUNDRED_MS, FIVE_HUNDRED_MS, PARITY_NONE, PARITY_ODD, PARITY_EVEN, CRLF, RED, WHITE, BLUE, DEFAULT_SERIAL_PORT_WINDOW, DEFAULT_SERIAL_PORT_LINUX, SERVER_PORT, COMP_MODE_INPUT, COMP_MODE_EMISSION, COMP_MODE_LIMIT, COMP_MODE_CHECKER } = require('./util/constant');
 const { scaleFlag, uartFlag, basicConfigFlag, externalPrintConfigFlag, calibrationConfigFlag } = require('./util/flag');
 
 const os = require('os'); // 운영체제 확인
@@ -156,10 +156,10 @@ const pcConfigGetLocalStorage = function(event) {
 const setStreamMode = function() {
     log.info('function: setStreamMode');
     // 201204 AD모듈 붙이면서 스트림 모드 명령어 F205,1로 변경됨
-    const command = 'F205,1' + '\r\n';
+    const command = 'F206,1' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            log.error('command: F205,1');
+            log.error('command: F206,1');
             log.error(err);
             return;
         }
@@ -169,10 +169,10 @@ const setStreamMode = function() {
 const setCommandMode = function() {
     log.info('function: setCommandMode');
     // 201204 AD모듈 붙이면서 커맨드 모드 명령어 F205,2로 변경됨
-    const command = 'F205,2' + '\r\n';
+    const command = 'F206,2' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            log.error('command: F205,2');
+            log.error('command: F206,2');
             log.error(err);
             return;
         }
@@ -180,8 +180,8 @@ const setCommandMode = function() {
     });
 }
 
-const rssetCommand = function() {
-    log.info('function: rssetCommand');
+const commandRsset = function() {
+    log.info('function: commandRsset');
     let command = 'RSSET' + '\r\n';
 
     scale.f = true;
@@ -194,6 +194,40 @@ const rssetCommand = function() {
             return;
         }
     })
+}
+
+const resultSetok = function(){
+    const localStorage = new Store();
+
+    localStorage.set('pc_config.baudrate', serialConfig.baudrate);
+    localStorage.set('pc_config.databits', serialConfig.databits);
+    localStorage.set('pc_config.parity', serialConfig.parity);
+    localStorage.set('pc_config.stopbits', serialConfig.stopbits);
+    localStorage.set('pc_config.terminator', serialConfig.terminator);
+
+    pcConfig.baudrate = serialConfig.baudrate;
+    pcConfig.databits = serialConfig.databits;
+    pcConfig.parity = serialConfig.parity;
+    pcConfig.stopbits = serialConfig.stopbits;
+    pcConfig.terminator = serialConfig.terminator;
+
+    configWin.webContents.send('set_serial_config_data', 'ok');
+
+    try {
+        sp.close(function(err){
+            if(err) {
+                log.error('error: SETOK');
+                log.error(err);
+                return;
+            }
+            log.info('closed');
+            startProgram();
+        });
+    }
+    catch(e) {
+        log.error('Cannot open port.');
+        log.error(e);
+    }
 }
 
 const commandOk = function() {
@@ -307,76 +341,104 @@ const convertComparatorValue = function(value, dp) {
 }
 
 const readHeader = function(rx) {
-    const header1bit = rx.substr(0, 1);
-    const header2bit = rx.substr(0, 2);
-    const header3bit = rx.substr(0, 3);
-    const header4bit = rx.substr(0, 4);
-    const header5bit = rx.substr(0, 5);
-    const header7bit = rx.substr(0, 7);
+    const separator = ',';
+    const splitedData = rx.split(separator);
+    const splitedDataLength = splitedData.length;
 
-    if(header5bit == 'INFOK' || header5bit == 'INCOK') {
-        // 초기화 된 설정값으로 변경 후 재연결
-        const currentPort = pcConfig.port;
-        pcConfig = new uartFlag(currentPort, 24, 8, PARITY_NONE, 1, CRLF);
-        const localStorage = new Store();
+    // // 통신포맷
+    // if(splitedDataLength == 5) {
+    //     if(rx.length < 20) {
+    //         return;
+    //     }
+    //
+    //     const header1 = splitedData[0];
+    //     const header2 = splitedData[1];
+    //     const seqState = splitedData[2];
+    //     const compState = splitedData[3];
+    //     const body = splitedData[4];
+    //
+    //     scale.isStable = false;
+    //     scale.isHold = false;
+    //     scale.isHg = false;
+    //     scale.isNet = false;
+    //     scale.isZero = false;
+    //     scale.block = false;
+    //
+    //     if(scale.comparator) {
+    //         scale.comparator = false;
+    //         scale.comparator_mode = 0;
+    //
+    //         getDecimalPoint(Number(body).toString());
+    //
+    //         setTimeout(function(){
+    //             scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
+    //             scale.s2_value = convertComparatorValue(scale.s2_value, decimalPoint);
+    //             scale.s3_value = convertComparatorValue(scale.s3_value, decimalPoint);
+    //             scale.s4_value = convertComparatorValue(scale.s4_value, decimalPoint);
+    //             scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
+    //
+    //             win.webContents.send('set_comp_value', scale);
+    //         }, ONE_HUNDRED_MS);
+    //     }
+    //
+    //     scale.displayMsg = makeFormat(rx);
+    //
+    //     if(header1 == 'ST') {
+    //         scale.isStable = true;
+    //         if(header2 == 'NT') {
+    //             scale.isNet = true;
+    //         }
+    //     }
+    //
+    //     else if(header1 == 'US') {
+    //         if(header2 == 'NT') {
+    //             scale.isNet = true;
+    //         }
+    //     }
+    //
+    //     else if(header1 == 'HD') {
+    //         scale.isHold = true;
+    //     }
+    //
+    //     else if (header1 == 'HG') {
+    //         scale.isHold = true;
+    //         scale.isHg = true;
+    //     }
+    //
+    //     else if (header1 == 'OL') {
+    //         scale.displayMsg = '   .  ';
+    //     }
+    //
+    //     else {
+    //         scale.block = true;
+    //     }
+    //     rx = '';
+    // }
 
-        localStorage.set('pc_config.baudrate', 24);
-        localStorage.set('pc_config.databits', 8);
-        localStorage.set('pc_config.parity', PARITY_NONE);
-        localStorage.set('pc_config.stopbits', 1);
-        localStorage.set('pc_config.terminator', CRLF);
-        localStorage.set('pc_config.fontcolor', BLUE);
-
-        sp.close(function(err){
-            if(err) {
-                log.error('error: INFOK/INCOK');
-                log.error(err);
-                return;
-            }
-            configWin.webContents.send('init_finish', 'ok');
-            startProgram();
-        });
-        return;
-    }
-
-    // 버전 확인
-    if(header3bit == 'VER') {
-        const data = Number(rx.substr(4,3))/100;
-        configWin.webContents.send('get_rom_ver', data);
-
-        return;
-    }
-
-    // 기기 시작시 컴퍼레이터 초기값 설정
-    if(scale.comparator) {
-        const data = rx.substr(6,6);
-        let value = '';
-        value = Number(data).toString();
-
-        if(header4bit == 'RDS1') {
-            scale.s1_value = value;
+    // 통신포맷 - seqstate, compstate 추가전
+    if(splitedDataLength == 3) {
+        if(rx.length < 16) {
+            return;
         }
-        else if(header4bit == 'RDS2') {
-            scale.s2_value = value;
-        }
-        else if(header4bit == 'RDS3') {
-            scale.s3_value = value;
-        }
-        else if(header4bit == 'RDS4') {
-            scale.s4_value = value;
-        }
-        else if(header4bit == 'RDS5') {
-            scale.s5_value = value;
 
-            setTimeout(function(){
-                commandOk();
-            }, ONE_HUNDRED_MS);
-        }
-        else {
+        const header1 = splitedData[0];
+        const header2 = splitedData[1];
+        // const seqState = splitedData[2];
+        // const compState = splitedData[3];
+        const body = splitedData[2];
+
+        scale.isStable = false;
+        scale.isHold = false;
+        scale.isHg = false;
+        scale.isNet = false;
+        scale.isZero = false;
+        scale.block = false;
+
+        if(scale.comparator) {
             scale.comparator = false;
             scale.comparator_mode = 0;
 
-            getDecimalPoint(rx.substr(6,8));
+            getDecimalPoint(Number(body).toString());
 
             setTimeout(function(){
                 scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
@@ -388,201 +450,173 @@ const readHeader = function(rx) {
                 win.webContents.send('set_comp_value', scale);
             }, ONE_HUNDRED_MS);
         }
-    }
 
-    // 컴퍼레이터 모드 진입
-    if(header3bit == 'COM') {
-        scale.comparator = true;
-        scale.comparator_mode = Number(rx.substr(4,2));
+        scale.displayMsg = makeFormat(body);
 
-        // 컴퍼레이터 모드별 분류
-        if(scale.comparator_mode == 1) {
-            scale.s1_title = 'fi';
-            scale.s2_title = 'fr';
-            scale.s3_title = 'pl';
-            scale.s4_title = 'ov';
-            scale.s5_title = 'ud';
-        }
-    }
-
-    // CF 펑션
-    if(scale.cf &&
-        (header1bit == '?') ||
-        (header1bit == 'I') ||
-        (header2bit == 'CF') ||
-        (header7bit == 'CALZERO') ||
-        (header7bit == 'CALSPAN'))
-    {
-        scale.cf = false;
-
-        if(header2bit == 'CF') {
-            const data = Number(rx.substr(5,7));
-            if(basicConfig.isRead) {
-                // 기본설정(우)
-                if(header4bit == 'CF05') {
-                    basicConfig.zeroRange = data;
-                }
-
-                if(header4bit == 'CF06') {
-                    basicConfig.zeroTrackingTime = data;
-                }
-
-                if(header4bit == 'CF07') {
-                    basicConfig.zeroTrackingWidth = data;
-                }
-
-                if(header4bit == 'CF08') {
-                    basicConfig.powerOnZero = data;
-                    configWin.webContents.send('get_basic_right_config_data', basicConfig);
-                }
-            }
-            else {
-                if(header4bit == 'CF08') {
-                    configWin.webContents.send('set_basic_right_config_data', 'ok');
-                    basicConfig.isRead = false;
-                }
-            }
-
-            if(calibrationConfig.isRead) {
-                // 교정 설정값
-                if(header4bit == 'CF03') {
-                    calibrationConfig.capa = data;
-                }
-
-                if(header4bit == 'CF02') {
-                    calibrationConfig.div = data;
-                }
-
-                if(header4bit == 'CF01') {
-                    calibrationConfig.decimalPoint = data;
-                }
-
-                if(header4bit == 'CF09') {
-                    calibrationConfig.unit = data;
-                    configWin.webContents.send('get_calibration_config_data', calibrationConfig);
-                }
-                // 교정
-                if(header4bit == 'CF04') {
-                    calibrationConfig.spanValue = data;
-                    configWin.webContents.send('get_cal_data', calibrationConfig);
-                }
-            }
-            else {
-                if(header4bit == 'CF09') {
-                    configWin.webContents.send('set_calibration_config_data', 'ok');
-                    calibrationConfig.isRead = false;
-                }
+        if(header1 == 'ST') {
+            scale.isStable = true;
+            if(header2 == 'NT') {
+                scale.isNet = true;
             }
         }
 
-        if(header7bit == 'CALZERO') {
-            configWin.webContents.send('set_cal_zero', 'ok');
+        else if(header1 == 'US') {
+            if(header2 == 'NT') {
+                scale.isNet = true;
+            }
+        }
+
+        else if(header1 == 'HD') {
+            scale.isHold = true;
+        }
+
+        else if (header1 == 'HG') {
+            scale.isHold = true;
+            scale.isHg = true;
+        }
+
+        else if (header1 == 'OL') {
+            scale.displayMsg = '   .  ';
+        }
+
+        else {
+            scale.block = true;
+        }
+        rx = '';
+    }
+
+    // 컴퍼레이터 읽기, 쓰기, 모드
+    // F펑션, CF펑션
+    else if(splitedDataLength == 2) {
+        const header = splitedData[0];
+        const body = splitedData[1];
+
+        // 컴퍼레이터 모드 진입
+        if(header == 'COM') {
+            scale.comparator = true;
+            scale.comparator_mode = Number(body);
+
+            // 모드별 분류 : 2단 투입, 2단 배출, 리미트, 체커
+            if(scale.comparator_mode == COMP_MODE_INPUT) {
+                scale.s1_title = 'fi';
+                scale.s2_title = 'fr';
+                scale.s3_title = 'pl';
+                scale.s4_title = 'ov';
+                scale.s5_title = 'ud';
+            }
+            else if(scale.comparator_mode == COMP_MODE_EMISSION) {
+                scale.s1_title = '';
+                scale.s2_title = '';
+                scale.s3_title = '';
+                scale.s4_title = '';
+                scale.s5_title = '';
+            }
+            else if(scale.comparator_mode == COMP_MODE_LIMIT) {
+                scale.s1_title = '';
+                scale.s2_title = '';
+                scale.s3_title = '';
+                scale.s4_title = '';
+                scale.s5_title = '';
+            }
+            else if(scale.comparator_mode == COMP_MODE_CHECKER) {
+                scale.s1_title = '';
+                scale.s2_title = '';
+                scale.s3_title = '';
+                scale.s4_title = '';
+                scale.s5_title = '';
+            }
+        }
+        // 컴퍼레이터 설정값 읽기
+        if(scale.comparator) {
+            let value = Number(body).toString();
+
+            if(header == 'RDS1') {
+                scale.s1_value = value;
+            }
+            else if(header == 'RDS2') {
+                scale.s2_value = value;
+            }
+            else if(header == 'RDS3') {
+                scale.s3_value = value;
+            }
+            else if(header == 'RDS4') {
+                scale.s4_value = value;
+            }
+            else if(header == 'RDS5') {
+                scale.s5_value = value;
+
+                setTimeout(function(){
+                    commandOk();
+                }, ONE_HUNDRED_MS);
+            }
+        }
+
+        if(header == 'STOOK') {
+            commandRsset();
+        }
+
+        if(header == 'SETOK') {
+            resultSetok();
+        }
+
+        // 버전 확인
+        if(header == 'VER') {
+            const data = Number(body)/100;
+            configWin.webContents.send('get_rom_ver', data);
+
             return;
         }
 
-        if(header7bit == 'CALSPAN') {
-            configWin.webContents.send('set_cal_span', 'ok');
-            return;
-        }
-    }
-    // F 펑션
-    else if (scale.f &&
-        (header1bit == '?') ||
-        (header1bit == 'I') ||
-        (header1bit == 'F') ||
-        (header3bit == 'VER') ||
-        (header5bit == 'STOOK') ||
-        (header5bit == 'SETOK'))
-    {
-        scale.f = false;
-
-        if(header5bit == 'STOOK') {
-            rssetCommand();
-        }
-
-        if(header5bit == 'SETOK') {
-            const localStorage = new Store();
-
-            localStorage.set('pc_config.baudrate', serialConfig.baudrate);
-            localStorage.set('pc_config.databits', serialConfig.databits);
-            localStorage.set('pc_config.parity', serialConfig.parity);
-            localStorage.set('pc_config.stopbits', serialConfig.stopbits);
-            localStorage.set('pc_config.terminator', serialConfig.terminator);
-
-            pcConfig.baudrate = serialConfig.baudrate;
-            pcConfig.databits = serialConfig.databits;
-            pcConfig.parity = serialConfig.parity;
-            pcConfig.stopbits = serialConfig.stopbits;
-            pcConfig.terminator = serialConfig.terminator;
-
-            configWin.webContents.send('set_serial_config_data', 'ok');
-
-            try {
-                sp.close(function(err){
-                    if(err) {
-                        log.error('error: SETOK');
-                        log.error(err);
-                        return;
-                    }
-                    log.info('closed');
-                    startProgram();
-                });
-            }
-            catch(e) {
-                log.error('Cannot open port.');
-                log.error(e);
-            }
-        }
-
-        if(header1bit == 'F') {
-            const data = Number(rx.substr(5,7));
+        // F펑션
+        if(header.substr(0, 1) == 'F') {
+            const data = Number(body);
             if(basicConfig.isRead) {
-                if(header4bit == 'F001') {
+                if(header == 'F001') {
                     basicConfig.digitalFilter = data;
                 }
 
-                if(header4bit == 'F002') {
+                if(header == 'F002') {
                     basicConfig.holdMode = data;
                 }
 
-                if(header4bit == 'F003') {
+                if(header == 'F003') {
                     basicConfig.averageTime = data;
                     configWin.webContents.send('get_basic_left_config_data', basicConfig);
                 }
             }
             else {
-                if(header4bit == 'F003') {
+                if(header == 'F003') {
                     configWin.webContents.send('set_basic_left_config_data', 'ok');
                     basicConfig.isRead = false;
                 }
             }
 
             if(externalPrintConfig.isRead){
-                if(header4bit == 'F101') {
+                if(header == 'F101') {
                     externalPrintConfig.printCondition = data;
                 }
 
-                if(header4bit == 'F102') {
+                if(header == 'F102') {
                     externalPrintConfig.configValue = data;
                 }
 
-                if(header4bit == 'F103') {
+                if(header == 'F103') {
                     externalPrintConfig.comparatorMode = data;
                 }
 
-                if(header4bit == 'F104') {
+                if(header == 'F104') {
                     externalPrintConfig.nearZero = data;
                     configWin.webContents.send('get_external_print_config_data', externalPrintConfig);
                 }
             }
             else {
-                if(header4bit == 'F104') {
+                if(header == 'F104') {
                     configWin.webContents.send('set_external_print_config_data', 'ok');
                     externalPrintConfig.isRead = false;
                 }
             }
 
-            if(header4bit == 'F201') {
+            if(header == 'F201') {
                 log.info('F201');
 
                 serialConfig.baudrate = pcConfig.baudrate;
@@ -593,91 +627,131 @@ const readHeader = function(rx) {
                 configWin.webContents.send('get_serial_config_data', serialConfig);
             }
 
-            if(header4bit == 'F202') {
+            if(header == 'F202') {
                 log.info('success F202');
                 serialConfig.databits = data;
             }
 
-            if(header4bit == 'F203') {
+            if(header == 'F203') {
                 log.info('success F203');
                 serialConfig.parity = data;
             }
 
-            if(header4bit == 'F204') {
+            if(header == 'F204') {
                 log.info('success F204');
                 serialConfig.stopbits = data;
             }
+        }
 
-            // if(header4bit == 'F205') {
-            //     console.log('success F205');
-            //     serialConfig.terminator = data;
-            //     console.log(serialConfig);
-            // }
+        // CF펑션
+        if(header.substr(0, 2) == 'CF') {
+            const data = Number(body);
+            if(basicConfig.isRead) {
+                // 기본설정(우)
+                if(header == 'CF05') {
+                    basicConfig.zeroRange = data;
+                }
+
+                if(header == 'CF06') {
+                    basicConfig.zeroTrackingTime = data;
+                }
+
+                if(header == 'CF07') {
+                    basicConfig.zeroTrackingWidth = data;
+                }
+
+                if(header == 'CF08') {
+                    basicConfig.powerOnZero = data;
+                    configWin.webContents.send('get_basic_right_config_data', basicConfig);
+                }
+            }
+            else {
+                if(header == 'CF08') {
+                    configWin.webContents.send('set_basic_right_config_data', 'ok');
+                    basicConfig.isRead = false;
+                }
+            }
+
+            if(calibrationConfig.isRead) {
+                // 교정 설정값
+                if(header == 'CF03') {
+                    calibrationConfig.capa = data;
+                }
+
+                if(header == 'CF02') {
+                    calibrationConfig.div = data;
+                }
+
+                if(header == 'CF01') {
+                    calibrationConfig.decimalPoint = data;
+                }
+
+                if(header == 'CF09') {
+                    calibrationConfig.unit = data;
+                    configWin.webContents.send('get_calibration_config_data', calibrationConfig);
+                }
+                // 교정
+                if(header == 'CF04') {
+                    calibrationConfig.spanValue = data;
+                    configWin.webContents.send('get_cal_data', calibrationConfig);
+                }
+            }
+            else {
+                if(header == 'CF09') {
+                    configWin.webContents.send('set_calibration_config_data', 'ok');
+                    calibrationConfig.isRead = false;
+                }
+            }
         }
     }
-    // 스트림 데이터
-    else {
-        if(rx.length < 16) {
+
+    // 컴퍼레이터 버전정보
+    // CALZERO, CALSPAN
+    // INCOK, INFOK
+    // ?, I
+    else if(splitedDataLength == 1) {
+        const header = splitedData[0];
+        if(header == '?') {
+            log.error('COMMAND NOT DEFINE');
+        }
+        if(header == 'I') {
+            log.error('COMMAND NOT RUN');
+        }
+        if(header.substr(0, 1) == '@') {
+            log.info('COMPARATOR VERSION INFO:', header);
+        }
+        if(header == 'CALZERO') {
+            configWin.webContents.send('set_cal_zero', 'ok');
             return;
         }
-
-        const state = rx.substr(3, 2);
-        if (header2bit == 'ST') {
-            scale.isStable = true;
-            scale.isHold = false;
-            scale.isHg = false;
-            scale.isNet = false;
-            if(state == 'NT') {
-                scale.isNet = true;
-            }
-            scale.displayMsg = makeFormat(rx);
+        if(header == 'CALSPAN') {
+            configWin.webContents.send('set_cal_span', 'ok');
+            return;
         }
+        if(header == 'INFOK' || header == 'INCOK') {
+            // 초기화 된 설정값으로 변경 후 재연결
+            const currentPort = pcConfig.port;
+            pcConfig = new uartFlag(currentPort, 24, 8, PARITY_NONE, 1, CRLF);
+            const localStorage = new Store();
 
-        else if (header2bit == 'US') {
-            scale.isStable = false;
-            scale.isHold = false;
-            scale.isHg = false;
-            scale.isNet = false;
-            if(state == 'NT') {
-                scale.isNet = true;
-            }
-            scale.displayMsg = makeFormat(rx);
-        }
+            localStorage.set('pc_config.baudrate', 24);
+            localStorage.set('pc_config.databits', 8);
+            localStorage.set('pc_config.parity', PARITY_NONE);
+            localStorage.set('pc_config.stopbits', 1);
+            localStorage.set('pc_config.terminator', CRLF);
+            localStorage.set('pc_config.fontcolor', BLUE);
 
-        else if (header2bit == 'HD') {
-            scale.isStable = false;
-            scale.isHold = true;
-            scale.isHg = false;
-            scale.isNet = false;
-            scale.displayMsg = makeFormat(rx);
+            sp.close(function(err){
+                if(err) {
+                    log.error('error: INFOK/INCOK');
+                    log.error(err);
+                    return;
+                }
+                configWin.webContents.send('init_finish', 'ok');
+                startProgram();
+            });
+            return;
         }
-
-        else if (header2bit == 'HG') {
-            scale.isStable = false;
-            scale.isHold = true;
-            scale.isHg = true;
-            scale.isNet = false;
-            scale.displayMsg = makeFormat(rx);
-        }
-
-        else if (header2bit == 'OL') {
-            scale.isStable = false;
-            scale.isHold = false;
-            scale.isHg = false;
-            scale.isNet = false;
-            scale.displayMsg = '   .  ';
-        }
-
-        else {
-            scale.isStable = false;
-            scale.isHold = false;
-            scale.isHg = false;
-            scale.isNet = false;
-            scale.isZero = false;
-            scale.block = true;
-            rx = '';
-        }
-        rx = '';
     }
 }
 
@@ -687,9 +761,14 @@ const getDecimalPoint = function(value) {
     }
     let result = '';
     const pointPos = value.indexOf('.');
+
     if(pointPos > 0) {
         decimalPoint = 7-pointPos
         result = Number(value).toFixed(decimalPoint).toString();
+    }
+    // 소수점 없음
+    else {
+        result = Number(value).toString();
     }
     return result;
 }
@@ -700,10 +779,9 @@ const makeFormat = function(data) {
         return result;
     }
 
-    const value = data.substr(6,8);
-    const unit = data.substr(14,2).trim();
+    const value = data.substr(0,8);
+    const unit = data.substr(8,2).trim();
 
-    // result = Number(value).toString();
     result = getDecimalPoint(value);
 
     if(result.substr(0,1).includes('0')) {
@@ -713,13 +791,13 @@ const makeFormat = function(data) {
         scale.isZero = false;
     }
 
-    scale.unit = unit.length;
+    scale.unit = unit.length;   // kg
     if(unit.length == 1) {
         if(unit == 'g') {
-            scale.unit = 1;
+            scale.unit = 1; // g
         }
         else {
-            scale.unit = 3;
+            scale.unit = 3; // t
         }
     }
 
@@ -1620,6 +1698,43 @@ ipcMain.on('on_off', (event, arg) => {
     }
 })
 
+const createSocketServer = function(ls) {
+    // TCP/IP 서버 소켓
+    socketServer = net.createServer(function(socket) {
+        let isConnected = true;
+
+        log.info('client connect');
+        socket.write('Welcome to Socket Server');
+
+        // 계량모듈로부터 받는 시리얼 데이터를 클라이언트로 전송하기
+        ls.on('data', function(rx) {
+            if(isConnected){
+                socket.write(rx + '\r\n');
+            }
+        });
+
+        // 클라이언트에서 보내는 데이터 처리
+        socket.on('data', function(chunk) {
+            let message = chunk.toString();
+            log.info('client send : ', message);
+        });
+
+        // 클라이언트와 연결이 해제되었을때
+        socket.on('end', function() {
+            log.info('client connection end');
+            isConnected = false;
+        });
+
+        // 연결 에러 있을 때
+        socket.on('error', (err) => {
+            log.error('Connection error:', err.message);
+        });
+    })
+    .listen(SERVER_PORT, function(){
+        log.info('listening on 3100...');
+    });
+}
+
 const startProgram = function() {
     log.info('function: startProgram');
     sp = openPort();
@@ -1641,40 +1756,7 @@ const startProgram = function() {
             scale.waiting_sec = 0;
         });
 
-        // TCP/IP 서버 소켓
-        socketServer = net.createServer(function(socket) {
-            let isConnected = true;
-
-            log.info('client connect');
-            socket.write('Welcome to Socket Server');
-
-            // 계량모듈로부터 받는 시리얼 데이터를 클라이언트로 전송하기
-            lineStream.on('data', function(rx) {
-                if(isConnected){
-                    socket.write(rx + '\r\n');
-                }
-            });
-
-            // 클라이언트에서 보내는 데이터 처리
-            socket.on('data', function(chunk) {
-                let message = chunk.toString();
-                log.info('client send : ', message);
-            });
-
-            // 클라이언트와 연결이 해제되었을때
-            socket.on('end', function() {
-                log.info('client connection end');
-                isConnected = false;
-            });
-
-            // 연결 에러 있을 때
-            socket.on('error', (err) => {
-                log.error('Connection error:', err.message);
-            });
-        })
-        .listen(SERVER_PORT, function(){
-            log.info('listening on 3100...');
-        });
+        createSocketServer(lineStream);
     });
 
     changeMainButtonActive(true);

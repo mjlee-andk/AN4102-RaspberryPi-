@@ -35,6 +35,11 @@ const TAB_INIT = 'tab_init';
 const DEFAULT_SERIAL_PORT_WINDOW = 'COM1';
 const DEFAULT_SERIAL_PORT_LINUX = '/dev/tty_AMA0';
 
+const COMP_MODE_INPUT = 1; // 2단 투입
+const COMP_MODE_EMISSION = 2; // 2단 배출
+const COMP_MODE_LIMIT = 3; // 리미트 모드
+const COMP_MODE_CHECKER = 4; // 체커 모드
+
 module.exports = {
     WINDOW_WIDTH,
     WINDOW_HEIGHT,
@@ -63,5 +68,9 @@ module.exports = {
     TAB_INIT,
     DEFAULT_SERIAL_PORT_WINDOW,
     DEFAULT_SERIAL_PORT_LINUX,
-    SERVER_PORT
+    SERVER_PORT,
+    COMP_MODE_INPUT,
+    COMP_MODE_EMISSION,
+    COMP_MODE_LIMIT,
+    COMP_MODE_CHECKER
 }
