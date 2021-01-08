@@ -34,8 +34,13 @@ body {
     height: 50px;
     background-color: #000000;
     color: #ffffff;
-    border: solid 2px #ffffff;
+    border: solid 2px #000000;
     border-radius: 12px;
+}
+
+.button_container button:disabled {
+    background-color: #ffffff;
+    color: #000000;
 }
 
 .main_container {
@@ -46,7 +51,9 @@ body {
     padding-top: 10px;
 }
 
-/*index.html 전용*/
+/**
+***index.html 전용
+**/
 .main_display {
     text-align: center;
 }
@@ -127,14 +134,36 @@ body {
 .btn_frame button {
     width: 80px;
     height: 70px;
-    background-color: #000000;
-    color: #ffffff;
-    border: solid 1px #000000;
     border-radius: 12px;
+    color: #ffffff;
+    border: #000000 solid 1px;
+    padding: 10px;
+    background-color: #000000;
 }
-/*index.html 전용*/
 
-/*config.html, pcconfig.html 전용*/
+.btn_frame button:disabled {
+    color: #000000;
+    background-color: #ffffff;
+}
+
+/* ### ### ### 01 */
+/* .b01_simple_rollover {
+    color: #000000;
+    border: #000000 solid 1px;
+    padding: 10px;
+    background-color: #ffffff;
+}
+
+.b01_simple_rollover:hover {
+    color: #ffffff;
+    background-color: #000000;
+} */
+
+
+
+/**
+***config.html, pcconfig.html 전용
+**/
 .row_container {
     margin-top: 12px;
     margin-bottom: 12px;

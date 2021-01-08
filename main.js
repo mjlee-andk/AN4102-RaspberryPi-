@@ -1339,7 +1339,7 @@ let isPause = false;
 let timer;
 
 const confirmConnection = function() {
-    log.info('function: confirmConnection');
+    // log.info('function: confirmConnection');
     if(isPause) {
         return;
     }
@@ -1353,7 +1353,6 @@ const confirmConnection = function() {
         scale.isNet = false;
         scale.isHg = false;
         win.webContents.send('rx_data', scale);
-        // console.log('confirm::::::::', scale.s1_value);
     }
 }
 
@@ -1635,11 +1634,10 @@ const startProgram = function() {
             return;
         }
 
-        const lineStream = sp.pipe(new Readline({ delimiter: pcConfig.terminator == CRLF ? '\r\n' : '\r' }));
+        const lineStream = sp.pipe(new Readline({ delimiter: pcConfig.terminator == CRLF ? '\r\n' : '\r' }, { encoding: 'utf-8' }));
         lineStream.on('data', function(rx) {
             readHeader(rx);
             win.webContents.send('rx_data', scale);
-            // console.log('lineStream::::::::', scale.s1_value);
             scale.waiting_sec = 0;
         });
 
@@ -1661,11 +1659,6 @@ const startProgram = function() {
             socket.on('data', function(chunk) {
                 let message = chunk.toString();
                 log.info('client send : ', message);
-
-                // // ZERO TARE
-                // if(message == 'MZT\r\n') {
-                //     setZeroTare();
-                // }
             });
 
             // 클라이언트와 연결이 해제되었을때
