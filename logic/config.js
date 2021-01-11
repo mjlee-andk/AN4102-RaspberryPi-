@@ -6,6 +6,9 @@ const { setBasicLeftConfigData, setBasicRightConfigData } = require('./basicConf
 const { setExternalPrintConfigData } = require('./externalPrintConfig');
 const { setCalibrationConfigData } = require('./calibrationConfig');
 
+require('./calibration');
+require('./init');
+
 const displayType = 'block';
 
 //
@@ -86,23 +89,23 @@ const setDivDisplay = function(tab) {
 
     if(tab == CONSTANT['TAB_SERIAL_CONFIG']) {
         serialDiv.style.display = displayType;
-        configOkButton.style.display = displayType;
+        configOkButton.style.display = 'inline-block';
     }
     else if(tab == CONSTANT['TAB_BASIC_LEFT_CONFIG']) {
         basicLeftDiv.style.display = displayType;
-        configOkButton.style.display = displayType;
+        configOkButton.style.display = 'inline-block';
     }
     else if(tab == CONSTANT['TAB_BASIC_RIGHT_CONFIG']) {
         basicRightDiv.style.display = displayType;
-        configOkButton.style.display = displayType;
+        configOkButton.style.display = 'inline-block';
     }
     else if(tab == CONSTANT['TAB_EXTERNAL_PRINT_CONFIG']) {
         externalPrintDiv.style.display = displayType;
-        configOkButton.style.display = displayType;
+        configOkButton.style.display = 'inline-block';
     }
     else if(tab == CONSTANT['TAB_CALIBRATION_CONFIG']) {
         calibrationConfigDiv.style.display = displayType;
-        configOkButton.style.display = displayType;
+        configOkButton.style.display = 'inline-block';
     }
     else if(tab == CONSTANT['TAB_CALIBRATION']) {
         calDiv.style.display = displayType;

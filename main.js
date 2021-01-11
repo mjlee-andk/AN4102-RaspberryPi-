@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const SerialPort = require('serialport');
-const Readline = require('@serialport/parser-readline'); // 시리얼 데이터
+const Readline = require('@serialport/parser-readline'); // 시리얼 데이터 파싱
 const Store = require('electron-store'); // local Storage
 
 const log = require('electron-log'); // 로그 기록
@@ -86,7 +86,7 @@ const openConfigWindow = function() {
         setTimeout(function() {
             getSerialConfig();
             getRomVer();
-        }, ['FIVE_HUNDRED_MS']);
+        }, CONSTANT['FIVE_HUNDRED_MS']);
     })
 }
 
@@ -156,7 +156,7 @@ const pcConfigGetLocalStorage = function(event) {
 const setStreamMode = function() {
     log.info('function: setStreamMode');
     // 201204 AD모듈 붙이면서 스트림 모드 명령어 F205,1로 변경됨
-    const command = 'F206,1' + '\r\n';
+    const command = 'F205,1' + '\r\n';
     sp.write(command, function(err){
         if(err) {
             log.error('command: F206,1');
@@ -169,7 +169,7 @@ const setStreamMode = function() {
 const setCommandMode = function() {
     log.info('function: setCommandMode');
     // 201204 AD모듈 붙이면서 커맨드 모드 명령어 F205,2로 변경됨
-    const command = 'F206,2' + '\r\n';
+    const command = 'F205,2' + '\r\n';
     sp.write(command, function(err){
         if(err) {
             log.error('command: F206,2');
@@ -624,13 +624,13 @@ const readHeader = function(rx) {
             }
 
             if(header == 'F201') {
-                log.info('F201');
+                log.info('success F201');
 
                 serialConfig.baudrate = pcConfig.baudrate;
                 serialConfig.databits = Number(pcConfig.databits);
                 serialConfig.parity = pcConfig.parity;
                 serialConfig.stopbits = Number(pcConfig.stopbits);
-                serialConfig.terminator = pcConfig.terminator == CRLF ? 1 : 2;
+                serialConfig.terminator = pcConfig.terminator == CONSTANT['CRLF'] ? 1 : 2;
                 configWin.webContents.send('get_serial_config_data', serialConfig);
             }
 

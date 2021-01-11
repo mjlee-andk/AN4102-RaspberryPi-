@@ -75,8 +75,8 @@ const pcConfigSetData = function() {
 
     let pcConfigNow = new uartFlag('COM1', 24, 8, CONSTANT['PARITY_NONE'], 1, CONSTANT['CRLF'], CONSTANT['FONT_COLOR_BLUE']);
 
-    pcConfigNow.port = portSelect.options[portSelect.selectedIndex].value;
-    pcConfigNow.baudrate = baudrateSelect.options[baudrateSelect.selectedIndex].value;
+    // pcConfigNow.port = portSelect.options[portSelect.selectedIndex].value;
+    // pcConfigNow.baudrate = baudrateSelect.options[baudrateSelect.selectedIndex].value;
 
     pcConfigNow.port = portSelect.options[portSelect.selectedIndex].value;
     pcConfigNow.baudrate = baudrateSelect.options[baudrateSelect.selectedIndex].value;

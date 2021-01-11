@@ -12,10 +12,21 @@ body {
     display: flex;
     width: 100%;
     justify-content: space-between;
+    align-items: center;
 }
 
-.upper_container .upper_title {
-    font-size: 30px;
+.upper_title {
+    display: flex;
+    align-items: center;
+}
+
+.upper_title h1{
+    margin: 0em 0.5em;
+    font-size: 2em;
+}
+
+.upper_title span {
+    font-size: 1em !important;
 }
 
 .logo {
@@ -147,12 +158,13 @@ body {
 
 .bottom_btn_container {
     margin-top: 15px;
-    display: inline-flex;
+    display: flex;
+    justify-content: space-between;
 }
 
 .btn_frame {
-    margin-left: 15px;
-    margin-right: 15px;
+    /* margin-left: 15px;
+    margin-right: 15px; */
 }
 
 .btn_frame button {
@@ -219,6 +231,110 @@ body {
 
 .row_item {
     width: 30%;
+}
+
+.button_label {
+    display: inline-block;
+    padding: 0em 1em;
+    color: #292929;
+    border-radius: 0.25em;
+    background: #efefef;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset 0 -3px 0 rgba(0,0,0,0.22);
+    /* transition: 0.3s; */
+    user-select: none;
+}
+
+.button_label h1 {
+    font-size: 0.9em;
+}
+
+#dataBitsRadios1:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#dataBitsRadios2:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#parityRadios1:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#parityRadios2:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#parityRadios3:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#stopbitsRadios1:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#stopbitsRadios2:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#terminatorRadios1:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#terminatorRadios2:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#fontColorRadios1:checked + .button_label {
+    background: #ff0000;
+    color: #000000;
+}
+
+#fontColorRadios2:checked + .button_label {
+    background: #ffff00;
+    color: #000000;
+}
+
+#fontColorRadios3:checked + .button_label {
+    background: #00b8dd;
+    color: #000000;
+}
+
+#printConditionRadios1:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#printConditionRadios2:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#comparatorModeRadios1:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#comparatorModeRadios2:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+#comparatorModeRadios3:checked + .button_label {
+    background: #2ECC71;
+    color: #ffffff;
+}
+
+.hidden {
+    display: none;
 }
 
 select {
