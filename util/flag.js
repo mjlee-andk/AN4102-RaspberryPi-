@@ -12,10 +12,10 @@ class scaleFlag {
 
         this.f = false;
         this.cf = false;
-        this.array_index_f = 0;
-        this.array_index_cf = 0;
-        this.read = false;
-        this.write = false;
+        // this.array_index_f = 0;
+        // this.array_index_cf = 0;
+        // this.read = false;
+        // this.write = false;
         this.hi = 0;
         this.lo = 0;
         this.terminator = 'CRLF';  // CRLF
@@ -39,23 +39,28 @@ class scaleFlag {
         // 단위 표시
         this.unit = 0;
 
-        // 스팬 적용
-        this.do_span = false;
+        // 시퀀스 상태
+        this.seqState = 0;
+        // Comparator 상태
+        this.compState = 0;
 
-        // init F 모드
-        this.mode_init_f = false;
-
-        // init All 모드
-        this.mode_init_a = false;
-
-        // init 응답 플래그
-        this.init_f = false;
-
-        // 100ms 카운터
-        this.cnt_100ms = 0;
-
-        // 초기화 루틴 진입
-        this.do_init = false;
+        // // 스팬 적용
+        // this.do_span = false;
+        //
+        // // init F 모드
+        // this.mode_init_f = false;
+        //
+        // // init All 모드
+        // this.mode_init_a = false;
+        //
+        // // init 응답 플래그
+        // this.init_f = false;
+        //
+        // // 100ms 카운터
+        // this.cnt_100ms = 0;
+        //
+        // // 초기화 루틴 진입
+        // this.do_init = false;
 
         // 대기 시간
         this.waiting_sec = 0;

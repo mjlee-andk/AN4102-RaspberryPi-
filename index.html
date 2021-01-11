@@ -16,23 +16,34 @@
     <body>
         <!--Header-->
         <div>
-            <!--Image Container-->
             <div class="upper_container">
                 <img class="logo" src="./img/A&D_DiscoverPrecision_RGB.png">
+
+                <!--Sequence State Container-->
+                <div class="seq_state_container">
+                    <div class="seq_state_box">
+                        <div class="seq_state_on" id="seq_state_near_zero"></div>
+                        <p>영점부근</p>
+                    </div>
+                    <div class="seq_state_box">
+                        <div class="seq_state_on" id="seq_state_input_much"></div>
+                        <p>대투입</p>
+                    </div>
+                    <div class="seq_state_box">
+                        <div class="seq_state_off" id="seq_state_input_little"></div>
+                        <p>소투입</p>
+                    </div>
+                    <div class="seq_state_box">
+                        <div class="seq_state_off" id="seq_state_finish"></div>
+                        <p>완료</p>
+                    </div>
+                </div>
 
                 <!--Button Container-->
                 <div class="button_container">
                     <button type="button" target="_blank" id="openPCConfigWindow">DEVICE</button>
                     <button type="button" target="_blank" id="openConfigWindow" disabled>SET</button>
                     <button type="button" target="_blank" id="closeMainWindow">CLOSE</button>
-                </div>
-
-                <!--Comparator Container-->
-                <div class="comparator_container">
-                    <div id="comp_near_zero">영점부근</div>
-                    <div id="comp_input_much">대투입</div>
-                    <div id="comp_input_little">소투입</div>
-                    <div id="comp_finish">완료</div>
                 </div>
             </div>
         </div>
@@ -73,10 +84,11 @@
                     <div class="main_unit">
                         <span id="unit"></span>
                     </div>
-                    <div class="hi_lo">
-                        <div id="hi" style="color:#ff0000">HI</div>
-                        <div id="lo" style="color:#ffa500">LO</div>
-                        <div id="ok" style="color:#6fb842">OK</div>
+                    <!--Comparator 상태표시창-->
+                    <div class="comp_state_container">
+                        <div id="comp_state_hi" style="color:#ff0000">HI</div>
+                        <div id="comp_state_lo" style="color:#ffa500">LO</div>
+                        <div id="comp_state_ok" style="color:#6fb842">OK</div>
                     </div>
                 </div>
                 <!--서브 계량값 표시부-->

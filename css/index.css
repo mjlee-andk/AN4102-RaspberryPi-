@@ -8,9 +8,12 @@ body {
 }
 
 .upper_container {
-    padding-left: 10px;
-    padding-right: 10px;
+    /* padding-left: 10px;
+    padding-right: 10px; */
     padding-top: 10px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .upper_container .upper_title {
@@ -20,29 +23,35 @@ body {
 .logo {
     width: auto;
     height: auto;
-    max-width: 120px;
-    max-height: 120px;
+    max-height: 60px;
 }
 
-.comparator_container {
-    display: inline-flex;
-    float: right;
+.seq_state_container {
+    width: 35%;
+    display: flex;
+    justify-content: space-around;
 }
 
-.comparator_container div {
-    width: 70px;
-    height: 50px;
-    line-height: 50px;
-    background-color: #000000;
-    color: #ffffff;
-    border: solid 2px #000000;
-    border-radius: 12px;
-    text-align: center;
+.seq_state_box div {
+    margin: 0 auto;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.seq_state_on {
+    background-color: #F00;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;
+}
+
+.seq_state_off {
+    background-color: #ABFF00;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #304701 0 -1px 9px, #89FF00 0 2px 12px;
 }
 
 .button_container {
-    display: inline-block;
-    float: right;
+    /* display: inline-block;
+    float: right; */
 }
 
 .button_container button {
@@ -96,13 +105,13 @@ body {
     width: 8%;
 }
 
-.hi_lo {
+.comp_state_container {
     display: inline-block;
     width: 5%;
     font-size: 25px;
 }
 
-.hi_lo div{
+.comp_state_container div{
     margin-bottom: 15px;
 }
 

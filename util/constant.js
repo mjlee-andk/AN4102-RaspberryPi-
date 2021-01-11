@@ -40,6 +40,10 @@ const COMP_MODE_EMISSION = 2; // 2단 배출
 const COMP_MODE_LIMIT = 3; // 리미트 모드
 const COMP_MODE_CHECKER = 4; // 체커 모드
 
+const HI = 1;
+const LO = 2;
+const OK = 3;
+
 module.exports = {
     WINDOW_WIDTH,
     WINDOW_HEIGHT,
@@ -72,5 +76,8 @@ module.exports = {
     COMP_MODE_INPUT,
     COMP_MODE_EMISSION,
     COMP_MODE_LIMIT,
-    COMP_MODE_CHECKER
+    COMP_MODE_CHECKER,
+    HI,
+    LO,
+    OK
 }

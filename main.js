@@ -54,7 +54,7 @@ const createWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
     win.loadFile('index.html');
 
@@ -78,7 +78,7 @@ const openConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
 
     configWin.loadFile('view/config.html');
@@ -102,7 +102,7 @@ const openPCConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
 
     pcConfigWin.loadFile('view/pcconfig.html');
@@ -345,75 +345,82 @@ const readHeader = function(rx) {
     const splitedData = rx.split(separator);
     const splitedDataLength = splitedData.length;
 
-    // // 통신포맷
-    // if(splitedDataLength == 5) {
-    //     if(rx.length < 20) {
-    //         return;
-    //     }
-    //
-    //     const header1 = splitedData[0];
-    //     const header2 = splitedData[1];
-    //     const seqState = splitedData[2];
-    //     const compState = splitedData[3];
-    //     const body = splitedData[4];
-    //
-    //     scale.isStable = false;
-    //     scale.isHold = false;
-    //     scale.isHg = false;
-    //     scale.isNet = false;
-    //     scale.isZero = false;
-    //     scale.block = false;
-    //
-    //     if(scale.comparator) {
-    //         scale.comparator = false;
-    //         scale.comparator_mode = 0;
-    //
-    //         getDecimalPoint(Number(body).toString());
-    //
-    //         setTimeout(function(){
-    //             scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
-    //             scale.s2_value = convertComparatorValue(scale.s2_value, decimalPoint);
-    //             scale.s3_value = convertComparatorValue(scale.s3_value, decimalPoint);
-    //             scale.s4_value = convertComparatorValue(scale.s4_value, decimalPoint);
-    //             scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
-    //
-    //             win.webContents.send('set_comp_value', scale);
-    //         }, ONE_HUNDRED_MS);
-    //     }
-    //
-    //     scale.displayMsg = makeFormat(rx);
-    //
-    //     if(header1 == 'ST') {
-    //         scale.isStable = true;
-    //         if(header2 == 'NT') {
-    //             scale.isNet = true;
-    //         }
-    //     }
-    //
-    //     else if(header1 == 'US') {
-    //         if(header2 == 'NT') {
-    //             scale.isNet = true;
-    //         }
-    //     }
-    //
-    //     else if(header1 == 'HD') {
-    //         scale.isHold = true;
-    //     }
-    //
-    //     else if (header1 == 'HG') {
-    //         scale.isHold = true;
-    //         scale.isHg = true;
-    //     }
-    //
-    //     else if (header1 == 'OL') {
-    //         scale.displayMsg = '   .  ';
-    //     }
-    //
-    //     else {
-    //         scale.block = true;
-    //     }
-    //     rx = '';
-    // }
+    // 통신포맷
+    if(splitedDataLength == 5) {
+        if(rx.length < 20) {
+            return;
+        }
+
+        const header1 = splitedData[0];
+        const header2 = splitedData[1];
+        const seqState = splitedData[2];
+        const compState = splitedData[3];
+        const body = splitedData[4];
+
+        scale.isStable = false;
+        scale.isHold = false;
+        scale.isHg = false;
+        scale.isNet = false;
+        scale.isZero = false;
+        scale.block = false;
+
+        if(scale.comparator) {
+            scale.comparator = false;
+            scale.comparator_mode = 0;
+
+            getDecimalPoint(Number(body).toString());
+
+            setTimeout(function(){
+                scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
+                scale.s2_value = convertComparatorValue(scale.s2_value, decimalPoint);
+                scale.s3_value = convertComparatorValue(scale.s3_value, decimalPoint);
+                scale.s4_value = convertComparatorValue(scale.s4_value, decimalPoint);
+                scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
+
+                win.webContents.send('set_comp_value', scale);
+            }, ONE_HUNDRED_MS);
+        }
+
+        scale.seqState = seqState;
+        scale.compState = compState;
+        scale.displayMsg = makeFormat(rx);
+
+        // 안정
+        if(header1 == 'ST') {
+            scale.isStable = true;
+            if(header2 == 'NT') {
+                scale.isNet = true;
+            }
+        }
+
+        // 불안정
+        else if(header1 == 'US') {
+            if(header2 == 'NT') {
+                scale.isNet = true;
+            }
+        }
+
+        // 홀드
+        else if(header1 == 'HD') {
+            scale.isHold = true;
+        }
+
+        // 홀드중
+        else if (header1 == 'HG') {
+            scale.isHold = true;
+            scale.isHg = true;
+        }
+
+        // 오버
+        else if (header1 == 'OL') {
+            scale.displayMsg = '   .  ';
+        }
+
+        else {
+            scale.block = true;
+        }
+        rx = '';
+    }
 
     // 통신포맷 - seqstate, compstate 추가전
     if(splitedDataLength == 3) {

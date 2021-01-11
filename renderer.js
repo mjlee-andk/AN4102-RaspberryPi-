@@ -1,7 +1,6 @@
 const { ipcRenderer, remote } = require('electron')
-// const remote = require('electron').remote;
 const log = require('electron-log'); // 로그 기록
-const { RED, YELLOW } = require('./util/constant');
+const { RED, YELLOW, HI, LO, OK } = require('./util/constant');
 const COLOR = require('./util/color');
 
 let colorName = '';
@@ -254,6 +253,17 @@ const setCompValue = function(flag, value) {
 // 2단 투입 시작 버튼
 let startButton = document.getElementById("start");
 
+// 시퀀스 상태
+let seqStateNearZero = document.getElementById("seq_state_near_zero");
+let seqStateInputMuch = document.getElementById("seq_state_input_much");
+let seqStateInputLittle = document.getElementById("seq_state_input_little");
+let seqStateFinish = document.getElementById("seq_state_finish");
+
+// 컴퍼레이터 상태
+let compStateHi = document.getElementById("comp_state_hi");
+let compStateLo = document.getElementById("comp_state_lo");
+let compStateOk = document.getElementById("comp_state_ok");
+
 // 메인 동작 관련 커맨드 버튼
 let setClearTareButton = document.getElementById("setClearTare");
 let setZeroTareButton = document.getElementById("setZeroTare");
@@ -360,6 +370,30 @@ ipcRenderer.on('rx_data', (event, data) => {
         comS3Value.innerHTML = data.s3_value;
         comS4Value.innerHTML = data.s4_value;
         comS5Value.innerHTML = data.s5_value;
+    }
+
+    // 시퀀스 상태
+    if(data.seqState == 1) {
+        
+    }
+
+    // Comparator 상태
+    if(data.compState == HI) {
+        compStateHi.style.color = COLOR['RED'];
+        compStateLO.style.color = COLOR['WHITE'];
+        compStateOK.style.color = COLOR['WHITE'];
+    }
+    // Comparator 상태
+    else if(data.compState == LO) {
+        compStateHi.style.color = COLOR['WHITE'];
+        compStateLO.style.color = COLOR['ORANGE'];
+        compStateOK.style.color = COLOR['WHITE'];
+    }
+    // Comparator 상태
+    else if(data.compState == OK) {
+        compStateHi.style.color = COLOR['WHITE'];
+        compStateLO.style.color = COLOR['WHITE'];
+        compStateOK.style.color = COLOR['GREEN'];
     }
 })
 
