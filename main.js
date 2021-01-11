@@ -159,7 +159,7 @@ const setStreamMode = function() {
     const command = 'F205,1' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            log.error('command: F206,1');
+            log.error('command: F205,1');
             log.error(err);
             return;
         }
@@ -172,7 +172,7 @@ const setCommandMode = function() {
     const command = 'F205,2' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            log.error('command: F206,2');
+            log.error('command: F205,2');
             log.error(err);
             return;
         }
