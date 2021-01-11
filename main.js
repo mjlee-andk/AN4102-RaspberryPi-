@@ -6,7 +6,7 @@ const Store = require('electron-store'); // local Storage
 const log = require('electron-log'); // 로그 기록
 const net = require('net'); // 소켓 서버통신
 
-const CONSTANT = require('../util/constant');
+const CONSTANT = require('./util/constant');
 const { scaleFlag, uartFlag, basicConfigFlag, externalPrintConfigFlag, calibrationConfigFlag } = require('./util/flag');
 
 const os = require('os'); // 운영체제 확인
