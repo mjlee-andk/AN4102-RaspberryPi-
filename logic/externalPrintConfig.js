@@ -1,6 +1,6 @@
 const { ipcRenderer, remote } = require('electron');
 const log = require('electron-log'); // 로그 기록
-const { FIVE_HUNDRED_MS } = require('../util/constant');
+const CONSTANT = require('../util/constant');
 
 // 외부 출력
 const printConditionRadios1 = document.getElementById("printConditionRadios1");
@@ -52,7 +52,7 @@ ipcRenderer.on('set_external_print_config_data', (event, arg) => {
         ipcRenderer.send('set_stream_mode', 'ok');
         const window = remote.getCurrentWindow();
         window.close();
-    }, FIVE_HUNDRED_MS);
+    }, CONSTANT['FIVE_HUNDRED_MS']);
 });
 
 const setExternalPrintConfigData = function() {

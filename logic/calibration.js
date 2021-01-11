@@ -1,6 +1,5 @@
 const { ipcRenderer, remote } = require('electron');
 const log = require('electron-log'); // 로그 기록
-// const remote = require('electron').remote;
 
 // 교정
 const spanValueText = document.getElementById("spanValueText");
@@ -83,7 +82,7 @@ ipcRenderer.on('set_cal_span', (event, arg) => {
 
 ipcRenderer.on('get_cal_data', (event, data) => {
     log.info('ipcRenderer.on: get_cal_data');
-    
+
     spanValueText.value = data.spanValue;
 });
 

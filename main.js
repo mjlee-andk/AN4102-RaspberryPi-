@@ -1,12 +1,12 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron')
-const SerialPort = require('serialport')
-const Readline = require('@serialport/parser-readline') // 시리얼 데이터
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const SerialPort = require('serialport');
+const Readline = require('@serialport/parser-readline'); // 시리얼 데이터
 const Store = require('electron-store'); // local Storage
 
 const log = require('electron-log'); // 로그 기록
 const net = require('net'); // 소켓 서버통신
 
-const { WINDOW_WIDTH, WINDOW_HEIGHT, ONE_HUNDRED_MS, FIVE_HUNDRED_MS, PARITY_NONE, PARITY_ODD, PARITY_EVEN, CRLF, RED, WHITE, BLUE, DEFAULT_SERIAL_PORT_WINDOW, DEFAULT_SERIAL_PORT_LINUX, SERVER_PORT, COMP_MODE_INPUT, COMP_MODE_EMISSION, COMP_MODE_LIMIT, COMP_MODE_CHECKER } = require('./util/constant');
+const CONSTANT = require('../util/constant');
 const { scaleFlag, uartFlag, basicConfigFlag, externalPrintConfigFlag, calibrationConfigFlag } = require('./util/flag');
 
 const os = require('os'); // 운영체제 확인
@@ -47,14 +47,14 @@ const createWindow = function() {
     log.info('function: createWindow');
     // 브라우저 창을 생성합니다.
     win = new BrowserWindow({
-        width: WINDOW_WIDTH,
-        height: WINDOW_HEIGHT,
+        width: CONSTANT['WINDOW_WIDTH'],
+        height: CONSTANT['WINDOW_HEIGHT'],
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
     win.loadFile('index.html');
 
@@ -71,14 +71,14 @@ const openConfigWindow = function() {
     // 브라우저 창을 생성합니다.
     configWin = new BrowserWindow({
         parent: win,
-        width: WINDOW_WIDTH,
-        height: WINDOW_HEIGHT,
+        width: CONSTANT['WINDOW_WIDTH'],
+        height: CONSTANT['WINDOW_HEIGHT'],
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
 
     configWin.loadFile('view/config.html');
@@ -86,7 +86,7 @@ const openConfigWindow = function() {
         setTimeout(function() {
             getSerialConfig();
             getRomVer();
-        }, FIVE_HUNDRED_MS);
+        }, ['FIVE_HUNDRED_MS']);
     })
 }
 
@@ -95,14 +95,14 @@ const openPCConfigWindow = function() {
     // 브라우저 창을 생성합니다.
     pcConfigWin = new BrowserWindow({
         parent: win,
-        width: WINDOW_WIDTH,
-        height: WINDOW_HEIGHT,
+        width: CONSTANT['WINDOW_WIDTH'],
+        height: CONSTANT['WINDOW_HEIGHT'],
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
 
     pcConfigWin.loadFile('view/pcconfig.html');
@@ -124,20 +124,20 @@ const pcConfigGetLocalStorage = function(event) {
     const localStorage = new Store();
     if(localStorage.get('pc_config') == undefined) {
         if(currentPlatform == 'WINDOWS') {
-            localStorage.set('pc_config.port', DEFAULT_SERIAL_PORT_WINDOW);
+            localStorage.set('pc_config.port', CONSTANT['DEFAULT_SERIAL_PORT_WINDOW']);
         }
         else {
-            localStorage.set('pc_config.port', DEFAULT_SERIAL_PORT_LINUX);
+            localStorage.set('pc_config.port', CONSTANT['DEFAULT_SERIAL_PORT_LINUX']);
         }
 
         localStorage.set('pc_config.baudrate', 24);
         localStorage.set('pc_config.databits', 8);
-        localStorage.set('pc_config.parity', PARITY_NONE);
+        localStorage.set('pc_config.parity', CONSTANT['PARITY_NONE']);
         localStorage.set('pc_config.stopbits', 1);
-        localStorage.set('pc_config.terminator', CRLF);
-        localStorage.set('pc_config.fontcolor', BLUE);
+        localStorage.set('pc_config.terminator', CONSTANT['CRLF']);
+        localStorage.set('pc_config.fontcolor', CONSTANT['FONT_COLOR_BLUE']);
 
-        win.webContents.send('set_font_color', BLUE);
+        win.webContents.send('set_font_color', CONSTANT['FONT_COLOR_BLUE']);
     }
     else {
         let tmpConfig = localStorage.get('pc_config');
@@ -316,9 +316,9 @@ ipcMain.on('set_comp_value', (event, data) => {
                         }
                         scale.comparator = true;
                     })
-                }, ONE_HUNDRED_MS)
+                }, CONSTANT['ONE_HUNDRED_MS'])
             })
-        }, ONE_HUNDRED_MS)
+        }, CONSTANT['ONE_HUNDRED_MS'])
     });
 })
 
@@ -378,7 +378,7 @@ const readHeader = function(rx) {
                 scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
 
                 win.webContents.send('set_comp_value', scale);
-            }, ONE_HUNDRED_MS);
+            }, CONSTANT['ONE_HUNDRED_MS']);
         }
 
         scale.seqState = seqState;
@@ -455,7 +455,7 @@ const readHeader = function(rx) {
                 scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
 
                 win.webContents.send('set_comp_value', scale);
-            }, ONE_HUNDRED_MS);
+            }, CONSTANT['ONE_HUNDRED_MS']);
         }
 
         scale.displayMsg = makeFormat(body);
@@ -504,28 +504,28 @@ const readHeader = function(rx) {
             scale.comparator_mode = Number(body);
 
             // 모드별 분류 : 2단 투입, 2단 배출, 리미트, 체커
-            if(scale.comparator_mode == COMP_MODE_INPUT) {
+            if(scale.comparator_mode == CONSTANT['COMP_MODE_INPUT']) {
                 scale.s1_title = 'fi';
                 scale.s2_title = 'fr';
                 scale.s3_title = 'pl';
                 scale.s4_title = 'ov';
                 scale.s5_title = 'ud';
             }
-            else if(scale.comparator_mode == COMP_MODE_EMISSION) {
+            else if(scale.comparator_mode == CONSTANT['COMP_MODE_EMISSION']) {
                 scale.s1_title = '';
                 scale.s2_title = '';
                 scale.s3_title = '';
                 scale.s4_title = '';
                 scale.s5_title = '';
             }
-            else if(scale.comparator_mode == COMP_MODE_LIMIT) {
+            else if(scale.comparator_mode == CONSTANT['COMP_MODE_LIMIT']) {
                 scale.s1_title = '';
                 scale.s2_title = '';
                 scale.s3_title = '';
                 scale.s4_title = '';
                 scale.s5_title = '';
             }
-            else if(scale.comparator_mode == COMP_MODE_CHECKER) {
+            else if(scale.comparator_mode == CONSTANT['COMP_MODE_CHECKER']) {
                 scale.s1_title = '';
                 scale.s2_title = '';
                 scale.s3_title = '';
@@ -554,7 +554,7 @@ const readHeader = function(rx) {
 
                 setTimeout(function(){
                     commandOk();
-                }, ONE_HUNDRED_MS);
+                }, CONSTANT['ONE_HUNDRED_MS']);
             }
         }
 
@@ -738,15 +738,15 @@ const readHeader = function(rx) {
         if(header == 'INFOK' || header == 'INCOK') {
             // 초기화 된 설정값으로 변경 후 재연결
             const currentPort = pcConfig.port;
-            pcConfig = new uartFlag(currentPort, 24, 8, PARITY_NONE, 1, CRLF);
+            pcConfig = new uartFlag(currentPort, 24, 8, CONSTANT['PARITY_NONE'], 1, CONSTANT['CRLF']);
             const localStorage = new Store();
 
             localStorage.set('pc_config.baudrate', 24);
             localStorage.set('pc_config.databits', 8);
-            localStorage.set('pc_config.parity', PARITY_NONE);
+            localStorage.set('pc_config.parity', CONSTANT['PARITY_NONE']);
             localStorage.set('pc_config.stopbits', 1);
-            localStorage.set('pc_config.terminator', CRLF);
-            localStorage.set('pc_config.fontcolor', BLUE);
+            localStorage.set('pc_config.terminator', CONSTANT['CRLF']);
+            localStorage.set('pc_config.fontcolor', CONSTANT['FONT_COLOR_BLUE']);
 
             sp.close(function(err){
                 if(err) {
@@ -948,9 +948,9 @@ const setBasicLeftConfig = function(data) {
                             return;
                         }
                     })
-                }, FIVE_HUNDRED_MS);
+                }, CONSTANT['FIVE_HUNDRED_MS']);
             })
-        }, FIVE_HUNDRED_MS);
+        }, CONSTANT['FIVE_HUNDRED_MS']);
     })
 }
 
@@ -1042,11 +1042,11 @@ const setBasicRightConfig = function(data) {
                                     return;
                                 }
                             })
-                        }, FIVE_HUNDRED_MS);
+                        }, CONSTANT['FIVE_HUNDRED_MS']);
                     })
-                }, FIVE_HUNDRED_MS);
+                }, CONSTANT['FIVE_HUNDRED_MS']);
             })
-        }, FIVE_HUNDRED_MS);
+        }, CONSTANT['FIVE_HUNDRED_MS']);
     })
 }
 
@@ -1146,11 +1146,11 @@ const setExternalPrintConfig = function(data) {
                                     return;
                                 }
                             })
-                        }, FIVE_HUNDRED_MS)
+                        }, CONSTANT['FIVE_HUNDRED_MS'])
                     })
-                }, FIVE_HUNDRED_MS)
+                }, CONSTANT['FIVE_HUNDRED_MS'])
             })
-        }, FIVE_HUNDRED_MS)
+        }, CONSTANT['FIVE_HUNDRED_MS'])
     })
 }
 
@@ -1250,11 +1250,11 @@ const setCalibrationConfig = function(data) {
                                     return;
                                 }
                             })
-                        }, FIVE_HUNDRED_MS)
+                        }, CONSTANT['FIVE_HUNDRED_MS'])
                     })
-                }, FIVE_HUNDRED_MS)
+                }, CONSTANT['FIVE_HUNDRED_MS'])
             })
-        }, FIVE_HUNDRED_MS)
+        },CONSTANT['FIVE_HUNDRED_MS'])
     })
 }
 
@@ -1392,10 +1392,10 @@ const openPort = function() {
     log.info('function: openPort');
     try {
         let parity = 'none';
-        if(pcConfig.parity == PARITY_ODD) {
+        if(pcConfig.parity == CONSTANT['PARITY_ODD']) {
             parity = 'odd';
         }
-        else if(pcConfig.parity == PARITY_EVEN) {
+        else if(pcConfig.parity == CONSTANT['PARITY_EVEN']) {
             parity = 'even';
         }
         sp = new SerialPort(pcConfig.port, {
@@ -1737,7 +1737,7 @@ const createSocketServer = function(ls) {
             log.error('Connection error:', err.message);
         });
     })
-    .listen(SERVER_PORT, function(){
+    .listen(CONSTANT['SERVER_PORT'], function(){
         log.info('listening on 3100...');
     });
 }
@@ -1756,7 +1756,7 @@ const startProgram = function() {
             return;
         }
 
-        const lineStream = sp.pipe(new Readline({ delimiter: pcConfig.terminator == CRLF ? '\r\n' : '\r' }, { encoding: 'utf-8' }));
+        const lineStream = sp.pipe(new Readline({ delimiter: pcConfig.terminator == CONSTANT['CRLF'] ? '\r\n' : '\r' }, { encoding: 'utf-8' }));
         lineStream.on('data', function(rx) {
             readHeader(rx);
             win.webContents.send('rx_data', scale);

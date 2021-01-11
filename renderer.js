@@ -1,6 +1,6 @@
-const { ipcRenderer, remote } = require('electron')
+const { ipcRenderer, remote } = require('electron');
 const log = require('electron-log'); // 로그 기록
-const { RED, YELLOW, HI, LO, OK } = require('./util/constant');
+const CONSTANT = require('./util/constant');
 const COLOR = require('./util/color');
 
 let colorName = '';
@@ -291,13 +291,13 @@ ipcRenderer.on('set_font_color', (event, data) => {
     setFontColor(data)
 });
 
-const setFontColor = function(color) {
+const setFontColor = function(font_color) {
     log.info('function: setFontColor');
 
-    if(color == RED) {
+    if(font_color == CONSTANT['FONT_COLOR_RED']) {
         colorName = COLOR['RED'];
     }
-    else if(color == YELLOW) {
+    else if(font_color == CONSTANT['FONT_COLOR_YELLOW']) {
         colorName = COLOR['YELLOW'];
     }
     else {
@@ -374,23 +374,23 @@ ipcRenderer.on('rx_data', (event, data) => {
 
     // 시퀀스 상태
     if(data.seqState == 1) {
-        
+
     }
 
     // Comparator 상태
-    if(data.compState == HI) {
+    if(data.compState == CONSTANT['HI']) {
         compStateHi.style.color = COLOR['RED'];
         compStateLO.style.color = COLOR['WHITE'];
         compStateOK.style.color = COLOR['WHITE'];
     }
     // Comparator 상태
-    else if(data.compState == LO) {
+    else if(data.compState == CONSTANT['LO']) {
         compStateHi.style.color = COLOR['WHITE'];
         compStateLO.style.color = COLOR['ORANGE'];
         compStateOK.style.color = COLOR['WHITE'];
     }
     // Comparator 상태
-    else if(data.compState == OK) {
+    else if(data.compState == CONSTANT['OK']) {
         compStateHi.style.color = COLOR['WHITE'];
         compStateLO.style.color = COLOR['WHITE'];
         compStateOK.style.color = COLOR['GREEN'];

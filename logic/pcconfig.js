@@ -1,7 +1,7 @@
 const { ipcRenderer } = require('electron');
 const { uartFlag } = require('../util/flag');
 const log = require('electron-log'); // 로그 기록
-const { PARITY_NONE, PARITY_ODD, PARITY_EVEN, CRLF, CR, RED, YELLOW, BLUE } = require('../util/constant');
+const CONSTANT = require('../util/constant');
 
 const pcConfigOkButton = document.getElementById("pcConfigOkButton");
 const pcConfigCloseButton = document.getElementById("pcConfigCloseButton");
@@ -41,19 +41,19 @@ ipcRenderer.on('pc_config_get_data', (event, data) => {
     dataBitsRadios1.checked = (data.databits == 7);
     dataBitsRadios2.checked = (data.databits == 8);
 
-    parityRadios1.checked = (data.parity == PARITY_NONE);
-    parityRadios2.checked = (data.parity == PARITY_ODD);
-    parityRadios3.checked = (data.parity == PARITY_EVEN);
+    parityRadios1.checked = (data.parity == CONSTANT['PARITY_NONE']);
+    parityRadios2.checked = (data.parity == CONSTANT['PARITY_ODD']);
+    parityRadios3.checked = (data.parity == CONSTANT['PARITY_EVEN']);
 
     stopbitsRadios1.checked = (data.stopbits == 1);
     stopbitsRadios2.checked = (data.stopbits == 2);
 
-    terminatorRadios1.checked = (data.terminator == CRLF);
-    terminatorRadios2.checked = (data.terminator == CR);
+    terminatorRadios1.checked = (data.terminator == CONSTANT['CRLF']);
+    terminatorRadios2.checked = (data.terminator == CONSTANT['CR']);
 
-    fontColorRadios1.checked = (data.fontcolor == RED);
-    fontColorRadios2.checked = (data.fontcolor == YELLOW);
-    fontColorRadios3.checked = (data.fontcolor == BLUE);
+    fontColorRadios1.checked = (data.fontcolor == CONSTANT['FONT_COLOR_RED']);
+    fontColorRadios2.checked = (data.fontcolor == CONSTANT['FONT_COLOR_YELLOW']);
+    fontColorRadios3.checked = (data.fontcolor == CONSTANT['FONT_COLOR_BLUE']);
 });
 
 // Port 리스트 받아오기
@@ -73,7 +73,7 @@ ipcRenderer.on('port_list', (event, data) => {
 const pcConfigSetData = function() {
     log.info('function: pcConfigSetData');
 
-    let pcConfigNow = new uartFlag('COM1', 24, 8, PARITY_NONE, 1, CRLF, BLUE);
+    let pcConfigNow = new uartFlag('COM1', 24, 8, CONSTANT['PARITY_NONE'], 1, CONSTANT['CRLF'], CONSTANT['FONT_COLOR_BLUE']);
 
     pcConfigNow.port = portSelect.options[portSelect.selectedIndex].value;
     pcConfigNow.baudrate = baudrateSelect.options[baudrateSelect.selectedIndex].value;

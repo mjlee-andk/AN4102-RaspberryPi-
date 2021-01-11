@@ -1,7 +1,6 @@
 const { ipcRenderer, remote } = require('electron');
 const log = require('electron-log'); // 로그 기록
-// const remote = require('electron').remote;
-const { FIVE_HUNDRED_MS } = require('../util/constant');
+const CONSTANT = require('../util/constant');
 
 // 교정 설정
 const capaText = document.getElementById("capaText");
@@ -29,7 +28,7 @@ ipcRenderer.on('set_calibration_config_data', (event, arg) => {
         ipcRenderer.send('set_stream_mode', 'ok');
         const window = remote.getCurrentWindow();
         window.close();
-    }, FIVE_HUNDRED_MS);
+    }, CONSTANT['FIVE_HUNDRED_MS']);
 });
 
 const setCalibrationConfigData = function() {

@@ -1,6 +1,5 @@
-const { ipcRenderer, remote } = require('electron')
+const { ipcRenderer, remote } = require('electron');
 const log = require('electron-log'); // 로그 기록
-// const remote = require('electron').remote;
 
 // 초기화
 const initFunctionFButton = document.getElementById("initFunctionFButton");

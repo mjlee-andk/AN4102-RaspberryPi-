@@ -1,14 +1,12 @@
-const { ipcRenderer, remote } = require('electron')
+const { ipcRenderer, remote } = require('electron');
 const log = require('electron-log'); // 로그 기록
-const { TAB_SERIAL_CONFIG, TAB_BASIC_LEFT_CONFIG, TAB_BASIC_RIGHT_CONFIG, TAB_EXTERNAL_PRINT_CONFIG, TAB_CALIBRATION_CONFIG, TAB_CALIBRATION, TAB_INIT } = require('../util/constant');
+const CONSTANT = require('../util/constant');
 const { setSerialConfigData } = require('./serialConfig');
 const { setBasicLeftConfigData, setBasicRightConfigData } = require('./basicConfig');
 const { setExternalPrintConfigData } = require('./externalPrintConfig');
 const { setCalibrationConfigData } = require('./calibrationConfig');
 
 const displayType = 'block';
-require('./calibration');
-require('./init');
 
 //
 // 화면 상단
@@ -86,30 +84,30 @@ const setDivDisplay = function(tab) {
     initDiv.style.display = "none";
     configOkButton.style.display = "none";
 
-    if(tab == TAB_SERIAL_CONFIG) {
+    if(tab == CONSTANT['TAB_SERIAL_CONFIG']) {
         serialDiv.style.display = displayType;
         configOkButton.style.display = displayType;
     }
-    else if(tab == TAB_BASIC_LEFT_CONFIG) {
+    else if(tab == CONSTANT['TAB_BASIC_LEFT_CONFIG']) {
         basicLeftDiv.style.display = displayType;
         configOkButton.style.display = displayType;
     }
-    else if(tab == TAB_BASIC_RIGHT_CONFIG) {
+    else if(tab == CONSTANT['TAB_BASIC_RIGHT_CONFIG']) {
         basicRightDiv.style.display = displayType;
         configOkButton.style.display = displayType;
     }
-    else if(tab == TAB_EXTERNAL_PRINT_CONFIG) {
+    else if(tab == CONSTANT['TAB_EXTERNAL_PRINT_CONFIG']) {
         externalPrintDiv.style.display = displayType;
         configOkButton.style.display = displayType;
     }
-    else if(tab == TAB_CALIBRATION_CONFIG) {
+    else if(tab == CONSTANT['TAB_CALIBRATION_CONFIG']) {
         calibrationConfigDiv.style.display = displayType;
         configOkButton.style.display = displayType;
     }
-    else if(tab == TAB_CALIBRATION) {
+    else if(tab == CONSTANT['TAB_CALIBRATION']) {
         calDiv.style.display = displayType;
     }
-    else if(tab == TAB_INIT) {
+    else if(tab == CONSTANT['TAB_INIT']) {
         initDiv.style.display = displayType;
     }
 }
@@ -125,25 +123,25 @@ const setButtonActive = function(tab) {
     calButton.classList.remove("active");
     initButton.classList.remove("active");
 
-    if(tab == TAB_SERIAL_CONFIG) {
+    if(tab == CONSTANT['TAB_SERIAL_CONFIG']) {
         serialConfigButton.classList.add("active");
     }
-    else if(tab == TAB_BASIC_LEFT_CONFIG) {
+    else if(tab == CONSTANT['TAB_BASIC_LEFT_CONFIG']) {
         basicLeftConfigButton.classList.add("active");
     }
-    else if(tab == TAB_BASIC_RIGHT_CONFIG) {
+    else if(tab == CONSTANT['TAB_BASIC_RIGHT_CONFIG']) {
         basicRightConfigButton.classList.add("active");
     }
-    else if(tab == TAB_EXTERNAL_PRINT_CONFIG) {
+    else if(tab == CONSTANT['TAB_EXTERNAL_PRINT_CONFIG']) {
         externalPrintConfigButton.classList.add("active");
     }
-    else if(tab == TAB_CALIBRATION_CONFIG) {
+    else if(tab == CONSTANT['TAB_CALIBRATION_CONFIG']) {
         calibrationConfigButton.classList.add("active");
     }
-    else if(tab == TAB_CALIBRATION) {
+    else if(tab == CONSTANT['TAB_CALIBRATION']) {
         calButton.classList.add("active");
     }
-    else if(tab == TAB_INIT) {
+    else if(tab == CONSTANT['TAB_INIT']) {
         initButton.classList.add("active");
     }
 }
@@ -151,46 +149,46 @@ const setButtonActive = function(tab) {
 serialConfigButton.addEventListener('click', function(){
     ipcRenderer.send('get_serial_config_data', 'ok');
 
-    setDivDisplay(TAB_SERIAL_CONFIG);
-    setButtonActive(TAB_SERIAL_CONFIG);
+    setDivDisplay(CONSTANT['TAB_SERIAL_CONFIG']);
+    setButtonActive(CONSTANT['TAB_SERIAL_CONFIG']);
 })
 
 basicLeftConfigButton.addEventListener('click', function(){
     ipcRenderer.send('get_basic_left_config_data', 'ok');
 
-    setDivDisplay(TAB_BASIC_LEFT_CONFIG);
-    setButtonActive(TAB_BASIC_LEFT_CONFIG);
+    setDivDisplay(CONSTANT['TAB_BASIC_LEFT_CONFIG']);
+    setButtonActive(CONSTANT['TAB_BASIC_LEFT_CONFIG']);
 })
 
 basicRightConfigButton.addEventListener('click', function(){
     ipcRenderer.send('get_basic_right_config_data', 'ok');
 
-    setDivDisplay(TAB_BASIC_RIGHT_CONFIG);
-    setButtonActive(TAB_BASIC_RIGHT_CONFIG);
+    setDivDisplay(CONSTANT['TAB_BASIC_RIGHT_CONFIG']);
+    setButtonActive(CONSTANT['TAB_BASIC_RIGHT_CONFIG']);
 })
 
 externalPrintConfigButton.addEventListener('click', function(){
     ipcRenderer.send('get_external_print_config_data', 'ok');
 
-    setDivDisplay(TAB_EXTERNAL_PRINT_CONFIG);
-    setButtonActive(TAB_EXTERNAL_PRINT_CONFIG);
+    setDivDisplay(CONSTANT['TAB_EXTERNAL_PRINT_CONFIG']);
+    setButtonActive(CONSTANT['TAB_EXTERNAL_PRINT_CONFIG']);
 })
 
 calibrationConfigButton.addEventListener('click', function(){
     ipcRenderer.send('get_calibration_config_data', 'ok');
 
-    setDivDisplay(TAB_CALIBRATION_CONFIG);
-    setButtonActive(TAB_CALIBRATION_CONFIG);
+    setDivDisplay(CONSTANT['TAB_CALIBRATION_CONFIG']);
+    setButtonActive(CONSTANT['TAB_CALIBRATION_CONFIG']);
 })
 
 calButton.addEventListener('click', function(){
     ipcRenderer.send('get_cal_data', 'ok');
 
-    setDivDisplay(TAB_CALIBRATION);
-    setButtonActive(TAB_CALIBRATION);
+    setDivDisplay(CONSTANT['TAB_CALIBRATION']);
+    setButtonActive(CONSTANT['TAB_CALIBRATION']);
 })
 
 initButton.addEventListener('click', function(){
-    setDivDisplay(TAB_INIT);
-    setButtonActive(TAB_INIT);
+    setDivDisplay(CONSTANT['TAB_INIT']);
+    setButtonActive(CONSTANT['TAB_INIT']);
 })

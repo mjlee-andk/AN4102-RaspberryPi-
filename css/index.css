@@ -8,8 +8,6 @@ body {
 }
 
 .upper_container {
-    /* padding-left: 10px;
-    padding-right: 10px; */
     padding-top: 10px;
     display: flex;
     width: 100%;
@@ -113,6 +111,7 @@ body {
 
 .comp_state_container div{
     margin-bottom: 15px;
+    color: #ffffff;
 }
 
 .sub_display {

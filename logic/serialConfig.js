@@ -1,8 +1,7 @@
 const { ipcRenderer, remote } = require('electron');
 const log = require('electron-log'); // 로그 기록
-const { FIVE_HUNDRED_MS } = require('../util/constant');
+const CONSTANT = require('../util/constant');
 const { uartFlag } = require('../util/flag');
-
 
 // 통신 설정
 let baudrateSelect = document.getElementById("baudrateSelect");
@@ -16,7 +15,6 @@ let stopbitsRadios2 = document.getElementById("stopbitsRadios2");
 let terminatorRadios1 = document.getElementById("terminatorRadios1");
 let terminatorRadios2 = document.getElementById("terminatorRadios2");
 
-
 ipcRenderer.on('get_serial_config_data', (event, data) => {
     log.info('ipcRenderer.on: get_serial_config_data');
 
@@ -27,6 +25,7 @@ ipcRenderer.on('get_serial_config_data', (event, data) => {
     else if(data.databits == 8) {
         dataBitsRadios2.checked = true;
     }
+
     if(data.parity == 0) {
         parityRadios1.checked = true;
     }
@@ -36,12 +35,14 @@ ipcRenderer.on('get_serial_config_data', (event, data) => {
     else if(data.parity == 2) {
         parityRadios3.checked = true;
     }
+
     if(data.stopbits == 1) {
         stopbitsRadios1.checked = true;
     }
     else if(data.stopbits == 2) {
         stopbitsRadios2.checked = true;
     }
+
     if(data.terminator == 1) {
         terminatorRadios1.checked = true;
     }
@@ -57,7 +58,7 @@ ipcRenderer.on('set_serial_config_data', (event, arg) => {
         ipcRenderer.send('set_stream_mode', 'ok');
         const window = remote.getCurrentWindow();
         window.close();
-    }, FIVE_HUNDRED_MS);
+    }, CONSTANT['FIVE_HUNDRED_MS']);
 });
 
 const setSerialConfigData = function() {

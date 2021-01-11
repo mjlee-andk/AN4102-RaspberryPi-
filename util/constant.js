@@ -8,9 +8,9 @@ const PARITY_EVEN = '2';
 const CRLF = '1';
 const CR = '2';
 
-const RED = '1';
-const YELLOW = '2';
-const BLUE = '3';
+const FONT_COLOR_RED = '1';
+const FONT_COLOR_YELLOW = '2';
+const FONT_COLOR_BLUE = '3';
 
 const SERVER_PORT = 3100;
 
@@ -52,9 +52,9 @@ module.exports = {
     PARITY_EVEN,
     CRLF,
     CR,
-    RED,
-    YELLOW,
-    BLUE,
+    FONT_COLOR_RED,
+    FONT_COLOR_YELLOW,
+    FONT_COLOR_BLUE,
     LOCALSTORAGE_KEY_PORT,
     LOCALSTORAGE_KEY_BAUDRATE,
     LOCALSTORAGE_KEY_DATABITS,
