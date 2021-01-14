@@ -340,6 +340,15 @@ const convertComparatorValue = function(value, dp) {
     return result;
 }
 
+const convertHexStringToBinary = function(hex) {
+    let result = '';
+    if(hex == '') {
+        return;
+    }
+    result = ('0000'+ parseInt(hex, 16).toString(2)).slice(-4);
+    return result;
+}
+
 const readHeader = function(rx) {
     const separator = ',';
     const splitedData = rx.split(separator);
@@ -381,8 +390,18 @@ const readHeader = function(rx) {
             }, CONSTANT['ONE_HUNDRED_MS']);
         }
 
-        scale.seqState = seqState;
-        scale.compState = compState;
+        const seqStateBinary = convertHexStringToBinary(seqState);
+        scale.seqStateFINISH = seqStateBinary.charAt(0);
+        scale.seqStateLITTLE = seqStateBinary.charAt(1);
+        scale.seqStateMUCH = seqStateBinary.charAt(2);
+        scale.seqStateNEARZERO = seqStateBinary.charAt(3);
+
+        const compStateBinary = convertHexStringToBinary(compState);
+        scale.compStateHI = compStateBinary.charAt(0);
+        scale.compStateOK = compStateBinary.charAt(1);
+        scale.compStateLO = compStateBinary.charAt(2);
+        scale.compStateNG = compStateBinary.charAt(3);
+
         scale.displayMsg = makeFormat(rx);
 
         // 안정
@@ -1424,6 +1443,8 @@ let isPause = false;
 let timer;
 
 const confirmConnection = function() {
+    log.info(('0000'+ parseInt('D', 16).toString(2)).slice(-4));
+    log.info(('0000'+ parseInt('D', 16).toString(2)).slice(-4).charAt(1));
     // log.info('function: confirmConnection');
     if(isPause) {
         return;

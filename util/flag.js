@@ -39,10 +39,17 @@ class scaleFlag {
         // 단위 표시
         this.unit = 0;
 
-        // 시퀀스 상태
-        this.seqState = 0;
-        // Comparator 상태
-        this.compState = 0;
+        // 시퀀스 상태 0: false, 1: true
+        this.seqStateFINISH = false;
+        this.seqStateLITTLE = false;
+        this.seqStateMUCH = false;
+        this.seqStateNEARZERO = false;
+
+        // Comparator 상태 0: false, 1: true
+        this.compStateHI = false;
+        this.compStateOK = false;
+        this.compStateLO = false;
+        this.compStateNG = false;
 
         // // 스팬 적용
         // this.do_span = false;

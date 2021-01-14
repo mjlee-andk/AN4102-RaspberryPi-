@@ -373,24 +373,46 @@ ipcRenderer.on('rx_data', (event, data) => {
     }
 
     // 시퀀스 상태
-    if(data.seqState == 1) {
+    if(data.seqStateFINISH) {
+        seqStateFinish.className = "seq_state_on";
+    }
+    else {
+        seqStateFinish.className = "seq_state_off";
+    }
 
+    if(data.seqStateLITTLE) {
+        seqStateInputLittle.className = "seq_state_on";
+    }
+    else {
+        seqStateInputLittle.className = "seq_state_off";
+    }
+
+    if(data.seqStateMUCH) {
+        seqStateInputMuch.className = "seq_state_on";
+    }
+    else {
+        seqStateInputMuch.className = "seq_state_off";
+    }
+
+    if(data.seqStateNEARZERO) {
+        seqStateNearZero.className = "seq_state_on";
+    }
+    else {
+        seqStateNearZero.className = "seq_state_off";
     }
 
     // Comparator 상태
-    if(data.compState == CONSTANT['HI']) {
+    if(data.compStateHI) {
         compStateHi.style.color = COLOR['RED'];
         compStateLO.style.color = COLOR['WHITE'];
         compStateOK.style.color = COLOR['WHITE'];
     }
-    // Comparator 상태
-    else if(data.compState == CONSTANT['LO']) {
+    else if(data.compStateLO) {
         compStateHi.style.color = COLOR['WHITE'];
         compStateLO.style.color = COLOR['ORANGE'];
         compStateOK.style.color = COLOR['WHITE'];
     }
-    // Comparator 상태
-    else if(data.compState == CONSTANT['OK']) {
+    else if(data.compStateOK) {
         compStateHi.style.color = COLOR['WHITE'];
         compStateLO.style.color = COLOR['WHITE'];
         compStateOK.style.color = COLOR['GREEN'];
