@@ -54,7 +54,7 @@ const createWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
     win.loadFile('index.html');
 
@@ -78,7 +78,7 @@ const openConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
 
     configWin.loadFile('view/config.html');
@@ -102,7 +102,7 @@ const openPCConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
 
     pcConfigWin.loadFile('view/pcconfig.html');
@@ -391,18 +391,18 @@ const readHeader = function(rx) {
         }
 
         const seqStateBinary = convertHexStringToBinary(seqState);
-        scale.seqStateFINISH = seqStateBinary.charAt(0);
-        scale.seqStateLITTLE = seqStateBinary.charAt(1);
-        scale.seqStateMUCH = seqStateBinary.charAt(2);
-        scale.seqStateNEARZERO = seqStateBinary.charAt(3);
+        scale.seqStateFINISH = seqStateBinary.charAt(0) == '1' ? true : false;
+        scale.seqStateLITTLE = seqStateBinary.charAt(1) == '1' ? true : false;
+        scale.seqStateMUCH = seqStateBinary.charAt(2) == '1' ? true : false;
+        scale.seqStateNEARZERO = seqStateBinary.charAt(3) == '1' ? true : false;
 
         const compStateBinary = convertHexStringToBinary(compState);
-        scale.compStateHI = compStateBinary.charAt(0);
-        scale.compStateOK = compStateBinary.charAt(1);
-        scale.compStateLO = compStateBinary.charAt(2);
-        scale.compStateNG = compStateBinary.charAt(3);
+        scale.compStateHI = compStateBinary.charAt(0) == '1' ? true : false;
+        scale.compStateOK = compStateBinary.charAt(1) == '1' ? true : false;
+        scale.compStateLO = compStateBinary.charAt(2) == '1' ? true : false;
+        scale.compStateNG = compStateBinary.charAt(3) == '1' ? true : false;
 
-        scale.displayMsg = makeFormat(rx);
+        scale.displayMsg = makeFormat(body);
 
         // 안정
         if(header1 == 'ST') {
@@ -442,74 +442,74 @@ const readHeader = function(rx) {
     }
 
     // 통신포맷 - seqstate, compstate 추가전
-    if(splitedDataLength == 3) {
-        if(rx.length < 16) {
-            return;
-        }
-
-        const header1 = splitedData[0];
-        const header2 = splitedData[1];
-        // const seqState = splitedData[2];
-        // const compState = splitedData[3];
-        const body = splitedData[2];
-
-        scale.isStable = false;
-        scale.isHold = false;
-        scale.isHg = false;
-        scale.isNet = false;
-        scale.isZero = false;
-        scale.block = false;
-
-        if(scale.comparator) {
-            scale.comparator = false;
-            scale.comparator_mode = 0;
-
-            getDecimalPoint(Number(body).toString());
-
-            setTimeout(function(){
-                scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
-                scale.s2_value = convertComparatorValue(scale.s2_value, decimalPoint);
-                scale.s3_value = convertComparatorValue(scale.s3_value, decimalPoint);
-                scale.s4_value = convertComparatorValue(scale.s4_value, decimalPoint);
-                scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
-
-                win.webContents.send('set_comp_value', scale);
-            }, CONSTANT['ONE_HUNDRED_MS']);
-        }
-
-        scale.displayMsg = makeFormat(body);
-
-        if(header1 == 'ST') {
-            scale.isStable = true;
-            if(header2 == 'NT') {
-                scale.isNet = true;
-            }
-        }
-
-        else if(header1 == 'US') {
-            if(header2 == 'NT') {
-                scale.isNet = true;
-            }
-        }
-
-        else if(header1 == 'HD') {
-            scale.isHold = true;
-        }
-
-        else if (header1 == 'HG') {
-            scale.isHold = true;
-            scale.isHg = true;
-        }
-
-        else if (header1 == 'OL') {
-            scale.displayMsg = '   .  ';
-        }
-
-        else {
-            scale.block = true;
-        }
-        rx = '';
-    }
+    // if(splitedDataLength == 3) {
+    //     if(rx.length < 16) {
+    //         return;
+    //     }
+    //
+    //     const header1 = splitedData[0];
+    //     const header2 = splitedData[1];
+    //     // const seqState = splitedData[2];
+    //     // const compState = splitedData[3];
+    //     const body = splitedData[2];
+    //
+    //     scale.isStable = false;
+    //     scale.isHold = false;
+    //     scale.isHg = false;
+    //     scale.isNet = false;
+    //     scale.isZero = false;
+    //     scale.block = false;
+    //
+    //     if(scale.comparator) {
+    //         scale.comparator = false;
+    //         scale.comparator_mode = 0;
+    //
+    //         getDecimalPoint(Number(body).toString());
+    //
+    //         setTimeout(function(){
+    //             scale.s1_value = convertComparatorValue(scale.s1_value, decimalPoint);
+    //             scale.s2_value = convertComparatorValue(scale.s2_value, decimalPoint);
+    //             scale.s3_value = convertComparatorValue(scale.s3_value, decimalPoint);
+    //             scale.s4_value = convertComparatorValue(scale.s4_value, decimalPoint);
+    //             scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
+    //
+    //             win.webContents.send('set_comp_value', scale);
+    //         }, CONSTANT['ONE_HUNDRED_MS']);
+    //     }
+    //
+    //     scale.displayMsg = makeFormat(body);
+    //
+    //     if(header1 == 'ST') {
+    //         scale.isStable = true;
+    //         if(header2 == 'NT') {
+    //             scale.isNet = true;
+    //         }
+    //     }
+    //
+    //     else if(header1 == 'US') {
+    //         if(header2 == 'NT') {
+    //             scale.isNet = true;
+    //         }
+    //     }
+    //
+    //     else if(header1 == 'HD') {
+    //         scale.isHold = true;
+    //     }
+    //
+    //     else if (header1 == 'HG') {
+    //         scale.isHold = true;
+    //         scale.isHg = true;
+    //     }
+    //
+    //     else if (header1 == 'OL') {
+    //         scale.displayMsg = '   .  ';
+    //     }
+    //
+    //     else {
+    //         scale.block = true;
+    //     }
+    //     rx = '';
+    // }
 
     // 컴퍼레이터 읽기, 쓰기, 모드
     // F펑션, CF펑션
@@ -1443,9 +1443,7 @@ let isPause = false;
 let timer;
 
 const confirmConnection = function() {
-    log.info(('0000'+ parseInt('D', 16).toString(2)).slice(-4));
-    log.info(('0000'+ parseInt('D', 16).toString(2)).slice(-4).charAt(1));
-    // log.info('function: confirmConnection');
+    log.info('function: confirmConnection');
     if(isPause) {
         return;
     }
@@ -1467,7 +1465,7 @@ const startWaitTimer = function() {
     isPause = false;
     timer = setInterval(function() {
         confirmConnection();
-    }, 500);
+    }, CONSTANT['FIVE_HUNDRED_MS']);
 }
 
 const stopWaitTimer = function() {
@@ -1780,6 +1778,7 @@ const startProgram = function() {
         const lineStream = sp.pipe(new Readline({ delimiter: pcConfig.terminator == CONSTANT['CRLF'] ? '\r\n' : '\r' }, { encoding: 'utf-8' }));
         lineStream.on('data', function(rx) {
             readHeader(rx);
+            // console.log(rx);
             win.webContents.send('rx_data', scale);
             scale.waiting_sec = 0;
         });

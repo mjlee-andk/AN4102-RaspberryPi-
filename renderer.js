@@ -260,9 +260,9 @@ let seqStateInputLittle = document.getElementById("seq_state_input_little");
 let seqStateFinish = document.getElementById("seq_state_finish");
 
 // 컴퍼레이터 상태
-let compStateHi = document.getElementById("comp_state_hi");
-let compStateLo = document.getElementById("comp_state_lo");
-let compStateOk = document.getElementById("comp_state_ok");
+let compStateHI = document.getElementById("comp_state_hi");
+let compStateLO = document.getElementById("comp_state_lo");
+let compStateOK = document.getElementById("comp_state_ok");
 
 // 메인 동작 관련 커맨드 버튼
 let setClearTareButton = document.getElementById("setClearTare");
@@ -403,19 +403,24 @@ ipcRenderer.on('rx_data', (event, data) => {
 
     // Comparator 상태
     if(data.compStateHI) {
-        compStateHi.style.color = COLOR['RED'];
+        compStateHI.style.color = COLOR['RED'];
         compStateLO.style.color = COLOR['WHITE'];
         compStateOK.style.color = COLOR['WHITE'];
     }
     else if(data.compStateLO) {
-        compStateHi.style.color = COLOR['WHITE'];
+        compStateHI.style.color = COLOR['WHITE'];
         compStateLO.style.color = COLOR['ORANGE'];
         compStateOK.style.color = COLOR['WHITE'];
     }
     else if(data.compStateOK) {
-        compStateHi.style.color = COLOR['WHITE'];
+        compStateHI.style.color = COLOR['WHITE'];
         compStateLO.style.color = COLOR['WHITE'];
         compStateOK.style.color = COLOR['GREEN'];
+    }
+    else {
+        compStateHI.style.color = COLOR['WHITE'];
+        compStateLO.style.color = COLOR['WHITE'];
+        compStateOK.style.color = COLOR['WHITE'];
     }
 })
 
