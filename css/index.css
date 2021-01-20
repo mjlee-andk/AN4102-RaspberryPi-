@@ -40,17 +40,30 @@ body {
     max-height: 60px;
 }
 
-.seq_state_container {
+.seq_state_out_container {
     width: 35%;
+    display: inline-block;
+}
+
+.seq_state_container {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
+}
+
+.seq_state_box {
+    width: 20%;
+    text-align: center;
 }
 
 .seq_state_box div {
     margin: 0 auto;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
+}
+
+.seq_state_box span {
+    font-size: 0.8em;
 }
 
 .seq_state_on {

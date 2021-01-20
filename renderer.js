@@ -304,7 +304,7 @@ const closeComparatorKeypad = function() {
     comS2Value.style.color = colorName;
     comS3Value.style.color = colorName;
     comS4Value.style.color = colorName;
-    comS5Value.style.color = colorName;
+    comS1Value.style.color = colorName;
     comp_flag = -1;
 }
 
