@@ -54,7 +54,7 @@ const createWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
     win.loadFile('index.html');
 
@@ -78,7 +78,7 @@ const openConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
 
     configWin.loadFile('view/config.html');
@@ -102,7 +102,7 @@ const openPCConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
 
     pcConfigWin.loadFile('view/pcconfig.html');
