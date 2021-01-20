@@ -8,7 +8,7 @@ class scaleFlag {
         this.isHg = false;
 
         // 표시 데이터
-        this.displayMsg = '888888';
+        this.displayMsg = '000000';
 
         this.f = false;
         this.cf = false;

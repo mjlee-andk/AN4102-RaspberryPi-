@@ -291,6 +291,23 @@ ipcRenderer.on('set_font_color', (event, data) => {
     setFontColor(data)
 });
 
+ipcRenderer.on('close_comparator_keypad', (event, data) => {
+    log.info('ipcRenderer.on: close_comparator_keypad');
+    closeComparatorKeypad();
+})
+
+const closeComparatorKeypad = function() {
+    log.info('function: close_comparator_keypad');
+
+    keypad_subweight.style.display = "none";
+    comS1Value.style.color = colorName;
+    comS2Value.style.color = colorName;
+    comS3Value.style.color = colorName;
+    comS4Value.style.color = colorName;
+    comS5Value.style.color = colorName;
+    comp_flag = -1;
+}
+
 const setFontColor = function(font_color) {
     log.info('function: setFontColor');
 
@@ -512,7 +529,7 @@ const setOnOffView = function() {
         onOffButton.innerHTML = 'ON';
         openPCConfigWindowButton.disabled = false;
 
-        displayMsg.innerHTML = '888888';
+        displayMsg.innerHTML = '000000';
         unitTag.innerHTML = '';
 
         labelStableClass.style.color = COLOR['WHITE'];

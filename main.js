@@ -54,7 +54,7 @@ const createWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
     win.loadFile('index.html');
 
@@ -78,7 +78,7 @@ const openConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
 
     configWin.loadFile('view/config.html');
@@ -102,7 +102,7 @@ const openPCConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
 
     pcConfigWin.loadFile('view/pcconfig.html');
@@ -524,11 +524,11 @@ const readHeader = function(rx) {
 
             // 모드별 분류 : 2단 투입, 2단 배출, 리미트, 체커
             if(scale.comparator_mode == CONSTANT['COMP_MODE_INPUT']) {
-                scale.s1_title = 'fi';
-                scale.s2_title = 'fr';
-                scale.s3_title = 'pl';
-                scale.s4_title = 'ov';
-                scale.s5_title = 'ud';
+                scale.s1_title = 'Fi';
+                scale.s2_title = 'Fr';
+                scale.s3_title = 'Pl';
+                scale.s4_title = 'Ov';
+                scale.s5_title = 'Ud';
             }
             else if(scale.comparator_mode == CONSTANT['COMP_MODE_EMISSION']) {
                 scale.s1_title = '';
@@ -1448,7 +1448,8 @@ const confirmConnection = function() {
         return;
     }
     scale.waiting_sec++;
-    if(scale.waiting_sec > 1) {
+    if(scale.waiting_sec > 2) {
+        // console.log('waiting sec', scale.waiting_sec);
         scale.displayMsg = '-----';
         scale.unit = 0;
         scale.isStable = false;
@@ -1708,21 +1709,26 @@ ipcMain.on('on_off', (event, arg) => {
     try {
         // 프로그램 시작
         if(arg == 'ON') {
-            startWaitTimer();
-            pcConfigGetLocalStorage(event);
-            startProgram();
+            startWaitTimer();   // 대기 타이머 시작 - 2초 이상 데이터 수신 안될 경우를 체크하기 위한 타이머
+            startProgram(); // 프로그램 시작
+            pcConfigGetLocalStorage(event); // 로컬저장소에 저장된 pc config 값 불러오기
         }
 
         // 프로그램 종료
         else {
-            stopWaitTimer();
-            stopProgram();
+            stopWaitTimer();    // 대기 타이머 종료
+            stopProgram();  // 프로그램 종료
+            closeComparatorKeypad(); // 컴퍼레이터 수정하는 키패드 종료
         }
     }
     catch(e) {
         log.error('error: ipcMain.on / on_off');
     }
 })
+
+const closeComparatorKeypad = function(){
+    win.webContents.send('close_comparator_keypad', '');
+}
 
 const createSocketServer = function(ls) {
     // TCP/IP 서버 소켓
