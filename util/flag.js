@@ -86,6 +86,97 @@ class uartFlag {
     }
 }
 
+class cfFunctionFlag {
+    constructor() {
+        this.cf01 = 1;
+        this.cf02 = 0;
+        this.cf03 = 10000;
+        this.cf04 = 0.00000;
+        this.cf05 = 0.00000;
+        this.cf06 = 10000;
+        this.cf07 = 100;
+        this.cf08 = 2.0;
+        this.cf09 = 1.5;
+        this.cf10 = 1.0;
+        this.cf11 = 2.0;
+        this.cf12 = 0;
+        this.cf13 = 0;
+    }
+}
+
+class f0FunctionFlag {
+    constructor() {
+        this.f001 = 000000;
+        this.f002 = 8;
+        this.f003 = 0;
+        this.f004 = 0.0;
+        this.f005 = 0.0;
+        this.f006 = 0.0;
+        this.f007 = 0.0;
+        this.f008 = 0;
+        this.f009 = 0;
+        this.f010 = 0;
+        this.f011 = 0;
+        this.f012 = 0;
+        this.f013 = 0;
+        this.f014 = 0;
+        this.f015 = 0;
+        this.f016 = 0;
+        this.f017 = 0;
+        this.f018 = 0;
+    }
+}
+
+class f1FunctionFlag {
+    constructor() {
+        this.f101 = 0;
+        this.f102 = 0;
+        this.f103 = 2;
+        this.f104 = 0;
+        this.f105 = 2;
+        this.f106 = 2;
+        this.f107 = 0;
+    }
+}
+
+class f2FunctionFlag {
+    constructor() {
+        this.f201 = 2;
+        this.f202 = 1;
+        this.f203 = 2;
+        this.f204 = 0;
+        this.f205 = 0;
+    }
+}
+
+class f3FunctionFlag {
+    constructor() {
+        this.f301 = 0;
+        this.f302 = 0;
+        this.f303 = 2;
+        this.f304 = 0;
+        this.f305 = 2;
+        this.f306 = 00;
+    }
+}
+
+class f4FunctionFlag {
+    constructor() {
+        this.f401 = 0;
+        this.f402 = 0;
+        this.f403 = 0;
+    }
+}
+
+class f5FunctionFlag {
+    constructor() {
+        this.f501 = 0;
+        this.f502 = 10000;
+        this.f503 = 0;
+        this.f504 = 10000;
+    }
+}
+
 class basicConfigFlag {
     constructor() {
         // 커맨드로 정보 읽어오는건지 아닌지 확인

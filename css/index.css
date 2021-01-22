@@ -233,12 +233,12 @@ body {
 }
 
 .row_title {
-    width: 25%;
+    width: 50%;
     justify-content: center;
 }
 
 .row_content {
-    width: 75%;
+    width: 50%;
 }
 
 .row_content span {

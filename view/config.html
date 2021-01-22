@@ -32,7 +32,7 @@
         <!--Body-->
         <div>
             <!--통신설정-->
-            <div id="serialDiv" class="main_container" style="display:block">
+            <div id="serialDiv" class="main_container" style="display:none">
                 <div class="row_container">
                     <div class="row_title">
                         <span>Baudrate</span>
@@ -175,6 +175,674 @@
                     <div class="row_content">
                         <input type="range" min="0" max="99" class="slider" id="averageTimeSlider">
                         <span id="averageTimeSliderValue"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!--CF 펑션-->
+            <div id="cfDiv" class="main_container" style="display:block;">
+                <div class="keypad" id="keypad_cf" style="display:none;">
+                    <ul id="keyboard">
+                        <li class="key_cf">1</li>
+                        <li class="key_cf">2</li>
+                        <li class="key_cf">3</li>
+
+                        <li class="key_cf clearl">4</li>
+                        <li class="key_cf">5</li>
+                        <li class="key_cf">6</li>
+
+                        <li class="key_cf clearl">7</li>
+                        <li class="key_cf ">8</li>
+                        <li class="key_cf">9</li>
+
+                        <li class="key_btn_cf clearl">+/-</li>
+                        <li class="key_cf">0</li>
+                        <li class="key_btn_cf">삭제</li>
+                        <li class="key_btn_cf">확인</li>
+                    </ul>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>소수점 위치</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="cf_01">
+                            <option value="0">000000</option>
+                            <option value="1">00000.0</option>
+                            <option value="2">0000.00</option>
+                            <option value="3">000.000</option>
+                            <option value="4">00.0000</option>
+                            <option value="5">0.00000</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>최소눈금</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="cf_02">
+                            <option value="0">1</option>
+                            <option value="1">2</option>
+                            <option value="2">5</option>
+                            <option value="3">10</option>
+                            <option value="4">20</option>
+                            <option value="5">50</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>정격용량</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="cf_03">
+                    </div>
+                    <div class="row_title">
+                        <span>Zero 입력전압</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="cf_04">
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Span 입력전압</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="cf_05">
+                    </div>
+                    <div class="row_title">
+                        <span>Span 입력전압 표시값</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="cf_06">
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Zero 범위</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="cf_07">
+                    </div>
+                    <div class="row_title">
+                        <span>제로 트래킹 시간</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="cf_08">
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>제로 트래킹 폭</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="cf_09">
+                    </div>
+                    <div class="row_title">
+                        <span>안정 검출 시간</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="cf_10">
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>안정 검출 폭</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="cf_11">
+                    </div>
+                    <div class="row_title">
+                        <span>Power On Zero</span>
+                    </div>
+                    <div class="row_content">
+                        <label class="switch" for="powerOnZeroToggle">
+                            <input type="checkbox" id="cf_12">
+                            <span class="toggle_slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>단위</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="cf_13">
+                            <option value="0">kg</option>
+                            <option value="1">g</option>
+                            <option value="2">t</option>
+                            <option value="3">lb</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span></span>
+                    </div>
+                    <div class="row_content">
+
+                    </div>
+                </div>
+            </div>
+
+            <!--F0 펑션(1)-->
+            <div id="f0_1Div" class="main_container" style="display:none;">
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>키 금지</span>
+                    </div>
+                    <div class="row_content">
+
+                    </div>
+                    <div class="row_title">
+                        <span></span>
+                    </div>
+                    <div class="row_content">
+
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>디지털 필터</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f0_02">
+                            <option value="0">없음</option>
+                            <option value="1">11Hz</option>
+                            <option value="2">8Hz</option>
+                            <option value="3">5.6Hz</option>
+                            <option value="4">4Hz</option>
+                            <option value="5">2.8Hz</option>
+                            <option value="6">2Hz</option>
+                            <option value="7">1.4Hz</option>
+                            <option value="8">1Hz</option>
+                            <option value="9">0.7Hz</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>Sequence Mode</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f0_03">
+                            <option value="0">사용안함</option>
+                            <option value="1">2단 투입 모드</option>
+                            <option value="2">2단 배출 모드</option>
+                            <option value="3">리미트 모드</option>
+                            <option value="4">체커 모드</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>대투입 비교금지 타이머</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f0_04">
+                    </div>
+                    <div class="row_title">
+                        <span>소투입 비교금지 타이머</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f0_05">
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>판정 대기 타이머</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f0_06">
+                    </div>
+                    <div class="row_title">
+                        <span>판정 완료 타이머</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f0_07">
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>자동낙차 유효폭</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f0_08">
+                    </div>
+                    <div class="row_title">
+                        <span>자동낙차 평균횟수</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f0_09">
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>영점부근 대상</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f0_10">
+                            <option value="0">순중량</option>
+                            <option value="1">총중량</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>영점부근</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f0_11">
+                    </div>
+                </div>
+            </div>
+
+            <!--F0 펑션(2)-->
+            <div id="f0_2Div" class="main_container" style="display:none;">
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>옵션 선택</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f0_12">
+                            <option value="0">사용안함</option>
+                            <option value="1">RS485</option>
+                            <option value="2">Modbus RTU</option>
+                            <option value="3">DAV</option>
+                            <option value="4">DAI</option>
+                            <option value="5">BCD</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>외부입력1 기능선택</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f0_13">
+                            <option value="0">기능없음</option>
+                            <option value="1">START</option>
+                            <option value="2">STOP</option>
+                            <option value="3">ON/OFF</option>
+                            <option value="4">GROSS/NET</option>
+                            <option value="5">ZERO</option>
+                            <option value="6">PRINT</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>외부입력2 기능선택</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f0_14">
+                            <option value="0">기능없음</option>
+                            <option value="1">START</option>
+                            <option value="2">STOP</option>
+                            <option value="3">ON/OFF</option>
+                            <option value="4">GROSS/NET</option>
+                            <option value="5">ZERO</option>
+                            <option value="6">PRINT</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>외부입력3 기능선택</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f0_15">
+                            <option value="0">기능없음</option>
+                            <option value="1">START</option>
+                            <option value="2">STOP</option>
+                            <option value="3">ON/OFF</option>
+                            <option value="4">GROSS/NET</option>
+                            <option value="5">ZERO</option>
+                            <option value="6">PRINT</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>외부입력4 기능선택</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f0_16">
+                            <option value="0">기능없음</option>
+                            <option value="1">START</option>
+                            <option value="2">STOP</option>
+                            <option value="3">ON/OFF</option>
+                            <option value="4">GROSS/NET</option>
+                            <option value="5">ZERO</option>
+                            <option value="6">PRINT</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>외부입력5 기능선택</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f0_17">
+                            <option value="0">기능없음</option>
+                            <option value="1">START</option>
+                            <option value="2">STOP</option>
+                            <option value="3">ON/OFF</option>
+                            <option value="4">GROSS/NET</option>
+                            <option value="5">ZERO</option>
+                            <option value="6">PRINT</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>외부입력6 기능선택</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f0_18">
+                            <option value="0">기능없음</option>
+                            <option value="1">START</option>
+                            <option value="2">STOP</option>
+                            <option value="3">ON/OFF</option>
+                            <option value="4">GROSS/NET</option>
+                            <option value="5">ZERO</option>
+                            <option value="6">PRINT</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span></span>
+                    </div>
+                    <div class="row_content">
+
+                    </div>
+                </div>
+            </div>
+
+            <!--F1 펑션-->
+            <div id="f1Div" class="main_container" style="display:none;">
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>RS232C(기본) Baud Rate</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f1_01">
+                            <option value="0">2400bps</option>
+                            <option value="1">4800bps</option>
+                            <option value="2">9600bps</option>
+                            <option value="3">19200bps</option>
+                            <option value="4">38400bps</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>RS232C(기본) Data Length</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f1_02">
+                            <option value="0">7bit</option>
+                            <option value="1">8bit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>RS232C(기본) Parity</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f1_03">
+                            <option value="0">NONE</option>
+                            <option value="1">ODD</option>
+                            <option value="2">EVEN</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>RS232C(기본) Terminator</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f1_04">
+                            <option value="0">CRLF</option>
+                            <option value="1">CR</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>RS232C(기본) 출력모드</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f1_05">
+                            <option value="0">스트림 모드(표시변환에 동기 출력)</option>
+                            <option value="1">매뉴얼 모드</option>
+                            <option value="2">오토프린트 모드(제로범위 이상에서 최초 안정 1회)</option>
+                            <option value="3">오토프린트 모드(제로범위 이상에서 안정될 때 마다 1회)</option>
+                            <option value="4">커맨드 모드</option>
+                            <option value="5">제트스트림 모드(AD Sampling에 동기 출력)</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>Current Loop(기본) Baud Rate</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f1_06">
+                            <option value="0">600bps</option>
+                            <option value="1">1200bps</option>
+                            <option value="2">2400bps</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Current Loop(기본) 출력모드</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f1_07">
+                            <option value="0">스트림 모드(표시변환에 동기 출력)</option>
+                            <option value="1">매뉴얼 모드</option>
+                            <option value="2">오토프린트 모드(제로범위 이상에서 최초 안정 1회)</option>
+                            <option value="3">오토프린트 모드(제로범위 이상에서 안정될 때 마다 1회)</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span></span>
+                    </div>
+                    <div class="row_content">
+
+                    </div>
+                </div>
+            </div>
+
+            <!--F2 펑션 CPi-A070WR과 Weighing Module RS232C 간 (User에게는 보이지 않음)-->
+            <div id="f2Div" class="main_container" style="display:none;">
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Baud Rate</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f2_01">
+                            <option value="0">2400bps</option>
+                            <option value="1">4800bps</option>
+                            <option value="2">9600bps</option>
+                            <option value="3">19200bps</option>
+                            <option value="4">38400bps</option>
+                            <option value="5">115200bps</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>Data Length</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f2_02">
+                            <option value="0">7bit</option>
+                            <option value="1">8bit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Parity</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f2_03">
+                            <option value="0">NONE</option>
+                            <option value="1">ODD</option>
+                            <option value="2">EVEN</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>Terminator</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f2_04">
+                            <option value="0">CRLF</option>
+                            <option value="1">CR</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>출력 모드</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f2_05">
+                            <option value="0">스트림 모드</option>
+                            <option value="1">커맨드 모드</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span></span>
+                    </div>
+                    <div class="row_content">
+
+                    </div>
+                </div>
+            </div>
+
+            <!--F3 펑션-->
+            <div id="f3Div" class="main_container" style="display:none;">
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>RS485(옵션) Baud Rate</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f3_01">
+                            <option value="0">2400bps</option>
+                            <option value="1">4800bps</option>
+                            <option value="2">9600bps</option>
+                            <option value="3">19200bps</option>
+                            <option value="4">38400bps</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>RS485(옵션) Data Length</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f3_02">
+                            <option value="0">7bit</option>
+                            <option value="1">8bit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>RS485(옵션) Parity</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f3_03">
+                            <option value="0">NONE</option>
+                            <option value="1">ODD</option>
+                            <option value="2">EVEN</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>RS485(옵션) Terminator</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f3_04">
+                            <option value="0">CRLF</option>
+                            <option value="1">CR</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>RS485(옵션) 출력 모드</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f3_05">
+                            <option value="0">스트림 모드(표시변환에 동기 출력)</option>
+                            <option value="1">매뉴얼 모드</option>
+                            <option value="2">오토프린트 모드(제로범위 이상에서 최초 안정 1회)</option>
+                            <option value="3">오토프린트 모드(제로범위 이상에서 안정될 때 마다 1회)</option>
+                            <option value="4">커맨드 모드</option>
+                            <option value="5">제트스트림 모드(AD Sampling에 동기 출력)</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>RS485(옵션) 기기번호</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f3_06">
+                    </div>
+                </div>
+            </div>
+
+            <!--F4 펑션-->
+            <div id="f4Div" class="main_container" style="display:none;">
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>BCD(옵션) 출력 모드</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f4_01">
+                            <option value="0">스트림 모드(표시변환에 동기 출력)</option>
+                            <option value="1">매뉴얼 모드</option>
+                            <option value="2">오토프린트 모드(제로범위 이상에서 최초 안정 1회)</option>
+                            <option value="3">오토프린트 모드(제로범위 이상에서 안정될 때 마다 1회)</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span>BCD(옵션) 출력 논리</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f4_02">
+                            <option value="0">부논리</option>
+                            <option value="1">정논리</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>BCD(옵션) 프린트 Command 논리</span>
+                    </div>
+                    <div class="row_content">
+                        <select id="f4_03">
+                            <option value="0">부논리</option>
+                            <option value="1">정논리</option>
+                        </select>
+                    </div>
+                    <div class="row_title">
+                        <span></span>
+                    </div>
+                    <div class="row_content">
+                    </div>
+                </div>
+            </div>
+
+            <!--F5 펑션-->
+            <div id="f5Div" class="main_container" style="display:none;">
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Analog out(옵션) 0v 출력</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f5_01">
+                    </div>
+                    <div class="row_title">
+                        <span>Analog out(옵션) 10v 출력</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f5_02">
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <span>Analog out(옵션) 4mA 출력</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f5_03">
+                    </div>
+                    <div class="row_title">
+                        <span>Analog out(옵션) 20mA 출력</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f5_04">
                     </div>
                 </div>
             </div>
