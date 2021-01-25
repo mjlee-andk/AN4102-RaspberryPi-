@@ -180,7 +180,7 @@
             </div>
 
             <!--CF 펑션-->
-            <div id="cfDiv" class="main_container" style="display:block;">
+            <div id="cfDiv" class="main_container" style="display:none;">
                 <div class="keypad" id="keypad_cf" style="display:none;">
                     <ul id="keyboard">
                         <li class="key_cf">1</li>
@@ -194,11 +194,12 @@
                         <li class="key_cf clearl">7</li>
                         <li class="key_cf ">8</li>
                         <li class="key_cf">9</li>
+                        <li class="key_cf">C</li>
 
-                        <li class="key_btn_cf clearl">+/-</li>
+                        <li class="key_cf clearl">+/-</li>
                         <li class="key_cf">0</li>
-                        <li class="key_btn_cf">삭제</li>
-                        <li class="key_btn_cf">확인</li>
+                        <li class="key_cf">.</li>
+                        <li class="key_cf">확인</li>
                     </ul>
                 </div>
                 <div class="row_container">
@@ -234,13 +235,13 @@
                         <span>정격용량</span>
                     </div>
                     <div class="row_content">
-                        <input id="cf_03">
+                        <input id="cf_03" placeholder="1~999999">
                     </div>
                     <div class="row_title">
                         <span>Zero 입력전압</span>
                     </div>
                     <div class="row_content">
-                        <input id="cf_04">
+                        <input id="cf_04" placeholder="-7.00000~7.00000">
                     </div>
                 </div>
                 <div class="row_container">
@@ -248,13 +249,13 @@
                         <span>Span 입력전압</span>
                     </div>
                     <div class="row_content">
-                        <input id="cf_05">
+                        <input id="cf_05" placeholder="0.00001~9.99999">
                     </div>
                     <div class="row_title">
                         <span>Span 입력전압 표시값</span>
                     </div>
                     <div class="row_content">
-                        <input id="cf_06">
+                        <input id="cf_06" placeholder="-999999~999999">
                     </div>
                 </div>
                 <div class="row_container">
@@ -262,13 +263,15 @@
                         <span>Zero 범위</span>
                     </div>
                     <div class="row_content">
-                        <input id="cf_07">
+                        <input type="range" min="0" max="100" class="slider" id="cf_07">
+                        <span id="cf_07_value"></span>
                     </div>
                     <div class="row_title">
                         <span>제로 트래킹 시간</span>
                     </div>
                     <div class="row_content">
-                        <input id="cf_08">
+                        <input type="range" min="0" max="99" class="slider" id="cf_08">
+                        <span id="cf_08_value"></span>
                     </div>
                 </div>
                 <div class="row_container">
@@ -276,13 +279,15 @@
                         <span>제로 트래킹 폭</span>
                     </div>
                     <div class="row_content">
-                        <input id="cf_09">
+                        <input type="range" min="0" max="99" class="slider" id="cf_09">
+                        <span id="cf_09_value"></span>
                     </div>
                     <div class="row_title">
                         <span>안정 검출 시간</span>
                     </div>
                     <div class="row_content">
-                        <input id="cf_10">
+                        <input type="range" min="0" max="99" class="slider" id="cf_10">
+                        <span id="cf_10_value"></span>
                     </div>
                 </div>
                 <div class="row_container">
@@ -290,13 +295,14 @@
                         <span>안정 검출 폭</span>
                     </div>
                     <div class="row_content">
-                        <input id="cf_11">
+                        <input type="range" min="0" max="99" class="slider" id="cf_11">
+                        <span id="cf_11_value"></span>
                     </div>
                     <div class="row_title">
                         <span>Power On Zero</span>
                     </div>
                     <div class="row_content">
-                        <label class="switch" for="powerOnZeroToggle">
+                        <label class="switch" for="cf_12">
                             <input type="checkbox" id="cf_12">
                             <span class="toggle_slider round"></span>
                         </label>
@@ -324,7 +330,28 @@
             </div>
 
             <!--F0 펑션(1)-->
-            <div id="f0_1Div" class="main_container" style="display:none;">
+            <div id="f0_1Div" class="main_container" style="display:block;">
+                <div class="keypad" id="keypad_f0" style="display:none;">
+                    <ul id="keyboard">
+                        <li class="key_f0">1</li>
+                        <li class="key_f0">2</li>
+                        <li class="key_f0">3</li>
+
+                        <li class="key_f0 clearl">4</li>
+                        <li class="key_f0">5</li>
+                        <li class="key_f0">6</li>
+
+                        <li class="key_f0 clearl">7</li>
+                        <li class="key_f0 ">8</li>
+                        <li class="key_f0">9</li>
+                        <li class="key_f0">C</li>
+
+                        <li class="key_f0 clearl">+/-</li>
+                        <li class="key_f0">0</li>
+                        <li class="key_f0"></li>
+                        <li class="key_f0">확인</li>
+                    </ul>
+                </div>
                 <div class="row_container">
                     <div class="row_title">
                         <span>키 금지</span>
@@ -375,13 +402,15 @@
                         <span>대투입 비교금지 타이머</span>
                     </div>
                     <div class="row_content">
-                        <input id="f0_04">
+                        <input type="range" min="0" max="100" class="slider" id="f0_04">
+                        <span id="f0_04_value"></span>
                     </div>
                     <div class="row_title">
                         <span>소투입 비교금지 타이머</span>
                     </div>
                     <div class="row_content">
-                        <input id="f0_05">
+                        <input type="range" min="0" max="100" class="slider" id="f0_05">
+                        <span id="f0_05_value"></span>
                     </div>
                 </div>
                 <div class="row_container">
@@ -389,13 +418,15 @@
                         <span>판정 대기 타이머</span>
                     </div>
                     <div class="row_content">
-                        <input id="f0_06">
+                        <input type="range" min="0" max="100" class="slider" id="f0_06">
+                        <span id="f0_06_value"></span>
                     </div>
                     <div class="row_title">
                         <span>판정 완료 타이머</span>
                     </div>
                     <div class="row_content">
-                        <input id="f0_07">
+                        <input type="range" min="0" max="100" class="slider" id="f0_07">
+                        <span id="f0_07_value"></span>
                     </div>
                 </div>
                 <div class="row_container">
@@ -403,16 +434,23 @@
                         <span>자동낙차 유효폭</span>
                     </div>
                     <div class="row_content">
-                        <input id="f0_08">
+                        <input id="f0_08" placeholder="0~999999">
                     </div>
                     <div class="row_title">
                         <span>자동낙차 평균횟수</span>
                     </div>
                     <div class="row_content">
-                        <input id="f0_09">
+                        <input type="range" min="0" max="10" class="slider" id="f0_09">
+                        <span id="f0_09_value"></span>
                     </div>
                 </div>
                 <div class="row_container">
+                    <div class="row_title">
+                        <span>영점부근</span>
+                    </div>
+                    <div class="row_content">
+                        <input id="f0_11" placeholder="-999999~999999">
+                    </div>
                     <div class="row_title">
                         <span>영점부근 대상</span>
                     </div>
@@ -421,12 +459,6 @@
                             <option value="0">순중량</option>
                             <option value="1">총중량</option>
                         </select>
-                    </div>
-                    <div class="row_title">
-                        <span>영점부근</span>
-                    </div>
-                    <div class="row_content">
-                        <input id="f0_11">
                     </div>
                 </div>
             </div>
@@ -768,7 +800,8 @@
                         <span>RS485(옵션) 기기번호</span>
                     </div>
                     <div class="row_content">
-                        <input id="f3_06">
+                        <input type="range" min="0" max="99" class="slider" id="f3_06">
+                        <span id="f3_06_value"></span>
                     </div>
                 </div>
             </div>

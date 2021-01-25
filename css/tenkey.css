@@ -4,6 +4,7 @@
     right: 30px;
     background-color: #808080;
     border-radius: 5px;
+    z-index: 999;
 }
 #keyboard {
     margin: 0;

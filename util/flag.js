@@ -106,7 +106,7 @@ class cfFunctionFlag {
 
 class f0FunctionFlag {
     constructor() {
-        this.f001 = 000000;
+        this.f001 = 0;
         this.f002 = 8;
         this.f003 = 0;
         this.f004 = 0.0;
@@ -156,7 +156,7 @@ class f3FunctionFlag {
         this.f303 = 2;
         this.f304 = 0;
         this.f305 = 2;
-        this.f306 = 00;
+        this.f306 = 0;
     }
 }
 

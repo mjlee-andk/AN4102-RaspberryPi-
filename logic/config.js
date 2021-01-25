@@ -5,6 +5,7 @@ const { setSerialConfigData } = require('./serialConfig');
 const { setBasicLeftConfigData, setBasicRightConfigData } = require('./basicConfig');
 const { setExternalPrintConfigData } = require('./externalPrintConfig');
 const { setCalibrationConfigData } = require('./calibrationConfig');
+const { setCFConfigData } = require('./cf');
 
 require('./calibration');
 require('./init');
