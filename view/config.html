@@ -331,7 +331,7 @@
             </div>
 
             <!--F0 펑션(1)-->
-            <div id="f0_1Div" class="main_container" style="display:block;">
+            <div id="f0_1Div" class="main_container" style="display:none;">
                 <div class="keypad" id="keypad_f0" style="display:none;">
                     <ul id="keyboard">
                         <li class="key_f0">1</li>
@@ -528,6 +528,14 @@
                         </select>
                     </div>
                     <div class="row_title">
+
+                    </div>
+                    <div class="row_content">
+
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
                         <span>외부입력1 기능선택</span>
                     </div>
                     <div class="row_content">
@@ -541,8 +549,6 @@
                             <option value="6">PRINT</option>
                         </select>
                     </div>
-                </div>
-                <div class="row_container">
                     <div class="row_title">
                         <span>외부입력2 기능선택</span>
                     </div>
@@ -557,6 +563,8 @@
                             <option value="6">PRINT</option>
                         </select>
                     </div>
+                </div>
+                <div class="row_container">
                     <div class="row_title">
                         <span>외부입력3 기능선택</span>
                     </div>
@@ -571,8 +579,6 @@
                             <option value="6">PRINT</option>
                         </select>
                     </div>
-                </div>
-                <div class="row_container">
                     <div class="row_title">
                         <span>외부입력4 기능선택</span>
                     </div>
@@ -587,6 +593,9 @@
                             <option value="6">PRINT</option>
                         </select>
                     </div>
+
+                </div>
+                <div class="row_container">
                     <div class="row_title">
                         <span>외부입력5 기능선택</span>
                     </div>
@@ -601,8 +610,6 @@
                             <option value="6">PRINT</option>
                         </select>
                     </div>
-                </div>
-                <div class="row_container">
                     <div class="row_title">
                         <span>외부입력6 기능선택</span>
                     </div>
@@ -617,12 +624,6 @@
                             <option value="6">PRINT</option>
                         </select>
                     </div>
-                    <div class="row_title">
-                        <span></span>
-                    </div>
-                    <div class="row_content">
-
-                    </div>
                 </div>
             </div>
 
@@ -630,7 +631,8 @@
             <div id="f1Div" class="main_container" style="display:none;">
                 <div class="row_container">
                     <div class="row_title">
-                        <span>RS232C(기본) Baud Rate</span>
+                        <div>RS232C(기본)</div>
+                        <div>Baud Rate</div>
                     </div>
                     <div class="row_content">
                         <select id="f1_01">
@@ -642,7 +644,8 @@
                         </select>
                     </div>
                     <div class="row_title">
-                        <span>RS232C(기본) Data Length</span>
+                        <div>RS232C(기본)</div>
+                        <div>Data Length</div>
                     </div>
                     <div class="row_content">
                         <select id="f1_02">
@@ -653,7 +656,8 @@
                 </div>
                 <div class="row_container">
                     <div class="row_title">
-                        <span>RS232C(기본) Parity</span>
+                        <div>RS232C(기본)</div>
+                        <div>Parity</div>
                     </div>
                     <div class="row_content">
                         <select id="f1_03">
@@ -663,7 +667,8 @@
                         </select>
                     </div>
                     <div class="row_title">
-                        <span>RS232C(기본) Terminator</span>
+                        <div>RS232C(기본)</div>
+                        <div>Terminator</div>
                     </div>
                     <div class="row_content">
                         <select id="f1_04">
@@ -674,7 +679,8 @@
                 </div>
                 <div class="row_container">
                     <div class="row_title">
-                        <span>RS232C(기본) 출력모드</span>
+                        <div>RS232C(기본)</div>
+                        <div>출력모드</div>
                     </div>
                     <div class="row_content">
                         <select id="f1_05">
@@ -687,7 +693,16 @@
                         </select>
                     </div>
                     <div class="row_title">
-                        <span>Current Loop(기본) Baud Rate</span>
+
+                    </div>
+                    <div class="row_content">
+
+                    </div>
+                </div>
+                <div class="row_container">
+                    <div class="row_title">
+                        <div>Current Loop(기본)</div>
+                        <div>Baud Rate</div>
                     </div>
                     <div class="row_content">
                         <select id="f1_06">
@@ -696,10 +711,9 @@
                             <option value="2">2400bps</option>
                         </select>
                     </div>
-                </div>
-                <div class="row_container">
                     <div class="row_title">
-                        <span>Current Loop(기본) 출력모드</span>
+                        <div>Current Loop(기본)</div>
+                        <div>출력모드</div>
                     </div>
                     <div class="row_content">
                         <select id="f1_07">
@@ -708,12 +722,6 @@
                             <option value="2">오토프린트 모드(제로범위 이상에서 최초 안정 1회)</option>
                             <option value="3">오토프린트 모드(제로범위 이상에서 안정될 때 마다 1회)</option>
                         </select>
-                    </div>
-                    <div class="row_title">
-                        <span></span>
-                    </div>
-                    <div class="row_content">
-
                     </div>
                 </div>
             </div>
@@ -785,7 +793,28 @@
             </div>
 
             <!--F3 펑션-->
-            <div id="f3Div" class="main_container" style="display:none;">
+            <div id="f3Div" class="main_container" style="display:block;">
+                <div class="keypad" id="keypad_f3" style="display:none;">
+                    <ul id="keyboard">
+                        <li class="key_f3">1</li>
+                        <li class="key_f3">2</li>
+                        <li class="key_f3">3</li>
+
+                        <li class="key_f3 clearl">4</li>
+                        <li class="key_f3">5</li>
+                        <li class="key_f3">6</li>
+
+                        <li class="key_f3 clearl">7</li>
+                        <li class="key_f3 ">8</li>
+                        <li class="key_f3">9</li>
+                        <li class="key_f3">C</li>
+
+                        <li class="key_f3 clearl">+/-</li>
+                        <li class="key_f3">0</li>
+                        <li class="key_f3">.</li>
+                        <li class="key_f3">확인</li>
+                    </ul>
+                </div>
                 <div class="row_container">
                     <div class="row_title">
                         <span>RS485(옵션) Baud Rate</span>
@@ -848,8 +877,7 @@
                         <span>RS485(옵션) 기기번호</span>
                     </div>
                     <div class="row_content">
-                        <input type="range" min="0" max="99" class="slider" id="f3_06">
-                        <span id="f3_06_value"></span>
+                        <input id="f3_06" placeholder="0~99">
                     </div>
                 </div>
             </div>

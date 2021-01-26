@@ -249,6 +249,7 @@ body {
 .row_title {
     width: 50%;
     justify-content: center;
+    flex-direction: column;
 }
 
 .row_content {
@@ -372,7 +373,7 @@ body {
 }
 
 select {
-    width: 50%;
+    width: 90%;
     height: 30px;
     padding-left: 5px;
     font-size: 15px;
