@@ -12,7 +12,6 @@ const f306 = document.getElementById("f3_06");
 const keypad_f3 = document.getElementById("keypad_f3");
 const key_f3_list = document.querySelectorAll(".key_f3");
 
-let focused_input = '';
 const background_color = 'pink';
 
 const makeKeypadSetting = function(element, ev) {
@@ -21,12 +20,10 @@ const makeKeypadSetting = function(element, ev) {
         keypad_f3.style.display = "block";
         keypad_f3.style.left = '30px';
         keypad_f3.style.right = 'auto';
-        focused_input = element;
     }
     else {
         ev.target.style.background = '';
         keypad_f3.style.display = "none";
-        focused_input = '';
     }
 }
 

@@ -1,54 +1,71 @@
 const { ipcRenderer, remote } = require('electron');
 const log = require('electron-log'); // 로그 기록
 const CONSTANT = require('../util/constant');
-const { setSerialConfigData } = require('./serialConfig');
-const { setBasicLeftConfigData, setBasicRightConfigData } = require('./basicConfig');
-const { setExternalPrintConfigData } = require('./externalPrintConfig');
-const { setCalibrationConfigData } = require('./calibrationConfig');
+
 const { setCFConfigData } = require('./cf');
 const { setF0_1ConfigData } = require('./f0_1');
+const { setF0_2ConfigData } = require('./f0_2');
+const { setF1ConfigData } = require('./f1');
 const { setF3ConfigData } = require('./f3');
+const { setF4ConfigData } = require('./f4');
+const { setF5ConfigData } = require('./f5');
 
 require('./calibration');
-require('./init');
 
-const displayType = 'block';
+const DISPLAY_BLOCK = 'block';
+
+const cfDiv = document.getElementById("cfDiv");
+const f0_1Div = document.getElementById("f0_1Div");
+const f0_2Div = document.getElementById("f0_2Div");
+const f1Div = document.getElementById("f1Div");
+const f2Div = document.getElementById("f2Div");
+const f3Div = document.getElementById("f3Div");
+const f4Div = document.getElementById("f4Div");
+const calDiv = document.getElementById("calDiv");
+
 
 //
 // 화면 상단
 //
-const configOkButton = document.getElementById("configOk");
-configOkButton.addEventListener('click', function(){
-    if(serialDiv.style.display == displayType) {
-        setSerialConfigData();
+const configOkBtn = document.getElementById("configOk");
+configOkBtn.addEventListener('click', function(){
+    if(cfDiv.style.display == DISPLAY_BLOCK) {
+        setCFConfigData();
     }
-    if(basicLeftDiv.style.display == displayType) {
-        setBasicLeftConfigData();
+    else if(f0_1Div.style.display == DISPLAY_BLOCK) {
+        setF0_1ConfigData();
     }
-    if(basicRightDiv.style.display == displayType) {
-        setBasicRightConfigData();
+    else if(f0_2Div.style.display == DISPLAY_BLOCK) {
+        setF0_2ConfigData();
     }
-
-    if(externalPrintDiv.style.display == displayType) {
-        setExternalPrintConfigData();
+    else if(f1Div.style.display == DISPLAY_BLOCK) {
+        setF1ConfigData();
     }
-
-    if(calibrationConfigDiv.style.display == displayType) {
-        setCalibrationConfigData();
+    // else if(f2Div.style.display == DISPLAY_BLOCK) {
+    //     setF2ConfigData();
+    // }
+    else if(f3Div.style.display == DISPLAY_BLOCK) {
+        setF3ConfigData();
+    }
+    else if(f4Div.style.display == DISPLAY_BLOCK) {
+        setF4ConfigData();
+    }
+    else if(f5Div.style.display == DISPLAY_BLOCK) {
+        setF5ConfigData();
     }
 })
-
-const closeConfigWindowButton = document.getElementById("closeConfigWindow");
-closeConfigWindowButton.addEventListener('click', function(){
-    ipcRenderer.send('set_stream_mode', 'ok');
-    closeWindow();
-});
 
 const closeWindow = function() {
     log.info('function: closeWindow');
 
     ipcRenderer.send('window_close', 'config');
 }
+
+const closeConfigWindowButton = document.getElementById("closeConfigWindow");
+closeConfigWindowButton.addEventListener('click', function(){
+    ipcRenderer.send('set_stream_mode', 'ok');
+    closeWindow();
+});
 
 const romVer = document.getElementById("romVer");
 
@@ -62,139 +79,129 @@ ipcRenderer.on('get_rom_ver', (event, data) => {
 // 화면 하단
 //
 
-const serialConfigButton = document.getElementById("serialConfigButton");
-const basicLeftConfigButton = document.getElementById("basicLeftConfigButton");
-const basicRightConfigButton = document.getElementById("basicRightConfigButton");
-const externalPrintConfigButton = document.getElementById("externalPrintConfigButton");
-const calibrationConfigButton = document.getElementById("calibrationConfigButton");
-const calButton = document.getElementById("calButton");
-const initButton = document.getElementById("initButton");
+const cfBtn = document.getElementById("cfBtn");
+const f0_1Btn = document.getElementById("f0_1Btn");
+const f0_2Btn = document.getElementById("f0_2Btn");
+const f1Btn = document.getElementById("f1Btn");
+const f3Btn = document.getElementById("f3Btn");
+const f4f5Btn = document.getElementById("f4f5Btn");
+const calBtn = document.getElementById("calBtn");
 
-const serialDiv = document.getElementById("serialDiv");
-const basicLeftDiv = document.getElementById("basicLeftDiv");
-const basicRightDiv = document.getElementById("basicRightDiv");
-const externalPrintDiv = document.getElementById("externalPrintDiv");
-const calibrationConfigDiv = document.getElementById("calibrationConfigDiv");
-const calDiv = document.getElementById("calDiv");
-const initDiv = document.getElementById("initDiv");
+cfBtn.addEventListener('click', function(){
+    ipcRenderer.send('get_cf_data', 'ok');
+
+    setDivDisplay('cfBtn');
+    setButtonActive('cfBtn');
+})
+
+f0_1Btn.addEventListener('click', function(){
+    ipcRenderer.send('get_f0_1_data', 'ok');
+
+    setDivDisplay('f0_1Btn');
+    setButtonActive('f0_1Btn');
+})
+
+f0_2Btn.addEventListener('click', function(){
+    ipcRenderer.send('get_f0_2_data', 'ok');
+
+    setDivDisplay('f0_2Btn');
+    setButtonActive('f0_2Btn');
+})
+
+f1Btn.addEventListener('click', function(){
+    ipcRenderer.send('get_f1_data', 'ok');
+
+    setDivDisplay('f1Btn');
+    setButtonActive('f1Btn');
+})
+
+f3Btn.addEventListener('click', function(){
+    ipcRenderer.send('get_f1_data', 'ok');
+
+    setDivDisplay('f3Btn');
+    setButtonActive('f3Btn');
+})
+
+f4f5Btn.addEventListener('click', function(){
+    ipcRenderer.send('get_f4_f5_data', 'ok');
+
+    setDivDisplay('f4f5Btn');
+    setButtonActive('f4f5Btn');
+})
+
+calBtn.addEventListener('click', function(){
+    ipcRenderer.send('get_cal_data', 'ok');
+
+    setDivDisplay('calBtn');
+    setButtonActive('calBtn');
+})
 
 const setDivDisplay = function(tab) {
     log.info('function: setDivDisplay');
 
-    serialDiv.style.display = "none";
-    basicLeftDiv.style.display = "none";
-    basicRightDiv.style.display = "none";
-    externalPrintDiv.style.display = "none";
-    calibrationConfigDiv.style.display = "none";
+    cfDiv.style.display = "none";
+    f0_1Div.style.display = "none";
+    f0_2Div.style.display = "none";
+    f1Div.style.display = "none";
+    f3Div.style.display = "none";
+    f4Div.style.display = "none";
     calDiv.style.display = "none";
-    initDiv.style.display = "none";
-    configOkButton.style.display = "none";
+    configOkBtn.style.display = "inline-block";
 
-    if(tab == CONSTANT['TAB_SERIAL_CONFIG']) {
-        serialDiv.style.display = displayType;
-        configOkButton.style.display = 'inline-block';
+    if(tab == 'cfBtn') {
+        cfDiv.style.display = DISPLAY_BLOCK;
     }
-    else if(tab == CONSTANT['TAB_BASIC_LEFT_CONFIG']) {
-        basicLeftDiv.style.display = displayType;
-        configOkButton.style.display = 'inline-block';
+    else if(tab == 'f0_1Btn') {
+        f0_1Div.style.display = DISPLAY_BLOCK;
     }
-    else if(tab == CONSTANT['TAB_BASIC_RIGHT_CONFIG']) {
-        basicRightDiv.style.display = displayType;
-        configOkButton.style.display = 'inline-block';
+    else if(tab == 'f0_2Btn') {
+        f0_2Div.style.display = DISPLAY_BLOCK;
     }
-    else if(tab == CONSTANT['TAB_EXTERNAL_PRINT_CONFIG']) {
-        externalPrintDiv.style.display = displayType;
-        configOkButton.style.display = 'inline-block';
+    else if(tab == 'f1Btn') {
+        f1Div.style.display = DISPLAY_BLOCK;
     }
-    else if(tab == CONSTANT['TAB_CALIBRATION_CONFIG']) {
-        calibrationConfigDiv.style.display = displayType;
-        configOkButton.style.display = 'inline-block';
+    else if(tab == 'f3Btn') {
+        f3Div.style.display = DISPLAY_BLOCK;
     }
-    else if(tab == CONSTANT['TAB_CALIBRATION']) {
-        calDiv.style.display = displayType;
+    else if(tab == 'f4f5Btn') {
+        f4Div.style.display = DISPLAY_BLOCK;
     }
-    else if(tab == CONSTANT['TAB_INIT']) {
-        initDiv.style.display = displayType;
+    else if(tab == 'calBtn') {
+        calDiv.style.display = DISPLAY_BLOCK;
+        configOkBtn.style.display = "none";
     }
 }
 
 const setButtonActive = function(tab) {
     log.info('function: setButtonActive');
 
-    serialConfigButton.classList.remove("active");
-    basicLeftConfigButton.classList.remove("active");
-    basicRightConfigButton.classList.remove("active");
-    externalPrintConfigButton.classList.remove("active");
-    calibrationConfigButton.classList.remove("active");
-    calButton.classList.remove("active");
-    initButton.classList.remove("active");
+    cfBtn.classList.remove("btn_active");
+    f0_1Btn.classList.remove("btn_active");
+    f0_2Btn.classList.remove("btn_active");
+    f1Btn.classList.remove("btn_active");
+    f3Btn.classList.remove("btn_active");
+    f4f5Btn.classList.remove("btn_active");
+    calBtn.classList.remove("btn_active");
 
-    if(tab == CONSTANT['TAB_SERIAL_CONFIG']) {
-        serialConfigButton.classList.add("active");
+    if(tab == 'cfBtn') {
+        cfBtn.classList.add("btn_active");
     }
-    else if(tab == CONSTANT['TAB_BASIC_LEFT_CONFIG']) {
-        basicLeftConfigButton.classList.add("active");
+    else if(tab == 'f0_1Btn') {
+        f0_1Btn.classList.add("btn_active");
     }
-    else if(tab == CONSTANT['TAB_BASIC_RIGHT_CONFIG']) {
-        basicRightConfigButton.classList.add("active");
+    else if(tab == 'f0_2Btn') {
+        f0_2Btn.classList.add("btn_active");
     }
-    else if(tab == CONSTANT['TAB_EXTERNAL_PRINT_CONFIG']) {
-        externalPrintConfigButton.classList.add("active");
+    else if(tab == 'f1Btn') {
+        f1Btn.classList.add("btn_active");
     }
-    else if(tab == CONSTANT['TAB_CALIBRATION_CONFIG']) {
-        calibrationConfigButton.classList.add("active");
+    else if(tab == 'f3Btn') {
+        f3Btn.classList.add("btn_active");
     }
-    else if(tab == CONSTANT['TAB_CALIBRATION']) {
-        calButton.classList.add("active");
+    else if(tab == 'f4f5Btn') {
+        f4f5Btn.classList.add("btn_active");
     }
-    else if(tab == CONSTANT['TAB_INIT']) {
-        initButton.classList.add("active");
+    else if(tab == 'calBtn') {
+        calBtn.classList.add("btn_active");
     }
 }
-
-serialConfigButton.addEventListener('click', function(){
-    ipcRenderer.send('get_serial_config_data', 'ok');
-
-    setDivDisplay(CONSTANT['TAB_SERIAL_CONFIG']);
-    setButtonActive(CONSTANT['TAB_SERIAL_CONFIG']);
-})
-
-basicLeftConfigButton.addEventListener('click', function(){
-    ipcRenderer.send('get_basic_left_config_data', 'ok');
-
-    setDivDisplay(CONSTANT['TAB_BASIC_LEFT_CONFIG']);
-    setButtonActive(CONSTANT['TAB_BASIC_LEFT_CONFIG']);
-})
-
-basicRightConfigButton.addEventListener('click', function(){
-    ipcRenderer.send('get_basic_right_config_data', 'ok');
-
-    setDivDisplay(CONSTANT['TAB_BASIC_RIGHT_CONFIG']);
-    setButtonActive(CONSTANT['TAB_BASIC_RIGHT_CONFIG']);
-})
-
-externalPrintConfigButton.addEventListener('click', function(){
-    ipcRenderer.send('get_external_print_config_data', 'ok');
-
-    setDivDisplay(CONSTANT['TAB_EXTERNAL_PRINT_CONFIG']);
-    setButtonActive(CONSTANT['TAB_EXTERNAL_PRINT_CONFIG']);
-})
-
-calibrationConfigButton.addEventListener('click', function(){
-    ipcRenderer.send('get_calibration_config_data', 'ok');
-
-    setDivDisplay(CONSTANT['TAB_CALIBRATION_CONFIG']);
-    setButtonActive(CONSTANT['TAB_CALIBRATION_CONFIG']);
-})
-
-calButton.addEventListener('click', function(){
-    ipcRenderer.send('get_cal_data', 'ok');
-
-    setDivDisplay(CONSTANT['TAB_CALIBRATION']);
-    setButtonActive(CONSTANT['TAB_CALIBRATION']);
-})
-
-initButton.addEventListener('click', function(){
-    setDivDisplay(CONSTANT['TAB_INIT']);
-    setButtonActive(CONSTANT['TAB_INIT']);
-})

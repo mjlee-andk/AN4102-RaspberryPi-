@@ -202,6 +202,12 @@ body {
     background-color: #ffffff;
 }
 
+.btn_active {
+    color: #ffffff;
+    border: #000000 solid 1px;
+    background-color: #000000;
+}
+
 /* ### ### ### 01 */
 /* .b01_simple_rollover {
     color: #000000;

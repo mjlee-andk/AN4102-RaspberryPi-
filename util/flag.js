@@ -92,7 +92,7 @@ class cfFunctionFlag {
         this.cf02 = 0;
         this.cf03 = 10000;
         this.cf04 = 0.00000;
-        this.cf05 = 0.00000;
+        this.cf05 = 3.20000;
         this.cf06 = 10000;
         this.cf07 = 100;
         this.cf08 = 2.0;

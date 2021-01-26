@@ -33,7 +33,7 @@
         <!--Body-->
         <div>
             <!--통신설정-->
-            <div id="serialDiv" class="main_container" style="display:none">
+            <!-- <div id="serialDiv" class="main_container" style="display:none">
                 <div class="row_container">
                     <div class="row_title">
                         <span>Baudrate</span>
@@ -130,10 +130,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!--기본설정 좌(I)-->
-            <div id="basicLeftDiv" class="main_container" style="display:none;">
+            <!-- <div id="basicLeftDiv" class="main_container" style="display:none;">
                 <div class="row_container">
                     <div class="row_title">
                         <span>디지털필터</span>
@@ -178,10 +178,10 @@
                         <span id="averageTimeSliderValue"></span>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!--CF 펑션-->
-            <div id="cfDiv" class="main_container" style="display:none;">
+            <div id="cfDiv" class="main_container" style="display:block;">
                 <div class="keypad" id="keypad_cf" style="display:none;">
                     <ul id="keyboard">
                         <li class="key_cf">1</li>
@@ -793,7 +793,7 @@
             </div>
 
             <!--F3 펑션-->
-            <div id="f3Div" class="main_container" style="display:block;">
+            <div id="f3Div" class="main_container" style="display:none;">
                 <div class="keypad" id="keypad_f3" style="display:none;">
                     <ul id="keyboard">
                         <li class="key_f3">1</li>
@@ -817,7 +817,8 @@
                 </div>
                 <div class="row_container">
                     <div class="row_title">
-                        <span>RS485(옵션) Baud Rate</span>
+                        <div>RS485(옵션)</div>
+                        <div>Baud Rate</div>
                     </div>
                     <div class="row_content">
                         <select id="f3_01">
@@ -829,7 +830,8 @@
                         </select>
                     </div>
                     <div class="row_title">
-                        <span>RS485(옵션) Data Length</span>
+                        <div>RS485(옵션)</div>
+                        <div>Data Length</div>
                     </div>
                     <div class="row_content">
                         <select id="f3_02">
@@ -840,7 +842,8 @@
                 </div>
                 <div class="row_container">
                     <div class="row_title">
-                        <span>RS485(옵션) Parity</span>
+                        <div>RS485(옵션)</div>
+                        <div>Parity</div>
                     </div>
                     <div class="row_content">
                         <select id="f3_03">
@@ -850,7 +853,8 @@
                         </select>
                     </div>
                     <div class="row_title">
-                        <span>RS485(옵션) Terminator</span>
+                        <div>RS485(옵션)</div>
+                        <div>Terminator</div>
                     </div>
                     <div class="row_content">
                         <select id="f3_04">
@@ -861,7 +865,8 @@
                 </div>
                 <div class="row_container">
                     <div class="row_title">
-                        <span>RS485(옵션) 출력 모드</span>
+                        <div>RS485(옵션)</div>
+                        <div>출력 모드</div>
                     </div>
                     <div class="row_content">
                         <select id="f3_05">
@@ -874,7 +879,8 @@
                         </select>
                     </div>
                     <div class="row_title">
-                        <span>RS485(옵션) 기기번호</span>
+                        <div>RS485(옵션)</div>
+                        <div>기기번호</div>
                     </div>
                     <div class="row_content">
                         <input id="f3_06" placeholder="0~99">
@@ -882,11 +888,33 @@
                 </div>
             </div>
 
-            <!--F4 펑션-->
+            <!--F4, F5 펑션-->
             <div id="f4Div" class="main_container" style="display:none;">
+                <div class="keypad" id="keypad_f5" style="display:none;">
+                    <ul id="keyboard">
+                        <li class="key_f5">1</li>
+                        <li class="key_f5">2</li>
+                        <li class="key_f5">3</li>
+
+                        <li class="key_f5 clearl">4</li>
+                        <li class="key_f5">5</li>
+                        <li class="key_f5">6</li>
+
+                        <li class="key_f5 clearl">7</li>
+                        <li class="key_f5 ">8</li>
+                        <li class="key_f5">9</li>
+                        <li class="key_f5">C</li>
+
+                        <li class="key_f5 clearl">+/-</li>
+                        <li class="key_f5">0</li>
+                        <li class="key_f5">.</li>
+                        <li class="key_f5">확인</li>
+                    </ul>
+                </div>
                 <div class="row_container">
                     <div class="row_title">
-                        <span>BCD(옵션) 출력 모드</span>
+                        <div>BCD(옵션)</div>
+                        <div>출력 모드</div>
                     </div>
                     <div class="row_content">
                         <select id="f4_01">
@@ -897,7 +925,8 @@
                         </select>
                     </div>
                     <div class="row_title">
-                        <span>BCD(옵션) 출력 논리</span>
+                        <div>BCD(옵션)</div>
+                        <div>출력 논리</div>
                     </div>
                     <div class="row_content">
                         <select id="f4_02">
@@ -908,7 +937,8 @@
                 </div>
                 <div class="row_container">
                     <div class="row_title">
-                        <span>BCD(옵션) 프린트 Command 논리</span>
+                        <div>BCD(옵션)</div>
+                        <div>프린트 Command 논리</div>
                     </div>
                     <div class="row_content">
                         <select id="f4_03">
@@ -922,42 +952,42 @@
                     <div class="row_content">
                     </div>
                 </div>
-            </div>
-
-            <!--F5 펑션-->
-            <div id="f5Div" class="main_container" style="display:none;">
                 <div class="row_container">
                     <div class="row_title">
-                        <span>Analog out(옵션) 0v 출력</span>
+                        <div>Analog out(옵션)</div>
+                        <div>0v 출력</div>
                     </div>
                     <div class="row_content">
-                        <input id="f5_01">
+                        <input id="f5_01" placeholder="-999999~999999">
                     </div>
                     <div class="row_title">
-                        <span>Analog out(옵션) 10v 출력</span>
+                        <div>Analog out(옵션)</div>
+                        <div>10v 출력</div>
                     </div>
                     <div class="row_content">
-                        <input id="f5_02">
+                        <input id="f5_02" placeholder="-999999~999999">
                     </div>
                 </div>
                 <div class="row_container">
                     <div class="row_title">
-                        <span>Analog out(옵션) 4mA 출력</span>
+                        <div>Analog out(옵션)</div>
+                        <div>4mA 출력</div>
                     </div>
                     <div class="row_content">
-                        <input id="f5_03">
+                        <input id="f5_03" placeholder="-999999~999999">
                     </div>
                     <div class="row_title">
-                        <span>Analog out(옵션) 20mA 출력</span>
+                        <div>Analog out(옵션)</div>
+                        <div>20mA 출력</div>
                     </div>
                     <div class="row_content">
-                        <input id="f5_04">
+                        <input id="f5_04" placeholder="-999999~999999">
                     </div>
                 </div>
             </div>
 
             <!--기본설정 우(II)-->
-            <div id="basicRightDiv" class="main_container" style="display:none;">
+            <!-- <div id="basicRightDiv" class="main_container" style="display:none;">
                 <div class="row_container">
                     <div class="row_title">
                         <span>제로 확보 범위</span>
@@ -996,10 +1026,10 @@
                         </label>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!--외부출력-->
-            <div id="externalPrintDiv" class="main_container" style="display:none;">
+            <!-- <div id="externalPrintDiv" class="main_container" style="display:none;">
                 <div class="keypad" id="keypad_config" style="display:none;">
                     <ul id="keyboard">
                         <li class="key_config">1</li>
@@ -1101,10 +1131,10 @@
                         <input id="nearZeroText">
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!--교정설정-->
-            <div id="calibrationConfigDiv" class="main_container" style="display:none;">
+            <!-- <div id="calibrationConfigDiv" class="main_container" style="display:none;">
                 <div class="keypad" id="keypad_capa" style="display:none;">
                     <ul id="keyboard">
                         <li class="key_capa">1</li>
@@ -1174,7 +1204,7 @@
                         </select>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!--교정(CAL0, CALF)-->
             <div id="calDiv" class="main_container" style="display:none;">
@@ -1227,7 +1257,7 @@
             </div>
 
             <!--초기화-->
-            <div id="initDiv" class="main_container" style="display:none;">
+            <!-- <div id="initDiv" class="main_container" style="display:none;">
                 <div class="row_container">
                     <div class="row_title">
                         <button id="initFunctionFButton">F펑션</br>초기화</button>
@@ -1244,31 +1274,31 @@
                         <span>통신/기본/외부출력/교정 초기화</span>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <!--Footer-->
         <div class="bottom_container">
             <div class="bottom_btn_container">
                 <div class="btn_frame">
-                    <button type="button" id="serialConfigButton">SERIAL</br>CONFIG</button>
+                    <button type="button" id="cfBtn">CF</br>Function</button>
                 </div>
                 <div class="btn_frame">
-                    <button type="button" id="basicLeftConfigButton">BASIC</br>I</button>
+                    <button type="button" id="f0_1Btn">F0</br>Function</button>
                 </div>
                 <div class="btn_frame">
-                    <button type="button" id="basicRightConfigButton">BASIC</br>II</button>
+                    <button type="button" id="f0_2Btn">OPTION</br>EXTERNAL</button>
                 </div>
                 <div class="btn_frame">
-                    <button type="button" id="externalPrintConfigButton">EXTERNAL</button>
+                    <button type="button" id="f1Btn">RS232</br>C/L</button>
                 </div>
                 <div class="btn_frame">
-                    <button type="button" id="calibrationConfigButton">CAL</br>CONFIG</button>
+                    <button type="button" id="f3Btn">RS485</button>
                 </div>
                 <div class="btn_frame">
-                    <button type="button" id="calButton">CAL</button>
+                    <button type="button" id="f4f5Btn">BCD</br>ANALOG</button>
                 </div>
                 <div class="btn_frame">
-                    <button type="button" id="initButton">INIT</button>
+                    <button type="button" id="calBtn">CAL</button>
                 </div>
             </div>
         </div>

@@ -24,14 +24,6 @@ const LOCALSTORAGE_KEY_TERMINATOR = 'terminator';
 const ONE_HUNDRED_MS = 100;
 const FIVE_HUNDRED_MS = 500;
 
-const TAB_SERIAL_CONFIG = 'tab_serial_config';
-const TAB_BASIC_LEFT_CONFIG = 'tab_basic_left_config';
-const TAB_BASIC_RIGHT_CONFIG = 'tab_basic_right_config';
-const TAB_EXTERNAL_PRINT_CONFIG = 'tab_external_print_config';
-const TAB_CALIBRATION_CONFIG = 'tab_calibration_config';
-const TAB_CALIBRATION = 'tab_calibration';
-const TAB_INIT = 'tab_init';
-
 const DEFAULT_SERIAL_PORT_WINDOW = 'COM1';
 const DEFAULT_SERIAL_PORT_LINUX = '/dev/tty_AMA0';
 
@@ -63,13 +55,6 @@ module.exports = {
     LOCALSTORAGE_KEY_TERMINATOR,
     ONE_HUNDRED_MS,
     FIVE_HUNDRED_MS,
-    TAB_SERIAL_CONFIG,
-    TAB_BASIC_LEFT_CONFIG,
-    TAB_BASIC_RIGHT_CONFIG,
-    TAB_EXTERNAL_PRINT_CONFIG,
-    TAB_CALIBRATION_CONFIG,
-    TAB_CALIBRATION,
-    TAB_INIT,
     DEFAULT_SERIAL_PORT_WINDOW,
     DEFAULT_SERIAL_PORT_LINUX,
     SERVER_PORT,
