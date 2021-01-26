@@ -232,6 +232,20 @@ body {
     color: #ffffff;
 }
 
+.f001_title {
+    width:25%;
+    justify-content: center;
+}
+
+.f001_content {
+    width:75%;
+    justify-content: space-around;
+}
+
+.f001_item {
+    display:block !important;
+}
+
 .row_title {
     width: 50%;
     justify-content: center;

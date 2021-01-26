@@ -2,7 +2,13 @@ const { ipcRenderer, remote } = require('electron');
 const log = require('electron-log'); // 로그 기록
 const CONSTANT = require('../util/constant');
 
-const f001 = document.getElementById("f0_01");
+const f001_1 = document.getElementById("f0_01_1");
+const f001_2 = document.getElementById("f0_01_2");
+const f001_3 = document.getElementById("f0_01_3");
+const f001_4 = document.getElementById("f0_01_4");
+const f001_5 = document.getElementById("f0_01_5");
+const f001_6 = document.getElementById("f0_01_6");
+
 const f002 = document.getElementById("f0_02");
 const f003 = document.getElementById("f0_03");
 const f004 = document.getElementById("f0_04");
@@ -42,14 +48,14 @@ let focused_input = '';
 const background_color = 'pink';
 
 const makeKeypadSetting = function(element, ev) {
-    if(keypad_cf.style.display == "none") {
+    if(keypad_f0.style.display == "none") {
         ev.target.style.background = background_color;
-        keypad_cf.style.display = "block";
+        keypad_f0.style.display = "block";
         focused_input = element;
     }
     else {
         ev.target.style.background = '';
-        keypad_cf.style.display = "none";
+        keypad_f0.style.display = "none";
         focused_input = '';
     }
 }
@@ -142,7 +148,15 @@ key_f0_list.forEach((item, index) => {
 ipcRenderer.on('get_f0_1_config_data', (event, data) => {
     log.info('ipcRenderer.on: get_f0_1_config_data');
 
-    f001.value = data.f001;
+    let hexData = data.f001.toString(16);
+
+    f001_1.checked = hexData.charAt(0) == '1' ? true : false;
+    f001_2.checked = hexData.charAt(1) == '1' ? true : false;
+    f001_3.checked = hexData.charAt(2) == '1' ? true : false;
+    f001_4.checked = hexData.charAt(3) == '1' ? true : false;
+    f001_5.checked = hexData.charAt(4) == '1' ? true : false;
+    f001_6.checked = hexData.charAt(5) == '1' ? true : false;
+
     f002.value = data.f002;
     f003.value = data.f003;
     f004.value = data.f004;
@@ -173,8 +187,19 @@ ipcRenderer.on('set_f0_1_config_data', (event, arg) => {
 const setF0_1ConfigData = function() {
     log.info('function: setF0_1ConfigData');
 
+    let intF001 = 0;
+    let hexF001 = '';
+
+    hexF001 = hexF001 + (f001_1.checked == true ? '1' : '0');
+    hexF001 = hexF001 + (f001_2.checked == true ? '1' : '0');
+    hexF001 = hexF001 + (f001_3.checked == true ? '1' : '0');
+    hexF001 = hexF001 + (f001_4.checked == true ? '1' : '0');
+    hexF001 = hexF001 + (f001_5.checked == true ? '1' : '0');
+    hexF001 = hexF001 + (f001_6.checked == true ? '1' : '0');
+    intF001 = parseInt(hexF001, 16);
+
     const f0_1ConfigData = {
-        f001: ,
+        f001: intF001,
         f002: f002.options[f002.selectedIndex].value,
         f003: f003.options[f003.selectedIndex].value,
         f004: f004.value,
