@@ -86,8 +86,9 @@ class uartFlag {
     }
 }
 
-class cfFunctionFlag {
+class cfFlag {
     constructor() {
+        this.isReadState = true;
         this.cf01 = 1;
         this.cf02 = 0;
         this.cf03 = 10000;
@@ -104,7 +105,7 @@ class cfFunctionFlag {
     }
 }
 
-class f0FunctionFlag {
+class f0Flag {
     constructor() {
         this.f001 = 0;
         this.f002 = 8;
@@ -127,7 +128,7 @@ class f0FunctionFlag {
     }
 }
 
-class f1FunctionFlag {
+class f1Flag {
     constructor() {
         this.f101 = 0;
         this.f102 = 0;
@@ -139,7 +140,7 @@ class f1FunctionFlag {
     }
 }
 
-class f2FunctionFlag {
+class f2Flag {
     constructor() {
         this.f201 = 2;
         this.f202 = 1;
@@ -149,7 +150,7 @@ class f2FunctionFlag {
     }
 }
 
-class f3FunctionFlag {
+class f3Flag {
     constructor() {
         this.f301 = 0;
         this.f302 = 0;
@@ -160,7 +161,7 @@ class f3FunctionFlag {
     }
 }
 
-class f4FunctionFlag {
+class f4Flag {
     constructor() {
         this.f401 = 0;
         this.f402 = 0;
@@ -168,7 +169,7 @@ class f4FunctionFlag {
     }
 }
 
-class f5FunctionFlag {
+class f5Flag {
     constructor() {
         this.f501 = 0;
         this.f502 = 10000;
@@ -220,6 +221,12 @@ class calibrationConfigFlag {
 module.exports = {
     scaleFlag: scaleFlag,
     uartFlag: uartFlag,
+    cfFlag: cfFlag,
+    f0Flag: f0Flag,
+    f1Flag: f1Flag,
+    f3Flag: f3Flag,
+    f4Flag: f4Flag,
+    f5Flag: f5Flag,
     basicConfigFlag: basicConfigFlag,
     externalPrintConfigFlag: externalPrintConfigFlag,
     calibrationConfigFlag: calibrationConfigFlag

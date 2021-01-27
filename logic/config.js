@@ -2,7 +2,7 @@ const { ipcRenderer, remote } = require('electron');
 const log = require('electron-log'); // 로그 기록
 const CONSTANT = require('../util/constant');
 
-const { setCFConfigData } = require('./cf');
+const { setCF } = require('./cf');
 const { setF0_1ConfigData } = require('./f0_1');
 const { setF0_2ConfigData } = require('./f0_2');
 const { setF1ConfigData } = require('./f1');
@@ -30,7 +30,7 @@ const calDiv = document.getElementById("calDiv");
 const configOkBtn = document.getElementById("configOk");
 configOkBtn.addEventListener('click', function(){
     if(cfDiv.style.display == DISPLAY_BLOCK) {
-        setCFConfigData();
+        setCF();
     }
     else if(f0_1Div.style.display == DISPLAY_BLOCK) {
         setF0_1ConfigData();
@@ -67,13 +67,13 @@ closeConfigWindowButton.addEventListener('click', function(){
     closeWindow();
 });
 
-const romVer = document.getElementById("romVer");
-
-ipcRenderer.on('get_rom_ver', (event, data) => {
-    log.info('ipcRenderer.on: get_rom_ver');
-
-    romVer.innerHTML = data;
-});
+// const romVer = document.getElementById("romVer");
+//
+// ipcRenderer.on('get_rom_ver', (event, data) => {
+//     log.info('ipcRenderer.on: get_rom_ver');
+//
+//     romVer.innerHTML = data;
+// });
 
 //
 // 화면 하단
@@ -116,14 +116,15 @@ f1Btn.addEventListener('click', function(){
 })
 
 f3Btn.addEventListener('click', function(){
-    ipcRenderer.send('get_f1_data', 'ok');
+    ipcRenderer.send('get_f3_data', 'ok');
 
     setDivDisplay('f3Btn');
     setButtonActive('f3Btn');
 })
 
 f4f5Btn.addEventListener('click', function(){
-    ipcRenderer.send('get_f4_f5_data', 'ok');
+    ipcRenderer.send('get_f4_data', 'ok');
+    ipcRenderer.send('get_f5_data', 'ok');
 
     setDivDisplay('f4f5Btn');
     setButtonActive('f4f5Btn');

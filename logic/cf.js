@@ -227,8 +227,8 @@ ipcRenderer.on('set_cf_config_data', (event, arg) => {
     }, CONSTANT['FIVE_HUNDRED_MS']);
 });
 
-const setCFConfigData = function() {
-    log.info('function: setCFConfigData');
+const setCF = function() {
+    log.info('function: setCF');
 
     const cfConfigData = {
         cf01: cf01.options[cf01.selectedIndex].value,
@@ -246,10 +246,10 @@ const setCFConfigData = function() {
         cf13: cf13.options[cf13.selectedIndex].value
     };
 
-    ipcRenderer.send('set_cf_config_data', cfConfigData);
+    ipcRenderer.send('set_cf_data', cfConfigData);
     return;
 }
 
 module.exports = {
-    setCFConfigData: setCFConfigData
+    setCF: setCF
 }
