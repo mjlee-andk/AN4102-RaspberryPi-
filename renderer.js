@@ -524,10 +524,6 @@ ipcRenderer.on('main_button_active', (event, isActive) => {
         onoffBtn.disabled = true;
         grossnetBtn.disabled = true;
         zeroBtn.disabled = true;
-        // setClearTareButton.disabled = true;
-        // setZeroTareButton.disabled = true;
-        // setGrossNetButton.disabled = true;
-        // setHoldButton.disabled = true;
         printBtn.disabled = true;
         openConfigWindowButton.disabled = true;
         isProgramOn = false;
@@ -539,10 +535,6 @@ ipcRenderer.on('main_button_active', (event, isActive) => {
         onoffBtn.disabled = false;
         grossnetBtn.disabled = false;
         zeroBtn.disabled = false;
-        // setClearTareButton.disabled = false;
-        // setZeroTareButton.disabled = false;
-        // setGrossNetButton.disabled = false;
-        // setHoldButton.disabled = false;
         printBtn.disabled = false;
         openConfigWindowButton.disabled = false;
         isProgramOn = true;
@@ -572,23 +564,6 @@ zeroBtn.addEventListener('click', function(){
 printBtn.addEventListener('click', function(){
     ipcRenderer.send('print', 'ok');
 })
-
-// setClearTareButton.addEventListener('click', function(){
-//       ipcRenderer.send('set_clear_tare', 'ok');
-// })
-//
-// setZeroTareButton.addEventListener('click', function(){
-//       ipcRenderer.send('set_zero_tare', 'ok');
-// })
-//
-// setGrossNetButton.addEventListener('click', function(){
-//       ipcRenderer.send('set_gross_net', 'ok');
-// })
-//
-// setHoldButton.addEventListener('click', function(){
-//       ipcRenderer.send('set_hold', 'ok');
-// })
-
 
 powerButton.addEventListener('click', function(){
     setOnOffView();
@@ -620,6 +595,11 @@ const setOnOffView = function() {
         labelHoldClass.style.color = COLOR['WHITE'];
         labelZeroClass.style.color = COLOR['WHITE'];
         labelNetClass.style.color = COLOR['WHITE'];
+
+        seqStateFinish.className = "seq_state_off";
+        seqStateInputLittle.className = "seq_state_off";
+        seqStateInputMuch.className = "seq_state_off";
+        seqStateNearZero.className = "seq_state_off";
     }
 
     ipcRenderer.send('power', onoffLabel);
