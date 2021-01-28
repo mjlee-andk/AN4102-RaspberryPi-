@@ -190,8 +190,8 @@ key_cf_list.forEach((item, index) => {
     })
 })
 
-ipcRenderer.on('get_cf_config_data', (event, data) => {
-    log.info('ipcRenderer.on: get_cf_config_data');
+ipcRenderer.on('get_cf_data', (event, data) => {
+    log.info('ipcRenderer.on: get_cf_data');
 
     cf01.value = data.cf01;
     cf02.value = data.cf02;
@@ -217,8 +217,8 @@ ipcRenderer.on('get_cf_config_data', (event, data) => {
 });
 
 // CF Function 값 수정이 완료됨을 알리는 신호
-ipcRenderer.on('set_cf_config_data', (event, arg) => {
-    log.info('ipcRenderer.on: set_cf_config_data');
+ipcRenderer.on('set_cf_data', (event, arg) => {
+    log.info('ipcRenderer.on: set_cf_data');
 
     setTimeout(function(){
         ipcRenderer.send('set_stream_mode', 'ok');

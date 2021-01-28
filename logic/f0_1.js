@@ -145,8 +145,8 @@ key_f0_list.forEach((item, index) => {
     })
 })
 
-ipcRenderer.on('get_f0_1_config_data', (event, data) => {
-    log.info('ipcRenderer.on: get_f0_1_config_data');
+ipcRenderer.on('get_f0_1_data', (event, data) => {
+    log.info('ipcRenderer.on: get_f0_1_data');
 
     let hexData = data.f001.toString(16);
 
@@ -174,8 +174,8 @@ ipcRenderer.on('get_f0_1_config_data', (event, data) => {
 });
 
 // F0_1 Function 값 수정이 완료됨을 알리는 신호
-ipcRenderer.on('set_f0_1_config_data', (event, arg) => {
-    log.info('ipcRenderer.on: set_f0_1_config_data');
+ipcRenderer.on('set_f0_1_data', (event, arg) => {
+    log.info('ipcRenderer.on: set_f0_1_data');
 
     setTimeout(function(){
         ipcRenderer.send('set_comp_mode', 'ok');
@@ -185,8 +185,8 @@ ipcRenderer.on('set_f0_1_config_data', (event, arg) => {
     }, CONSTANT['FIVE_HUNDRED_MS']);
 });
 
-const setF0_1ConfigData = function() {
-    log.info('function: setF0_1ConfigData');
+const setF0_1Data = function() {
+    log.info('function: setF0_1Data');
 
     let intF001 = 0;
     let hexF001 = '';
@@ -199,7 +199,7 @@ const setF0_1ConfigData = function() {
     hexF001 = hexF001 + (f001_6.checked == true ? '1' : '0');
     intF001 = parseInt(hexF001, 16);
 
-    const f0_1ConfigData = {
+    const f0_1Data = {
         f001: intF001,
         f002: f002.options[f002.selectedIndex].value,
         f003: f003.options[f003.selectedIndex].value,
@@ -213,10 +213,10 @@ const setF0_1ConfigData = function() {
         f011: f011.value
     };
 
-    ipcRenderer.send('set_f0_1_config_data', f0_1ConfigData);
+    ipcRenderer.send('set_f0_1_data', f0_1Data);
     return;
 }
 
 module.exports = {
-    setF0_1ConfigData: setF0_1ConfigData
+    setF0_1Data: setF0_1Data
 }

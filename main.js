@@ -524,76 +524,24 @@ const readHeader = function(rx) {
         // F펑션
         if(headerCategory == 'F0') {
             const data = Number(body);
-            if(basicConfig.isRead) {
-                if(header == 'F001') {
-                    basicConfig.digitalFilter = data;
+            if(f0Config.isReadState) {
+                f0Config[header.toLowerCase()] = data;
+                if(header == 'F009') {
+                    configWin.webContents.send('get_f0_1_data', f0Config);
                 }
-
-                if(header == 'F002') {
-                    basicConfig.holdMode = data;
-                }
-
-                if(header == 'F003') {
-                    basicConfig.averageTime = data;
-                    configWin.webContents.send('get_basic_left_config_data', basicConfig);
+                if(header == 'F018') {
+                    configWin.webContents.send('get_f0_2_data', f0Config);
                 }
             }
             else {
-                if(header == 'F003') {
-                    configWin.webContents.send('set_basic_left_config_data', 'ok');
-                    basicConfig.isRead = false;
+                if(header == 'F009') {
+                    configWin.webContents.send('set_f0_1_data', 'ok');
+                    f0Config.isReadState = false;
                 }
-            }
-
-            if(externalPrintConfig.isRead){
-                if(header == 'F101') {
-                    externalPrintConfig.printCondition = data;
+                if(header == 'F018') {
+                    configWin.webContents.send('set_f0_2_data', f0Config);
+                    f0Config.isReadState = false;
                 }
-
-                if(header == 'F102') {
-                    externalPrintConfig.configValue = data;
-                }
-
-                if(header == 'F103') {
-                    externalPrintConfig.comparatorMode = data;
-                }
-
-                if(header == 'F104') {
-                    externalPrintConfig.nearZero = data;
-                    configWin.webContents.send('get_external_print_config_data', externalPrintConfig);
-                }
-            }
-            else {
-                if(header == 'F104') {
-                    configWin.webContents.send('set_external_print_config_data', 'ok');
-                    externalPrintConfig.isRead = false;
-                }
-            }
-
-            if(header == 'F201') {
-                log.info('success F201');
-
-                serialConfig.baudrate = pcConfig.baudrate;
-                serialConfig.databits = Number(pcConfig.databits);
-                serialConfig.parity = pcConfig.parity;
-                serialConfig.stopbits = Number(pcConfig.stopbits);
-                serialConfig.terminator = pcConfig.terminator == CONSTANT['CRLF'] ? 1 : 2;
-                configWin.webContents.send('get_serial_config_data', serialConfig);
-            }
-
-            if(header == 'F202') {
-                log.info('success F202');
-                serialConfig.databits = data;
-            }
-
-            if(header == 'F203') {
-                log.info('success F203');
-                serialConfig.parity = data;
-            }
-
-            if(header == 'F204') {
-                log.info('success F204');
-                serialConfig.stopbits = data;
             }
         }
 
@@ -605,7 +553,7 @@ const readHeader = function(rx) {
                 cfConfig[header.toLowerCase()] = data;
 
                 if(header == 'CF13') {
-                    configWin.webContents.send('get_cf_config_data', cfConfig);
+                    configWin.webContents.send('get_cf_data', cfConfig);
                 }
 
                 // if(header == 'CF01') {
@@ -650,7 +598,7 @@ const readHeader = function(rx) {
             }
             else {
                 if(header == 'CF13') {
-                    configWin.webContents.send('set_cf_config_data', 'ok');
+                    configWin.webContents.send('set_cf_data', 'ok');
                     cfConfig.isReadState = false;
                 }
             }
@@ -1565,10 +1513,6 @@ ipcMain.on('get_cf_data', (event, arg) => {
     getCF();
 })
 
-setTimeout(function() {
-
-}, CONSTANT['ONE_HUNDRED_MS']);
-
 const setCF = function(data) {
     log.info('function: setCF');
 
@@ -1606,12 +1550,12 @@ const setCF = function(data) {
             }
 
             // 최종 커맨드
-            command = header + ',' + content;
+            command = header + ',' + content + '\r\n';
 
-            log.info('command: ' + header);
+            log.info('write command: ' + header);
             sp.write(command, function(err){
                 if(err) {
-                    log.error('command: ' + header);
+                    log.error('write command: ' + header);
                     log.error(err);
                     return;
                 }
@@ -1899,15 +1843,88 @@ const getCF = function() {
     })
 }
 
-
+ipcMain.on('set_f0_1_data', (event, data) => {
+    log.info('ipcMain.on: set_f0_1_data');
+    setF0_1(data);
+})
 
 ipcMain.on('get_f0_1_data', (event, arg) => {
     log.info('ipcMain.on: get_f0_1_data');
     getF0_1();
 })
 
-const getF0_1 = function() {
+const setF0_1 = function(data) {
+    log.info('function: setF0_1');
 
+    for(var i = 0; i < 9; i++) {
+        setTimeout(function(){
+            let command = '';
+            let content = '';
+
+            // 헤더 정리
+            let header = 'F0';
+            header = header + (i+1).toString();
+
+            // 내용 정리
+            let tmpValue = data['f0' + header.substr(2,2)].toString();
+            if(header == 'F002' || header == 'F003') {
+                content = tmpValue;
+            }
+            else {
+                // 부호 붙여주기
+                let numValue = Number(tmpValue);
+                content = '+';
+                if(numValue < 0) {
+                    content = '-';
+                }
+
+                // 6자리 채우기
+                let numLength = tmpValue.length();
+                for(var j = 0; j < 6-numLength; j++) {
+                    content = content + '0';
+                }
+                content = content + tmpValue;
+            }
+
+            // 최종 커맨드
+            command = header + ',' + content;
+
+            log.info('write command: ' + header);
+            sp.write(command, function(err){
+                if(err) {
+                    log.error('write command: ' + header);
+                    log.error(err);
+                    return;
+                }
+            })
+        }, CONSTANT['FIVE_HUNDRED_MS'])
+    }
+}
+
+const getF0_1 = function() {
+    log.info('function: getF0_1');
+
+    for(var i = 0; i < 9; i++) {
+        setTimeout(function(){
+            let command = '';
+
+            // 헤더 정리
+            let header = 'F0';
+            header = header + (i+1).toString();
+
+            // 최종 커맨드
+            command = header + '\r\n';
+
+            log.info('read command: ' + header);
+            sp.write(command, function(err){
+                if(err) {
+                    log.error('read command: ' + header);
+                    log.error(err);
+                    return;
+                }
+            })
+        }, CONSTANT['ONE_HUNDRED_MS'])
+    }
 }
 
 ipcMain.on('get_f0_2_data', (event, arg) => {

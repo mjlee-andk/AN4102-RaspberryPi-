@@ -107,6 +107,7 @@ class cfFlag {
 
 class f0Flag {
     constructor() {
+        this.isReadState = true;
         this.f001 = 0;
         this.f002 = 8;
         this.f003 = 0;

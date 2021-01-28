@@ -3,7 +3,7 @@ const log = require('electron-log'); // 로그 기록
 const CONSTANT = require('../util/constant');
 
 const { setCF } = require('./cf');
-const { setF0_1ConfigData } = require('./f0_1');
+const { setF0_1Data } = require('./f0_1');
 const { setF0_2ConfigData } = require('./f0_2');
 const { setF1ConfigData } = require('./f1');
 const { setF3ConfigData } = require('./f3');
