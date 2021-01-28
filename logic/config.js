@@ -33,7 +33,7 @@ configOkBtn.addEventListener('click', function(){
         setCF();
     }
     else if(f0_1Div.style.display == DISPLAY_BLOCK) {
-        setF0_1ConfigData();
+        setF0_1Data();
     }
     else if(f0_2Div.style.display == DISPLAY_BLOCK) {
         setF0_2ConfigData();

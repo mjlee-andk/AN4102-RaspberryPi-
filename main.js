@@ -158,11 +158,11 @@ const pcConfigGetLocalStorage = function(event) {
 
 const setStreamMode = function() {
     log.info('function: setStreamMode');
-    // 201204 AD모듈 붙이면서 스트림 모드 명령어 F205,1로 변경됨
-    const command = 'F205,1' + '\r\n';
+
+    const command = 'F205,0' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            log.error('command: F205,1');
+            log.error('command: F205,0');
             log.error(err);
             return;
         }
@@ -171,11 +171,11 @@ const setStreamMode = function() {
 
 const setCommandMode = function() {
     log.info('function: setCommandMode');
-    // 201204 AD모듈 붙이면서 커맨드 모드 명령어 F205,2로 변경됨
-    const command = 'F205,2' + '\r\n';
+
+    const command = 'F205,1' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            log.error('command: F205,2');
+            log.error('command: F205,1');
             log.error(err);
             return;
         }
@@ -353,6 +353,7 @@ const convertHexStringToBinary = function(hex) {
 }
 
 const readHeader = function(rx) {
+    // console.log(rx);
     const separator = ',';
     const splitedData = rx.split(separator);
     const splitedDataLength = splitedData.length;
@@ -524,8 +525,8 @@ const readHeader = function(rx) {
         // F펑션
         if(headerCategory == 'F0') {
             const data = Number(body);
+            f0Config[header.toLowerCase()] = data;
             if(f0Config.isReadState) {
-                f0Config[header.toLowerCase()] = data;
                 if(header == 'F009') {
                     configWin.webContents.send('get_f0_1_data', f0Config);
                 }
@@ -548,53 +549,11 @@ const readHeader = function(rx) {
         // CF펑션
         if(headerCategory == 'CF') {
             const data = Number(body);
+            cfConfig[header.toLowerCase()] = data;
             if(cfConfig.isReadState) {
-
-                cfConfig[header.toLowerCase()] = data;
-
                 if(header == 'CF13') {
                     configWin.webContents.send('get_cf_data', cfConfig);
                 }
-
-                // if(header == 'CF01') {
-                //     cfConfig.cf01 = data;
-                // }
-                // else if(header == 'CF02') {
-                //     cfConfig.cf02 = data;
-                // }
-                // else if(header == 'CF03') {
-                //     cfConfig.cf03 = data;
-                // }
-                // else if(header == 'CF04') {
-                //     cfConfig.cf04 = data;
-                // }
-                // else if(header == 'CF05') {
-                //     cfConfig.cf05 = data;
-                // }
-                // else if(header == 'CF06') {
-                //     cfConfig.cf06 = data;
-                // }
-                // else if(header == 'CF07') {
-                //     cfConfig.cf07 = data;
-                // }
-                // else if(header == 'CF08') {
-                //     cfConfig.cf08 = data;
-                // }
-                // else if(header == 'CF09') {
-                //     cfConfig.cf09 = data;
-                // }
-                // else if(header == 'CF10') {
-                //     cfConfig.cf10 = data;
-                // }
-                // else if(header == 'CF11') {
-                //     cfConfig.cf11 = data;
-                // }
-                // else if(header == 'CF12') {
-                //     cfConfig.cf12 = data;
-                // }
-                // else if(header == 'CF13') {
-                //     cfConfig.cf13 = data;
-                // }
             }
             else {
                 if(header == 'CF13') {
@@ -602,37 +561,6 @@ const readHeader = function(rx) {
                     cfConfig.isReadState = false;
                 }
             }
-
-            // if(calibrationConfig.isRead) {
-            //     // 교정 설정값
-            //     if(header == 'CF03') {
-            //         calibrationConfig.capa = data;
-            //     }
-            //
-            //     if(header == 'CF02') {
-            //         calibrationConfig.div = data;
-            //     }
-            //
-            //     if(header == 'CF01') {
-            //         calibrationConfig.decimalPoint = data;
-            //     }
-            //
-            //     if(header == 'CF09') {
-            //         calibrationConfig.unit = data;
-            //         configWin.webContents.send('get_calibration_config_data', calibrationConfig);
-            //     }
-            //     // 교정
-            //     if(header == 'CF04') {
-            //         calibrationConfig.spanValue = data;
-            //         configWin.webContents.send('get_cal_data', calibrationConfig);
-            //     }
-            // }
-            // else {
-            //     if(header == 'CF09') {
-            //         configWin.webContents.send('set_calibration_config_data', 'ok');
-            //         calibrationConfig.isRead = false;
-            //     }
-            // }
         }
     }
 
@@ -1348,7 +1276,7 @@ let isPause = false;
 let timer;
 
 const confirmConnection = function() {
-    log.info('function: confirmConnection');
+    // log.info('function: confirmConnection');
     if(isPause) {
         return;
     }
@@ -1484,7 +1412,7 @@ const setCompMode = function(param) {
         scale.s5_title = 'Ud';
     }
     // 리미트
-    else if(data == CONSTANT['COMP_MODE_LIMIT']) {
+    else if(param == CONSTANT['COMP_MODE_LIMIT']) {
         scale.s1_title = 'Fi';
         scale.s2_title = 'SP1';
         scale.s3_title = 'SP2';
@@ -1492,7 +1420,7 @@ const setCompMode = function(param) {
         scale.s5_title = 'Ud';
     }
     // 체커
-    else if(data == CONSTANT['COMP_MODE_CHECKER']) {
+    else if(param == CONSTANT['COMP_MODE_CHECKER']) {
         scale.s1_title = 'Fi';
         scale.s2_title = 'SP1';
         scale.s3_title = 'SP2';
@@ -1513,334 +1441,98 @@ ipcMain.on('get_cf_data', (event, arg) => {
     getCF();
 })
 
+const writeCommandCallback = function(i, lastIndex, list, callback) {
+    setTimeout(function(){
+        log.info('write command: ' + list[i]);
+        sp.write(list[i], function(err){
+            if(err) {
+                log.error('write command: ' + list[i]);
+                log.error(err);
+                return;
+            }
+        })
+
+        if(i >= lastIndex) {
+            callback();
+        }
+        else {
+            writeCommandCallback(i+1, lastIndex, list, callback);
+        }
+    }, 300)
+}
+
 const setCF = function(data) {
     log.info('function: setCF');
 
+    cfConfig.isReadState = false;
+    let commandList = new Array();
     for(var i = 0; i < 13; i++) {
-        setTimeout(function(){
-            let command = '';
-            let content = '';
+        let command = '';
+        let content = '';
 
-            // 헤더 정리
-            let header = 'CF';
-            if(i < 9) {
-                header = 'CF0';
-            }
-            header = header + (i+1).toString();
+        // 헤더 정리
+        let header = 'CF';
+        if(i < 9) {
+            header = 'CF0';
+        }
+        header = header + (i+1).toString();
 
-            // 내용 정리
-            let tmpValue = data['cf' + header.substr(2,2)].toString();
-            if(header == 'CF01' || header == 'CF02' || header == 'CF12' || header == 'CF13') {
-                content = tmpValue;
-            }
-            else {
-                // 부호 붙여주기
-                let numValue = Number(tmpValue);
-                content = '+';
-                if(numValue < 0) {
-                    content = '-';
-                }
-
-                // 6자리 채우기
-                let numLength = tmpValue.length();
-                for(var j = 0; j < 6-numLength; j++) {
-                    content = content + '0';
-                }
-                content = content + tmpValue;
+        // 내용 정리
+        let tmpValue = data['cf' + header.substr(2,2)].toString();
+        if(header == 'CF01' || header == 'CF02' || header == 'CF12' || header == 'CF13') {
+            content = tmpValue;
+        }
+        else {
+            // 부호 붙여주기
+            let numValue = Number(tmpValue);
+            content = '+';
+            if(numValue < 0) {
+                content = '-';
             }
 
-            // 최종 커맨드
-            command = header + ',' + content + '\r\n';
+            // 6자리 채우기
+            let numLength = tmpValue.length;
+            for(var j = 0; j < 6-numLength; j++) {
+                content = content + '0';
+            }
+            content = content + tmpValue;
+        }
 
-            log.info('write command: ' + header);
-            sp.write(command, function(err){
-                if(err) {
-                    log.error('write command: ' + header);
-                    log.error(err);
-                    return;
-                }
-            })
-        }, CONSTANT['FIVE_HUNDRED_MS'])
+        // 최종 커맨드
+        command = header + ',' + content + '\r\n';
+        commandList.push(command);
     }
 
+    writeCommandCallback(0, 12, commandList, function(){
 
-    // log.info('command: CF01');
-    // let command = 'CF01,' + data.cf01.toString() + '\r\n';
-    // sp.write(command, function(err){
-    //     if(err) {
-    //         log.error('command: CF01');
-    //         log.error(err);
-    //         return;
-    //     }
-    //     setTimeout(function(){
-    //         log.info('command: CF02');
-    //         command = 'CF02,' + data.cf02.toString() + '\r\n';
-    //         sp.write(command, function(err){
-    //             if(err) {
-    //                 log.error('command: CF02');
-    //                 log.error(err);
-    //                 return;
-    //             }
-    //             setTimeout(function(){
-    //                 log.info('command: CF03');
-    //                 command = 'CF03,' + data.cf03.toString() + '\r\n';
-    //                 sp.write(command, function(err){
-    //                     if(err) {
-    //                         log.error('command: CF03');
-    //                         log.error(err);
-    //                         return;
-    //                     }
-    //                     setTimeout(function(){
-    //                         log.info('command: CF04');
-    //                         command = 'CF04,' + data.cf04.toString() + '\r\n';
-    //                         sp.write(command, function(err){
-    //                             if(err) {
-    //                                 log.error('command: CF04');
-    //                                 log.error(err);
-    //                                 return;
-    //                             }
-    //                             setTimeout(function(){
-    //                                 log.info('command: CF05');
-    //                                 command = 'CF05,' + data.cf05.toString() + '\r\n';
-    //                                 sp.write(command, function(err){
-    //                                     if(err) {
-    //                                         log.error('command: CF05');
-    //                                         log.error(err);
-    //                                         return;
-    //                                     }
-    //                                     setTimeout(function(){
-    //                                         log.info('command: CF06');
-    //                                         command = 'CF06,' + data.cf06.toString() + '\r\n';
-    //                                         sp.write(command, function(err){
-    //                                             if(err) {
-    //                                                 log.error('command: CF06');
-    //                                                 log.error(err);
-    //                                                 return;
-    //                                             }
-    //                                             setTimeout(function(){
-    //                                                 log.info('command: CF07');
-    //                                                 command = 'CF07,' + data.cf07.toString() + '\r\n';
-    //                                                 sp.write(command, function(err){
-    //                                                     if(err) {
-    //                                                         log.error('command: CF07');
-    //                                                         log.error(err);
-    //                                                         return;
-    //                                                     }
-    //                                                     setTimeout(function(){
-    //                                                         log.info('command: CF08');
-    //                                                         command = 'CF08,' + data.cf08.toString() + '\r\n';
-    //                                                         sp.write(command, function(err){
-    //                                                             if(err) {
-    //                                                                 log.error('command: CF08');
-    //                                                                 log.error(err);
-    //                                                                 return;
-    //                                                             }
-    //                                                             setTimeout(function(){
-    //                                                                 log.info('command: CF09');
-    //                                                                 command = 'CF09,' + data.cf09.toString() + '\r\n';
-    //                                                                 sp.write(command, function(err){
-    //                                                                     if(err) {
-    //                                                                         log.error('command: CF09');
-    //                                                                         log.error(err);
-    //                                                                         return;
-    //                                                                     }
-    //                                                                     setTimeout(function(){
-    //                                                                         log.info('command: CF10');
-    //                                                                         command = 'CF10,' + data.cf10.toString() + '\r\n';
-    //                                                                         sp.write(command, function(err){
-    //                                                                             if(err) {
-    //                                                                                 log.error('command: CF10');
-    //                                                                                 log.error(err);
-    //                                                                                 return;
-    //                                                                             }
-    //                                                                             setTimeout(function(){
-    //                                                                                 log.info('command: CF11');
-    //                                                                                 command = 'CF11,' + data.cf11.toString() + '\r\n';
-    //                                                                                 sp.write(command, function(err){
-    //                                                                                     if(err) {
-    //                                                                                         log.error('command: CF11');
-    //                                                                                         log.error(err);
-    //                                                                                         return;
-    //                                                                                     }
-    //                                                                                     setTimeout(function(){
-    //                                                                                         log.info('command: CF12');
-    //                                                                                         command = 'CF12,' + data.cf12.toString() + '\r\n';
-    //                                                                                         sp.write(command, function(err){
-    //                                                                                             if(err) {
-    //                                                                                                 log.error('command: CF12');
-    //                                                                                                 log.error(err);
-    //                                                                                                 return;
-    //                                                                                             }
-    //                                                                                             setTimeout(function(){
-    //                                                                                                 log.info('command: CF13');
-    //                                                                                                 command = 'CF13,' + data.cf13.toString() + '\r\n';
-    //                                                                                                 sp.write(command, function(err){
-    //                                                                                                     if(err) {
-    //                                                                                                         log.error('command: CF13');
-    //                                                                                                         log.error(err);
-    //                                                                                                         return;
-    //                                                                                                     }
-    //                                                                                                 })
-    //                                                                                             }, CONSTANT['FIVE_HUNDRED_MS']);
-    //                                                                                         })
-    //                                                                                     }, CONSTANT['FIVE_HUNDRED_MS']);
-    //                                                                                 })
-    //                                                                             }, CONSTANT['FIVE_HUNDRED_MS']);
-    //                                                                         })
-    //                                                                     }, CONSTANT['FIVE_HUNDRED_MS']);
-    //                                                                 })
-    //                                                             }, CONSTANT['FIVE_HUNDRED_MS']);
-    //                                                         })
-    //                                                     }, CONSTANT['FIVE_HUNDRED_MS']);
-    //                                                 })
-    //                                             }, CONSTANT['FIVE_HUNDRED_MS']);
-    //                                         })
-    //                                     }, CONSTANT['FIVE_HUNDRED_MS']);
-    //                                 })
-    //                             }, CONSTANT['FIVE_HUNDRED_MS']);
-    //                         })
-    //                     }, CONSTANT['FIVE_HUNDRED_MS']);
-    //                 })
-    //             }, CONSTANT['FIVE_HUNDRED_MS']);
-    //         })
-    //     }, CONSTANT['FIVE_HUNDRED_MS']);
-    // })
+    });
 }
 const getCF = function() {
     log.info('function: getCF');
 
     cfConfig.isReadState = true;
+    for(var i = 0; i < 13; i++) {
+        let command = '';
 
-    log.info('command: ?CF01');
-    let command = '?CF01' + '\r\n';
-    sp.write(command, function(err){
-        if(err) {
-            log.error('command: ?CF01');
-            log.error(err);
-            cfConfig = new cfFlag();
-            return;
+        // 헤더 정리
+        let header = '?CF';
+        if(i < 9) {
+            header = '?CF0';
         }
-        log.info('command: ?CF02');
-        command = '?CF02' + '\r\n';
+        header = header + (i+1).toString();
+
+        // 최종 커맨드
+        command = header + '\r\n';
+
+        log.info('read command: ' + header);
         sp.write(command, function(err){
             if(err) {
-                log.error('command: ?CF02');
+                log.error('read command: ' + header);
                 log.error(err);
-                cfConfig = new cfFlag();
                 return;
             }
-            log.info('command: ?CF03');
-            command = '?CF03' + '\r\n';
-            sp.write(command, function(err){
-                if(err) {
-                    log.error('command: ?CF03');
-                    log.error(err);
-                    cfConfig = new cfFlag();
-                    return;
-                }
-                log.info('command: ?CF04');
-                command = '?CF04' + '\r\n';
-                sp.write(command, function(err){
-                    if(err) {
-                        log.error('command: ?CF04');
-                        log.error(err);
-                        cfConfig = new cfFlag();
-                        return;
-                    }
-                    log.info('command: ?CF05');
-                    command = '?CF05' + '\r\n';
-                    sp.write(command, function(err){
-                        if(err) {
-                            log.error('command: ?CF05');
-                            log.error(err);
-                            cfConfig = new cfFlag();
-                            return;
-                        }
-                        log.info('command: ?CF06');
-                        command = '?CF06' + '\r\n';
-                        sp.write(command, function(err){
-                            if(err) {
-                                log.error('command: ?CF06');
-                                log.error(err);
-                                cfConfig = new cfFlag();
-                                return;
-                            }
-                            log.info('command: ?CF07');
-                            command = '?CF07' + '\r\n';
-                            sp.write(command, function(err){
-                                if(err) {
-                                    log.error('command: ?CF07');
-                                    log.error(err);
-                                    cfConfig = new cfFlag();
-                                    return;
-                                }
-                                log.info('command: ?CF08');
-                                command = '?CF08' + '\r\n';
-                                sp.write(command, function(err){
-                                    if(err) {
-                                        log.error('command: ?CF08');
-                                        log.error(err);
-                                        cfConfig = new cfFlag();
-                                        return;
-                                    }
-                                    log.info('command: ?CF09');
-                                    command = '?CF09' + '\r\n';
-                                    sp.write(command, function(err){
-                                        if(err) {
-                                            log.error('command: ?CF09');
-                                            log.error(err);
-                                            cfConfig = new cfFlag();
-                                            return;
-                                        }
-                                        log.info('command: ?CF10');
-                                        command = '?CF10' + '\r\n';
-                                        sp.write(command, function(err){
-                                            if(err) {
-                                                log.error('command: ?CF10');
-                                                log.error(err);
-                                                cfConfig = new cfFlag();
-                                                return;
-                                            }
-                                            log.info('command: ?CF11');
-                                            command = '?CF11' + '\r\n';
-                                            sp.write(command, function(err){
-                                                if(err) {
-                                                    log.error('command: ?CF11');
-                                                    log.error(err);
-                                                    cfConfig = new cfFlag();
-                                                    return;
-                                                }
-                                                log.info('command: ?CF12');
-                                                command = '?CF12' + '\r\n';
-                                                sp.write(command, function(err){
-                                                    if(err) {
-                                                        log.error('command: ?CF12');
-                                                        log.error(err);
-                                                        cfConfig = new cfFlag();
-                                                        return;
-                                                    }
-                                                    log.info('command: ?CF13');
-                                                    command = '?CF13' + '\r\n';
-                                                    sp.write(command, function(err){
-                                                        if(err) {
-                                                            log.error('command: ?CF13');
-                                                            log.error(err);
-                                                            cfConfig = new cfFlag();
-                                                            return;
-                                                        }
-                                                    })
-                                                })
-                                            })
-                                        })
-                                    })
-                                })
-                            })
-                        })
-                    })
-                })
-            })
         })
-    })
+    }
 }
 
 ipcMain.on('set_f0_1_data', (event, data) => {
@@ -1856,74 +1548,68 @@ ipcMain.on('get_f0_1_data', (event, arg) => {
 const setF0_1 = function(data) {
     log.info('function: setF0_1');
 
+    f0Config.isReadState = false;
+    let commandList = new Array();
     for(var i = 0; i < 9; i++) {
-        setTimeout(function(){
-            let command = '';
-            let content = '';
+        let command = '';
+        let content = '';
 
-            // 헤더 정리
-            let header = 'F0';
-            header = header + (i+1).toString();
+        // 헤더 정리
+        let header = 'F00';
+        header = header + (i+1).toString();
 
-            // 내용 정리
-            let tmpValue = data['f0' + header.substr(2,2)].toString();
-            if(header == 'F002' || header == 'F003') {
-                content = tmpValue;
-            }
-            else {
-                // 부호 붙여주기
-                let numValue = Number(tmpValue);
-                content = '+';
-                if(numValue < 0) {
-                    content = '-';
-                }
-
-                // 6자리 채우기
-                let numLength = tmpValue.length();
-                for(var j = 0; j < 6-numLength; j++) {
-                    content = content + '0';
-                }
-                content = content + tmpValue;
+        // 내용 정리
+        let tmpValue = data['f0' + header.substr(2,2)].toString();
+        if(header == 'F002' || header == 'F003') {
+            content = tmpValue;
+        }
+        else {
+            // 부호 붙여주기
+            let numValue = Number(tmpValue);
+            content = '+';
+            if(numValue < 0) {
+                content = '-';
             }
 
-            // 최종 커맨드
-            command = header + ',' + content;
+            // 6자리 채우기
+            let numLength = tmpValue.length;
+            for(var j = 0; j < 6-numLength; j++) {
+                content = content + '0';
+            }
+            content = content + tmpValue;
+        }
 
-            log.info('write command: ' + header);
-            sp.write(command, function(err){
-                if(err) {
-                    log.error('write command: ' + header);
-                    log.error(err);
-                    return;
-                }
-            })
-        }, CONSTANT['FIVE_HUNDRED_MS'])
+        // 최종 커맨드
+        command = header + ',' + content + '\r\n';
+        commandList.push(command);
     }
+    writeCommandCallback(0, 8, commandList, function(){
+
+    });
 }
 
 const getF0_1 = function() {
     log.info('function: getF0_1');
 
+    f0Config.isReadState = true;
     for(var i = 0; i < 9; i++) {
-        setTimeout(function(){
-            let command = '';
+        let command = '';
 
-            // 헤더 정리
-            let header = 'F0';
-            header = header + (i+1).toString();
+        // 헤더 정리
+        let header = '?F00';
+        header = header + (i+1).toString();
 
-            // 최종 커맨드
-            command = header + '\r\n';
+        // 최종 커맨드
+        command = header + '\r\n';
 
-            log.info('read command: ' + header);
-            sp.write(command, function(err){
-                if(err) {
-                    log.error('read command: ' + header);
-                    log.error(err);
-                    return;
-                }
-            })
-        }, CONSTANT['ONE_HUNDRED_MS'])
+        log.info('read command: ' + header);
+        sp.write(command, function(err){
+            if(err) {
+                log.error('read command: ' + header);
+                log.error(err);
+                return;
+            }
+        })
     }
 }
 

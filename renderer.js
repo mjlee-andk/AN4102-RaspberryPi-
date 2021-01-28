@@ -512,9 +512,18 @@ ipcRenderer.on('set_comp_value', (event, data) => {
 ipcRenderer.on('main_button_active', (event, isActive) => {
     log.info('ipcRenderer.on: main_button_active');
 
+    let stopBtn = document.getElementById("stop");
+    let onoffBtn = document.getElementById("onoff");
+    let grossnetBtn = document.getElementById("grossnet");
+    let zeroBtn = document.getElementById("zero");
+    let printBtn = document.getElementById("print");
     // 프로그램 OFF 상태
     if(!isActive) {
         startBtn.disabled = true;
+        stopBtn.disabled = true;
+        onoffBtn.disabled = true;
+        grossnetBtn.disabled = true;
+        zeroBtn.disabled = true;
         // setClearTareButton.disabled = true;
         // setZeroTareButton.disabled = true;
         // setGrossNetButton.disabled = true;
@@ -526,6 +535,10 @@ ipcRenderer.on('main_button_active', (event, isActive) => {
     // 프로그램 ON 상태
     else {
         startBtn.disabled = false;
+        stopBtn.disabled = false;
+        onoffBtn.disabled = false;
+        grossnetBtn.disabled = false;
+        zeroBtn.disabled = false;
         // setClearTareButton.disabled = false;
         // setZeroTareButton.disabled = false;
         // setGrossNetButton.disabled = false;

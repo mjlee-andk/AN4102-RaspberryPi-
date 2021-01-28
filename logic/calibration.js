@@ -72,7 +72,7 @@ ipcRenderer.on('set_cal_span', (event, arg) => {
     log.info('ipcRenderer.on: set_cal_span');
 
     if(arg == 'ok') {
-        setSpanValue();
+        // setSpanValue();
         checkCalSpan.innerHTML = 'OK';
     }
     else {
