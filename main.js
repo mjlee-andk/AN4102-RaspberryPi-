@@ -7,7 +7,7 @@ const log = require('electron-log'); // 로그 기록
 const net = require('net'); // 소켓 서버통신
 
 const CONSTANT = require('./util/constant');
-const { scaleFlag, uartFlag, cfFlag, basicConfigFlag, externalPrintConfigFlag, calibrationConfigFlag } = require('./util/flag');
+const { scaleFlag, uartFlag, cfFlag, f0Flag, basicConfigFlag, externalPrintConfigFlag, calibrationConfigFlag } = require('./util/flag');
 
 const os = require('os'); // 운영체제 확인
 const platforms = {
@@ -37,6 +37,7 @@ let scale = new scaleFlag();
 let pcConfig = new uartFlag();
 
 let cfConfig = new cfFlag();
+let f0Config = new f0Flag();
 
 let serialConfig = new uartFlag();
 let basicConfig = new basicConfigFlag();
@@ -454,36 +455,30 @@ const readHeader = function(rx) {
         if(header == 'COM') {
             scale.comparator = true;
             scale.comparator_mode = Number(body);
+            setCompMode(scale.comparator_mode);
 
-            // 모드별 분류 : 2단 투입, 2단 배출, 리미트, 체커
-            if(scale.comparator_mode == CONSTANT['COMP_MODE_INPUT']) {
-                scale.s1_title = 'Fi';
-                scale.s2_title = 'Fr';
-                scale.s3_title = 'Pl';
-                scale.s4_title = 'Ov';
-                scale.s5_title = 'Ud';
-            }
-            else if(scale.comparator_mode == CONSTANT['COMP_MODE_EMISSION']) {
-                scale.s1_title = '';
-                scale.s2_title = '';
-                scale.s3_title = '';
-                scale.s4_title = '';
-                scale.s5_title = '';
-            }
-            else if(scale.comparator_mode == CONSTANT['COMP_MODE_LIMIT']) {
-                scale.s1_title = '';
-                scale.s2_title = '';
-                scale.s3_title = '';
-                scale.s4_title = '';
-                scale.s5_title = '';
-            }
-            else if(scale.comparator_mode == CONSTANT['COMP_MODE_CHECKER']) {
-                scale.s1_title = '';
-                scale.s2_title = '';
-                scale.s3_title = '';
-                scale.s4_title = '';
-                scale.s5_title = '';
-            }
+            // // 모드별 분류 : 2단 투입, 2단 배출, 리미트, 체커
+            // if(scale.comparator_mode == CONSTANT['COMP_MODE_INPUT'] || scale.comparator_mode == CONSTANT['COMP_MODE_EMISSION']) {
+            //     scale.s1_title = 'Fi';
+            //     scale.s2_title = 'Fr';
+            //     scale.s3_title = 'Pl';
+            //     scale.s4_title = 'Ov';
+            //     scale.s5_title = 'Ud';
+            // }
+            // else if(scale.comparator_mode == CONSTANT['COMP_MODE_LIMIT']) {
+            //     scale.s1_title = 'Fi';
+            //     scale.s2_title = 'SP1';
+            //     scale.s3_title = 'SP2';
+            //     scale.s4_title = 'Ov';
+            //     scale.s5_title = 'Ud';
+            // }
+            // else if(scale.comparator_mode == CONSTANT['COMP_MODE_CHECKER']) {
+            //     scale.s1_title = 'Fi';
+            //     scale.s2_title = 'SP1';
+            //     scale.s3_title = 'SP2';
+            //     scale.s4_title = 'Ov';
+            //     scale.s5_title = 'Ud';
+            // }
         }
         // 컴퍼레이터 설정값 읽기
         if(scale.comparator) {
@@ -1526,6 +1521,40 @@ ipcMain.on('set_stream_mode', (event, data) => {
     setStreamMode();
 })
 
+ipcMain.on('set_comp_mode', (event, data) => {
+    log.info('ipcMain.on: set_comp_mode');
+    setCompMode(f0Config.f003);
+})
+
+const setCompMode = function(param) {
+    // 2단 투입, 2단 배출
+    if(param == CONSTANT['COMP_MODE_INPUT'] || param == CONSTANT['COMP_MODE_EMISSION']) {
+        scale.s1_title = 'Fi';
+        scale.s2_title = 'Fr';
+        scale.s3_title = 'Pl';
+        scale.s4_title = 'Ov';
+        scale.s5_title = 'Ud';
+    }
+    // 리미트
+    else if(data == CONSTANT['COMP_MODE_LIMIT']) {
+        scale.s1_title = 'Fi';
+        scale.s2_title = 'SP1';
+        scale.s3_title = 'SP2';
+        scale.s4_title = 'Ov';
+        scale.s5_title = 'Ud';
+    }
+    // 체커
+    else if(data == CONSTANT['COMP_MODE_CHECKER']) {
+        scale.s1_title = 'Fi';
+        scale.s2_title = 'SP1';
+        scale.s3_title = 'SP2';
+        scale.s4_title = 'Ov';
+        scale.s5_title = 'Ud';
+    }
+
+    win.webContents.send('set_comp_mode', param);
+}
+
 ipcMain.on('set_cf_data', (event, data) => {
     log.info('ipcMain.on: set_cf_data');
     setCF(data);
@@ -1966,10 +1995,7 @@ ipcMain.on('init_config', (event, arg) => {
     initConfig();
 })
 
-ipcMain.on('start', (event, arg) =>{
-    log.info('ipcMain.on: start');
-    start();
-})
+
 
 ipcMain.on('set_clear_tare', (event, arg) =>{
     log.info('ipcMain.on: set_clear_tare');
@@ -1991,6 +2017,11 @@ ipcMain.on('set_hold', (event, arg) =>{
     setHold();
 })
 
+ipcMain.on('start', (event, arg) =>{
+    log.info('ipcMain.on: start');
+    start();
+})
+
 // 2단 투입 시작
 const start = function() {
     log.info('function: start');
@@ -1998,6 +2029,91 @@ const start = function() {
     sp.write(command, function(err){
         if(err) {
             log.error('command: SW1');
+            log.error(err);
+            return;
+        }
+    })
+}
+
+ipcMain.on('stop', (event, arg) =>{
+    log.info('ipcMain.on: stop');
+    stop();
+})
+
+const stop = function() {
+    log.info('function: stop');
+    const command = 'SW2' + '\r\n';
+    sp.write(command, function(err){
+        if(err) {
+            log.error('command: SW2');
+            log.error(err);
+            return;
+        }
+    })
+}
+
+ipcMain.on('onoff', (event, arg) =>{
+    log.info('ipcMain.on: onoff');
+    onoff();
+})
+
+const onoff = function() {
+    log.info('function: onoff');
+    const command = 'SW3' + '\r\n';
+    sp.write(command, function(err){
+        if(err) {
+            log.error('command: SW3');
+            log.error(err);
+            return;
+        }
+    })
+}
+
+ipcMain.on('grossnet', (event, arg) =>{
+    log.info('ipcMain.on: grossnet');
+    grossnet();
+})
+
+const grossnet = function() {
+    log.info('function: grossnet');
+    const command = 'SW4' + '\r\n';
+    sp.write(command, function(err){
+        if(err) {
+            log.error('command: SW4');
+            log.error(err);
+            return;
+        }
+    })
+}
+
+ipcMain.on('zero', (event, arg) =>{
+    log.info('ipcMain.on: zero');
+    zero();
+})
+
+const zero = function() {
+    log.info('function: zero');
+    const command = 'SW5' + '\r\n';
+    sp.write(command, function(err){
+        if(err) {
+            log.error('command: SW5');
+            log.error(err);
+            return;
+        }
+    })
+}
+
+ipcMain.on('print', (event, arg) =>{
+    log.info('ipcMain.on: print');
+    print();
+})
+
+const print = function() {
+    log.info('function: print');
+    const command = 'SW6' + '\r\n';
+    sp.write(command, function(err){
+        if(err) {
+            log.error('command: SW6');
             log.error(err);
             return;
         }
@@ -2066,8 +2182,8 @@ ipcMain.on('print', (event, arg) => {
     return;
 })
 
-ipcMain.on('on_off', (event, arg) => {
-    log.info('ipcMain.on: on_off');
+ipcMain.on('power', (event, arg) => {
+    log.info('ipcMain.on: power');
     try {
         // 프로그램 시작
         if(arg == 'ON') {
@@ -2084,7 +2200,7 @@ ipcMain.on('on_off', (event, arg) => {
         }
     }
     catch(e) {
-        log.error('error: ipcMain.on / on_off');
+        log.error('error: ipcMain.on / power');
     }
 })
 

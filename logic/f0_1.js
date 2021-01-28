@@ -178,6 +178,7 @@ ipcRenderer.on('set_f0_1_config_data', (event, arg) => {
     log.info('ipcRenderer.on: set_f0_1_config_data');
 
     setTimeout(function(){
+        ipcRenderer.send('set_comp_mode', 'ok');
         ipcRenderer.send('set_stream_mode', 'ok');
         const window = remote.getCurrentWindow();
         window.close();

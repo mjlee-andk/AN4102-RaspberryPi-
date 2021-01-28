@@ -251,7 +251,12 @@ const setCompValue = function(flag, value) {
 }
 
 // 2단 투입 시작 버튼
-let startButton = document.getElementById("start");
+let startBtn = document.getElementById("start");
+let stopBtn = document.getElementById("stop");
+let onoffBtn = document.getElementById("onoff");
+let grossnetBtn = document.getElementById("grossnet");
+let zeroBtn = document.getElementById("zero");
+let printBtn = document.getElementById("print");
 
 // 시퀀스 상태
 let seqStateNearZero = document.getElementById("seq_state_near_zero");
@@ -269,8 +274,7 @@ let setClearTareButton = document.getElementById("setClearTare");
 let setZeroTareButton = document.getElementById("setZeroTare");
 let setGrossNetButton = document.getElementById("setGrossNet");
 let setHoldButton = document.getElementById("setHold");
-let printButton = document.getElementById("print");
-let onOffButton = document.getElementById("onOff");
+let powerButton = document.getElementById("power");
 
 openPCConfigWindowButton.addEventListener('click', function(){
     ipcRenderer.send('open_pc_config_window', 'ok');
@@ -439,10 +443,60 @@ ipcRenderer.on('rx_data', (event, data) => {
         compStateLO.style.color = COLOR['WHITE'];
         compStateOK.style.color = COLOR['WHITE'];
     }
-})
+});
 
 ipcRenderer.on('print', (event, data) => {
 
+});
+
+ipcRenderer.on('set_comp_mode', (event, data) => {
+    // 2단 투입, 2단 배출
+    if(data == CONSTANT['COMP_MODE_INPUT'] || data == CONSTANT['COMP_MODE_EMISSION']) {
+        comS1Title.innerHTML = 'Fi';
+        comS2Title.innerHTML = 'Fr';
+        comS3Title.innerHTML = 'Pl';
+        comS4Title.innerHTML = 'Ov';
+        comS5Title.innerHTML = 'Ud';
+
+        startBtn.style.display = "inline-block";
+        stopBtn.style.display = "inline-block";
+        onoffBtn.style.display = "inline-block";
+        grossnetBtn.style.display = "inline-block";
+        zeroBtn.style.display = "inline-block";
+        printBtn.style.display = "inline-block";
+    }
+    // 리미트
+    else if(data == CONSTANT['COMP_MODE_LIMIT']) {
+        comS1Title.innerHTML = 'Fi';
+        comS2Title.innerHTML = 'SP1';
+        comS3Title.innerHTML = 'SP2';
+        comS4Title.innerHTML = 'Ov';
+        comS5Title.innerHTML = 'Ud';
+
+        startBtn.style.display = "none";
+        stopBtn.style.display = "none";
+        onoffBtn.style.display = "inline-block";
+        grossnetBtn.style.display = "inline-block";
+        zeroBtn.style.display = "inline-block";
+        printBtn.style.display = "inline-block";
+
+    }
+    // 체커
+    else if(data == CONSTANT['COMP_MODE_CHECKER']) {
+        comS1Title.style.display = 'none';
+
+        comS2Title.innerHTML = 'SP1';
+        comS3Title.innerHTML = 'SP2';
+        comS4Title.innerHTML = 'Ov';
+        comS5Title.innerHTML = 'Ud';
+
+        startBtn.style.display = "none";
+        stopBtn.style.display = "none";
+        onoffBtn.style.display = "inline-block";
+        grossnetBtn.style.display = "inline-block";
+        zeroBtn.style.display = "inline-block";
+        printBtn.style.display = "inline-block";
+    }
 });
 
 ipcRenderer.on('set_comp_value', (event, data) => {
@@ -460,53 +514,70 @@ ipcRenderer.on('main_button_active', (event, isActive) => {
 
     // 프로그램 OFF 상태
     if(!isActive) {
-        startButton.disabled = true;
-        setClearTareButton.disabled = true;
-        setZeroTareButton.disabled = true;
-        setGrossNetButton.disabled = true;
-        setHoldButton.disabled = true;
-        printButton.disabled = true;
+        startBtn.disabled = true;
+        // setClearTareButton.disabled = true;
+        // setZeroTareButton.disabled = true;
+        // setGrossNetButton.disabled = true;
+        // setHoldButton.disabled = true;
+        printBtn.disabled = true;
         openConfigWindowButton.disabled = true;
         isProgramOn = false;
     }
     // 프로그램 ON 상태
     else {
-        startButton.disabled = false;
-        setClearTareButton.disabled = false;
-        setZeroTareButton.disabled = false;
-        setGrossNetButton.disabled = false;
-        setHoldButton.disabled = false;
-        printButton.disabled = false;
+        startBtn.disabled = false;
+        // setClearTareButton.disabled = false;
+        // setZeroTareButton.disabled = false;
+        // setGrossNetButton.disabled = false;
+        // setHoldButton.disabled = false;
+        printBtn.disabled = false;
         openConfigWindowButton.disabled = false;
         isProgramOn = true;
     }
 })
 
-startButton.addEventListener('click', function(){
+startBtn.addEventListener('click', function(){
       ipcRenderer.send('start', 'ok');
 })
 
-setClearTareButton.addEventListener('click', function(){
-      ipcRenderer.send('set_clear_tare', 'ok');
+stopBtn.addEventListener('click', function(){
+      ipcRenderer.send('stop', 'ok');
 })
 
-setZeroTareButton.addEventListener('click', function(){
-      ipcRenderer.send('set_zero_tare', 'ok');
+onoffBtn.addEventListener('click', function(){
+      ipcRenderer.send('onoff', 'ok');
 })
 
-setGrossNetButton.addEventListener('click', function(){
-      ipcRenderer.send('set_gross_net', 'ok');
+grossnetBtn.addEventListener('click', function(){
+      ipcRenderer.send('grossnet', 'ok');
 })
 
-setHoldButton.addEventListener('click', function(){
-      ipcRenderer.send('set_hold', 'ok');
+zeroBtn.addEventListener('click', function(){
+      ipcRenderer.send('zero', 'ok');
 })
 
-printButton.addEventListener('click', function(){
+printBtn.addEventListener('click', function(){
     ipcRenderer.send('print', 'ok');
 })
 
-onOffButton.addEventListener('click', function(){
+// setClearTareButton.addEventListener('click', function(){
+//       ipcRenderer.send('set_clear_tare', 'ok');
+// })
+//
+// setZeroTareButton.addEventListener('click', function(){
+//       ipcRenderer.send('set_zero_tare', 'ok');
+// })
+//
+// setGrossNetButton.addEventListener('click', function(){
+//       ipcRenderer.send('set_gross_net', 'ok');
+// })
+//
+// setHoldButton.addEventListener('click', function(){
+//       ipcRenderer.send('set_hold', 'ok');
+// })
+
+
+powerButton.addEventListener('click', function(){
     setOnOffView();
 })
 
@@ -517,16 +588,16 @@ const closeWindow = function() {
 const setOnOffView = function() {
     log.info('function: setOnOffView');
 
-    let onoffLabel = onOffButton.innerHTML;
+    let onoffLabel = powerButton.innerHTML;
 
     // 프로그램 시작
     if(onoffLabel == 'ON') {
-        onOffButton.innerHTML = 'OFF';
+        powerButton.innerHTML = 'OFF';
         openPCConfigWindowButton.disabled = true;
     }
     // 프로그램 종료
     else {
-        onOffButton.innerHTML = 'ON';
+        powerButton.innerHTML = 'ON';
         openPCConfigWindowButton.disabled = false;
 
         displayMsg.innerHTML = '000000';
@@ -538,5 +609,5 @@ const setOnOffView = function() {
         labelNetClass.style.color = COLOR['WHITE'];
     }
 
-    ipcRenderer.send('on_off', onoffLabel);
+    ipcRenderer.send('power', onoffLabel);
 }
