@@ -551,6 +551,12 @@ const readHeader = function(rx) {
             const data = Number(body);
             cfConfig[header.toLowerCase()] = data;
             if(cfConfig.isReadState) {
+                // 캘리브레이션 - 스팬 입력 전압
+                if(header == 'CF05') {
+                    configWin.webContents.send('get_cal_data', cfConfig);
+                }
+
+                // CF 펑션 마지막 커맨드
                 if(header == 'CF13') {
                     configWin.webContents.send('get_cf_data', cfConfig);
                 }
@@ -1202,14 +1208,15 @@ const setSpanValue = function(data) {
     })
 }
 
-const getCal = function() {
-    log.info('function: getCal');
-    let command = '?CF04' + '\r\n';
-    scale.cf = true;
-    calibrationConfig.isRead = true;
+const getCF05 = function() {
+    log.info('function: getCF05');
+    let command = '?CF05' + '\r\n';
+    cfConfig.isReadState = true;
+
+    log.info('command: ?CF05')
     sp.write(command, function(err){
         if(err) {
-            log.error('command: getCal');
+            log.error('command: ?CF05');
             log.error(err);
             return;
         }
@@ -1686,7 +1693,7 @@ ipcMain.on('get_calibration_config_data', (event, arg) => {
 
 ipcMain.on('get_cal_data', (event, arg) => {
     log.info('ipcMain.on: get_cal_data');
-    getCal();
+    getCF05();
 });
 
 ipcMain.on('init_function_f', (event, arg) => {
