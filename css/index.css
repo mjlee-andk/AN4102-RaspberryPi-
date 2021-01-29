@@ -229,7 +229,7 @@ body {
 ***config.html, pcconfig.html 전용
 **/
 .row_container {
-    margin-top: 12px;
+    margin-top: 4px;
     margin-bottom: 12px;
     display: flex;
 }
@@ -255,13 +255,13 @@ body {
 }
 
 .row_title {
-    width: 50%;
+    width: 70%;
     justify-content: center;
     flex-direction: column;
 }
 
 .row_content {
-    width: 50%;
+    width: 70%;
 }
 
 .row_content span {
@@ -380,14 +380,18 @@ body {
     display: none;
 }
 
+input {
+    width: 75%;
+}
+
 select {
-    width: 90%;
-    height: 30px;
+    width: 80%;
+    height: 27px;
     padding-left: 5px;
     font-size: 15px;
     color: black;
-    border-radius:3px;
-    border: 1px solid black;
+    border-radius:15px;
+    border: 0px solid black;
 }
 
 

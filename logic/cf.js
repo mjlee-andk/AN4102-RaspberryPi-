@@ -49,7 +49,7 @@ const makeKeypadSetting = function(element, ev) {
         keypad_cf.style.display = "block";
         focused_input = element;
 
-        if(element == 'cf04' || element == 'cf06') {
+        if(element == 'cf03' || element == 'cf05' || element == 'cf06') {
             keypad_cf.style.left = '30px';
             keypad_cf.style.right = 'auto';
         }
@@ -59,7 +59,7 @@ const makeKeypadSetting = function(element, ev) {
         keypad_cf.style.display = "none";
         focused_input = '';
 
-        if(element == 'cf04' || element == 'cf06') {
+        if(element == 'cf03' || element == 'cf05' || element == 'cf06') {
             keypad_cf.style.left = 'auto';
             keypad_cf.style.right = '30px';
         }
@@ -125,7 +125,7 @@ key_cf_list.forEach((item, index) => {
             inputDocument.value = inputValue;
         }
         else if(keyValue == '확인') {
-            if(inputDocument.value == '') {
+            if(inputValue == '') {
                 alert('값을 입력해주세요.');
                 return;
             }
@@ -135,7 +135,7 @@ key_cf_list.forEach((item, index) => {
                     alert('입력 범위 내의 값을 입력해주세요.(1 이상 999999 이하)');
                     return;
                 }
-                cf03.value = inputDocument.value;
+                cf03.value = inputValue;
             }
             else if(focused_input == 'cf04') {
                 if(convertedValue > 7.00000 || convertedValue < -7.00000) {
@@ -144,19 +144,19 @@ key_cf_list.forEach((item, index) => {
                 }
 
                 if(convertedValue < 0) {
-                    if(inputDocument.value.length > 8) {
+                    if(inputValueLength > 8) {
                         alert('입력 범위 내의 값을 입력해주세요.(-7.00000 이상 7.00000 이하)');
                         return;
                     }
                 }
                 else {
-                    if(inputDocument.value.length > 7) {
+                    if(inputValueLength > 7) {
                         alert('입력 범위 내의 값을 입력해주세요.(-7.00000 이상 7.00000 이하)');
                         return;
                     }
                 }
 
-                cf04.value = inputDocument.value;
+                cf04.value = inputValue;
             }
             else if(focused_input == 'cf05') {
                 if(convertedValue > 9.99999 || convertedValue < 0.00001) {
@@ -164,18 +164,18 @@ key_cf_list.forEach((item, index) => {
                     return;
                 }
 
-                if(inputDocument.value.length > 7) {
+                if(inputValueLength > 7) {
                     alert('입력 범위 내의 값을 입력해주세요.(0.00001 이상 9.99999 이하)');
                     return;
                 }
-                cf05.value = inputDocument.value;
+                cf05.value = inputValue;
             }
             else if(focused_input == 'cf06') {
                 if(convertedValue > 999999 || convertedValue < -999999) {
                     alert('입력 범위 내의 값을 입력해주세요.(-999999 이상 999999 이하)');
                     return;
                 }
-                cf06.value = inputDocument.value;
+                cf06.value = inputValue;
             }
 
             inputDocument.style.background = '';
