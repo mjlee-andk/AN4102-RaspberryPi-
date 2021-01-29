@@ -103,7 +103,7 @@ key_cf_list.forEach((item, index) => {
         inputValueLength = inputValue.length;
 
         if(keyValue == 'C'){
-            inputDocument.value = '0';
+            inputDocument.value = '';
         }
         else if(keyValue == '+/-') {
             if(focused_input == 'cf03'
@@ -124,26 +124,6 @@ key_cf_list.forEach((item, index) => {
             }
             inputDocument.value = inputValue;
         }
-        else if(keyValue == '.') {
-            if(focused_input == 'cf03'
-            || focused_input == 'cf06') {
-                return;
-            }
-            if(inputValueLength == 0) {
-                return;
-            }
-            if(inputValue.indexOf(keyValue) > 0) {
-                return;
-            }
-
-            inputDocument.value = inputValue + keyValue;
-        }
-        else if(keyValue == '0') {
-            if(inputValue == '0'){
-                return;
-            }
-            inputDocument.value = inputValue + keyValue;
-        }
         else if(keyValue == '확인') {
             if(inputDocument.value == '') {
                 alert('값을 입력해주세요.');
@@ -152,24 +132,47 @@ key_cf_list.forEach((item, index) => {
             let convertedValue = Number(inputDocument.value);
             if(focused_input == 'cf03') {
                 if(convertedValue > 999999 || convertedValue < 1) {
+                    alert('입력 범위 내의 값을 입력해주세요.(1 이상 999999 이하)');
                     return;
                 }
                 cf03.value = inputDocument.value;
             }
             else if(focused_input == 'cf04') {
                 if(convertedValue > 7.00000 || convertedValue < -7.00000) {
+                    alert('입력 범위 내의 값을 입력해주세요.(-7.00000 이상 7.00000 이하)');
                     return;
                 }
+
+                if(convertedValue < 0) {
+                    if(inputDocument.value.length > 8) {
+                        alert('입력 범위 내의 값을 입력해주세요.(-7.00000 이상 7.00000 이하)');
+                        return;
+                    }
+                }
+                else {
+                    if(inputDocument.value.length > 7) {
+                        alert('입력 범위 내의 값을 입력해주세요.(-7.00000 이상 7.00000 이하)');
+                        return;
+                    }
+                }
+
                 cf04.value = inputDocument.value;
             }
             else if(focused_input == 'cf05') {
                 if(convertedValue > 9.99999 || convertedValue < 0.00001) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.00001 이상 9.99999 이하)');
+                    return;
+                }
+
+                if(inputDocument.value.length > 7) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.00001 이상 9.99999 이하)');
                     return;
                 }
                 cf05.value = inputDocument.value;
             }
             else if(focused_input == 'cf06') {
                 if(convertedValue > 999999 || convertedValue < -999999) {
+                    alert('입력 범위 내의 값을 입력해주세요.(-999999 이상 999999 이하)');
                     return;
                 }
                 cf06.value = inputDocument.value;
@@ -182,12 +185,39 @@ key_cf_list.forEach((item, index) => {
             focused_input = '';
         }
         else {
-            if(inputValue == '0') {
-                inputDocument.value = keyValue;
+            if(focused_input == 'cf04'
+            || focused_input == 'cf05') {
+                // 소수점이 있을 경우
+                if(inputValue.indexOf('.') > -1) {
+                    inputDocument.value = inputValue + keyValue;
+                }
+                // 소수점이 없을 경우
+                else {
+                    // 리셋하여 입력된 값이 없을 경우
+                    if(inputValue.length == 0) {
+                        inputDocument.value = keyValue;
+                    }
+                    // 입력된 값이 1개일 경우
+                    else if(inputValue.length == 1){
+                        inputDocument.value = inputValue + '.' + keyValue;
+                    }
+                    // 그 외
+                    else {
+                        inputDocument.value = inputValue + keyValue;
+                    }
+                }
             }
             else {
-                inputDocument.value = inputValue + keyValue;
+                // 입력창에 입력된 값이 0일 때
+                if(inputValue == '0') {
+                    inputDocument.value = keyValue;
+                }
+                else {
+                    inputDocument.value = inputValue + keyValue;
+
+                }
             }
+
         }
     })
 })
