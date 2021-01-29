@@ -1267,6 +1267,7 @@ const openPort = function() {
     }
 };
 
+
 const changeMainButtonActive = function(isActive) {
     log.info('function: changeMainButtonActive');
     win.webContents.send('main_button_active', isActive);
@@ -1458,7 +1459,7 @@ const writeCommandCallback = function(i, lastIndex, list, callback) {
         else {
             writeCommandCallback(i+1, lastIndex, list, callback);
         }
-    }, 300)
+    }, CONSTANT['ONE_HUNDRED_MS'])
 }
 
 const setCF = function(data) {

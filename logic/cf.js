@@ -258,6 +258,7 @@ ipcRenderer.on('get_cf_data', (event, data) => {
 ipcRenderer.on('set_cf_data', (event, arg) => {
     log.info('ipcRenderer.on: set_cf_data');
 
+    loader.style.display = "none";
     setTimeout(function(){
         ipcRenderer.send('set_stream_mode', 'ok');
         const window = remote.getCurrentWindow();

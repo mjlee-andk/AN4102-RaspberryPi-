@@ -177,6 +177,7 @@ ipcRenderer.on('get_f0_1_data', (event, data) => {
 ipcRenderer.on('set_f0_1_data', (event, arg) => {
     log.info('ipcRenderer.on: set_f0_1_data');
 
+    loader.style.display = "none";
     setTimeout(function(){
         ipcRenderer.send('set_comp_mode', 'ok');
         ipcRenderer.send('set_stream_mode', 'ok');

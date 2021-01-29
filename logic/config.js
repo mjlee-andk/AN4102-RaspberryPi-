@@ -23,6 +23,7 @@ const f3Div = document.getElementById("f3Div");
 const f4Div = document.getElementById("f4Div");
 const calDiv = document.getElementById("calDiv");
 
+const loader = document.getElementById("loader");
 
 //
 // 화면 상단
@@ -53,6 +54,8 @@ configOkBtn.addEventListener('click', function(){
     else if(f5Div.style.display == DISPLAY_BLOCK) {
         setF5ConfigData();
     }
+
+    loader.style.display = "block";
 })
 
 const closeWindow = function() {
