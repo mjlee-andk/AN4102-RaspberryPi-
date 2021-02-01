@@ -12,35 +12,14 @@ const f001_6 = document.getElementById("f0_01_6");
 const f002 = document.getElementById("f0_02");
 const f003 = document.getElementById("f0_03");
 const f004 = document.getElementById("f0_04");
-// const f004Value =document.getElementById("f0_04_value");
 const f005 = document.getElementById("f0_05");
-const f005Value =document.getElementById("f0_05_value");
 const f006 = document.getElementById("f0_06");
-const f006Value =document.getElementById("f0_06_value");
 const f007 = document.getElementById("f0_07");
-const f007Value =document.getElementById("f0_07_value");
 const f008 = document.getElementById("f0_08");
 const f009 = document.getElementById("f0_09");
-const f009Value =document.getElementById("f0_09_value");
 
 const keypad_f0 = document.getElementById("keypad_f0");
 const key_f0_list = document.querySelectorAll(".key_f0");
-
-// f004.oninput = function() {
-//     f004Value.innerHTML = (this.value / 10).toFixed(1);
-// }
-// f005.oninput = function() {
-//     f005Value.innerHTML = (this.value / 10).toFixed(1);
-// }
-// f006.oninput = function() {
-//     f006Value.innerHTML = (this.value / 10).toFixed(1);
-// }
-// f007.oninput = function() {
-//     f007Value.innerHTML = (this.value / 10).toFixed(1);
-// }
-// f009.oninput = function() {
-//     f009Value.innerHTML = this.value / 10;
-// }
 
 let focused_input = '';
 const background_color = 'pink';
@@ -121,22 +100,6 @@ key_f0_list.forEach((item, index) => {
         }
         else if(keyValue == '+/-') {
             return;
-            // if(focused_input == 'f008') {
-            //     return;
-            // }
-            //
-            // if(inputValue == '0' || inputValue == ''){
-            //     return;
-            // }
-            // // 음수일 경우
-            // if(inputValue.indexOf('-') >= 0) {
-            //     inputValue = inputValue.replace('-', '');
-            // }
-            // // 양수일 경우
-            // else if(inputValue.indexOf('-') < 0) {
-            //     inputValue = '-' + inputValue;
-            // }
-            // inputDocument.value = inputValue;
         }
         else if(keyValue == '확인') {
             if(inputValue == '') {
@@ -234,14 +197,19 @@ key_f0_list.forEach((item, index) => {
 ipcRenderer.on('get_f0_1_data', (event, data) => {
     log.info('ipcRenderer.on: get_f0_1_data');
 
-    let hexData = data.f001.toString(16);
+    let binData = data.f001.toString(2);
+    let binDataLength = binData.length;
 
-    f001_1.checked = hexData.charAt(0) == '1' ? true : false;
-    f001_2.checked = hexData.charAt(1) == '1' ? true : false;
-    f001_3.checked = hexData.charAt(2) == '1' ? true : false;
-    f001_4.checked = hexData.charAt(3) == '1' ? true : false;
-    f001_5.checked = hexData.charAt(4) == '1' ? true : false;
-    f001_6.checked = hexData.charAt(5) == '1' ? true : false;
+    for(let i = 0; i < 6 - binDataLength; i++) {
+        binData = '0' + binData;
+    }
+
+    f001_1.checked = binData.charAt(0) == '1' ? true : false;
+    f001_2.checked = binData.charAt(1) == '1' ? true : false;
+    f001_3.checked = binData.charAt(2) == '1' ? true : false;
+    f001_4.checked = binData.charAt(3) == '1' ? true : false;
+    f001_5.checked = binData.charAt(4) == '1' ? true : false;
+    f001_6.checked = binData.charAt(5) == '1' ? true : false;
 
     f002.value = data.f002;
     f003.value = data.f003;
@@ -270,15 +238,15 @@ const setF0_1Data = function() {
     log.info('function: setF0_1Data');
 
     let intF001 = 0;
-    let hexF001 = '';
+    let binF001 = '';
 
-    hexF001 = hexF001 + (f001_1.checked == true ? '1' : '0');
-    hexF001 = hexF001 + (f001_2.checked == true ? '1' : '0');
-    hexF001 = hexF001 + (f001_3.checked == true ? '1' : '0');
-    hexF001 = hexF001 + (f001_4.checked == true ? '1' : '0');
-    hexF001 = hexF001 + (f001_5.checked == true ? '1' : '0');
-    hexF001 = hexF001 + (f001_6.checked == true ? '1' : '0');
-    intF001 = parseInt(hexF001, 16);
+    binF001 = binF001 + (f001_1.checked == true ? '1' : '0');
+    binF001 = binF001 + (f001_2.checked == true ? '1' : '0');
+    binF001 = binF001 + (f001_3.checked == true ? '1' : '0');
+    binF001 = binF001 + (f001_4.checked == true ? '1' : '0');
+    binF001 = binF001 + (f001_5.checked == true ? '1' : '0');
+    binF001 = binF001 + (f001_6.checked == true ? '1' : '0');
+    intF001 = parseInt(binF001, 2);
 
     const f0_1Data = {
         f001: intF001,

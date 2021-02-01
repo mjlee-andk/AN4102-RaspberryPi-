@@ -63,12 +63,6 @@ key_f0_list.forEach((item, index) => {
             }
             inputDocument.value = inputValue;
         }
-        else if(keyValue == '0') {
-            if(inputValue == '0'){
-                return;
-            }
-            inputDocument.value = inputValue + keyValue;
-        }
         else if(keyValue == '확인') {
             if(inputValue == '') {
                 alert('값을 입력해주세요.');

@@ -353,7 +353,6 @@ const convertHexStringToBinary = function(hex) {
 }
 
 const readHeader = function(rx) {
-    // console.log(rx);
     const separator = ',';
     const splitedData = rx.split(separator);
     const splitedDataLength = splitedData.length;
@@ -1590,7 +1589,6 @@ const setF0_1 = function(data) {
 
         // 최종 커맨드
         command = header + ',' + content + '\r\n';
-        console.log('command', command);
         commandList.push(command);
     }
     writeCommandCallback(0, 8, commandList, function(){
@@ -1975,7 +1973,6 @@ const startProgram = function() {
         const lineStream = sp.pipe(new Readline({ delimiter: pcConfig.terminator == CONSTANT['CRLF'] ? '\r\n' : '\r' }, { encoding: 'utf-8' }));
         lineStream.on('data', function(rx) {
             readHeader(rx);
-            // console.log(rx);
             win.webContents.send('rx_data', scale);
             scale.waiting_sec = 0;
         });
