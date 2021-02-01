@@ -252,11 +252,11 @@ ipcMain.on('set_comp_value', (event, data) => {
     let compValue = data['value'];
 
     // 커맨드 모드로 진입
-    log.info('command: F205,2');
-    let command = 'F205,2' + '\r\n';
+    log.info('command: F205,1');
+    let command = 'F205,1' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            log.error('command: F205,2');
+            log.error('command: F205,1');
             log.error(err);
             return;
         }
@@ -309,11 +309,11 @@ ipcMain.on('set_comp_value', (event, data) => {
                     }
 
                     // 변경 완료 후 스트림 모드로 진입
-                    log.info('command: F205,1');
-                    command = 'F205,1' + '\r\n';
+                    log.info('command: F205,0');
+                    command = 'F205,0' + '\r\n';
                     sp.write(command, function(err){
                         if(err) {
-                            log.error('command: F205,1');
+                            log.error('command: F205,0');
                             log.error(err);
                             return;
                         }
