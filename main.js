@@ -1466,7 +1466,8 @@ const writeCommandCallback = function(i, lastIndex, list, callback) {
         else {
             writeCommandCallback(i+1, lastIndex, list, callback);
         }
-    }, CONSTANT['ONE_HUNDRED_MS'])
+    }, 300)
+    // }, CONSTANT['ONE_HUNDRED_MS'])
 }
 
 const setCF = function(data) {
@@ -1589,6 +1590,7 @@ const setF0_1 = function(data) {
 
         // 최종 커맨드
         command = header + ',' + content + '\r\n';
+        console.log('command', command);
         commandList.push(command);
     }
     writeCommandCallback(0, 8, commandList, function(){

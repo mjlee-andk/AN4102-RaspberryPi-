@@ -12,7 +12,7 @@ const f001_6 = document.getElementById("f0_01_6");
 const f002 = document.getElementById("f0_02");
 const f003 = document.getElementById("f0_03");
 const f004 = document.getElementById("f0_04");
-const f004Value =document.getElementById("f0_04_value");
+// const f004Value =document.getElementById("f0_04_value");
 const f005 = document.getElementById("f0_05");
 const f005Value =document.getElementById("f0_05_value");
 const f006 = document.getElementById("f0_06");
@@ -26,21 +26,21 @@ const f009Value =document.getElementById("f0_09_value");
 const keypad_f0 = document.getElementById("keypad_f0");
 const key_f0_list = document.querySelectorAll(".key_f0");
 
-f004.oninput = function() {
-    f004Value.innerHTML = (this.value / 10).toFixed(1);
-}
-f005.oninput = function() {
-    f005Value.innerHTML = (this.value / 10).toFixed(1);
-}
-f006.oninput = function() {
-    f006Value.innerHTML = (this.value / 10).toFixed(1);
-}
-f007.oninput = function() {
-    f007Value.innerHTML = (this.value / 10).toFixed(1);
-}
-f009.oninput = function() {
-    f009Value.innerHTML = this.value / 10;
-}
+// f004.oninput = function() {
+//     f004Value.innerHTML = (this.value / 10).toFixed(1);
+// }
+// f005.oninput = function() {
+//     f005Value.innerHTML = (this.value / 10).toFixed(1);
+// }
+// f006.oninput = function() {
+//     f006Value.innerHTML = (this.value / 10).toFixed(1);
+// }
+// f007.oninput = function() {
+//     f007Value.innerHTML = (this.value / 10).toFixed(1);
+// }
+// f009.oninput = function() {
+//     f009Value.innerHTML = this.value / 10;
+// }
 
 let focused_input = '';
 const background_color = 'pink';
@@ -50,18 +50,42 @@ const makeKeypadSetting = function(element, ev) {
         ev.target.style.background = background_color;
         keypad_f0.style.display = "block";
         focused_input = element;
+
+        if(element == 'f005' || element == 'f007' || element == 'f009') {
+            keypad_f0.style.left = '30px';
+            keypad_f0.style.right = 'auto';
+        }
     }
     else {
         ev.target.style.background = '';
         keypad_f0.style.display = "none";
         focused_input = '';
+
+        if(element == 'f005' || element == 'f007' || element == 'f009') {
+            keypad_f0.style.left = 'auto';
+            keypad_f0.style.right = '30px';
+        }
     }
 }
 
+f004.addEventListener('click', (event) => {
+    makeKeypadSetting('f004', event);
+})
+f005.addEventListener('click', (event) => {
+    makeKeypadSetting('f005', event);
+})
+f006.addEventListener('click', (event) => {
+    makeKeypadSetting('f006', event);
+})
+f007.addEventListener('click', (event) => {
+    makeKeypadSetting('f007', event);
+})
 f008.addEventListener('click', (event) => {
     makeKeypadSetting('f008', event);
 })
-
+f009.addEventListener('click', (event) => {
+    makeKeypadSetting('f009', event);
+})
 
 key_f0_list.forEach((item, index) => {
     item.addEventListener("click", (event) => {
@@ -70,8 +94,23 @@ key_f0_list.forEach((item, index) => {
         let inputValueLength = 0;
         const keyValue = item.innerHTML;
 
+        if(focused_input == 'f004') {
+            inputDocument = f004;
+        }
+        if(focused_input == 'f005') {
+            inputDocument = f005;
+        }
+        if(focused_input == 'f006') {
+            inputDocument = f006;
+        }
+        if(focused_input == 'f007') {
+            inputDocument = f007;
+        }
         if(focused_input == 'f008') {
             inputDocument = f008;
+        }
+        if(focused_input == 'f009') {
+            inputDocument = f009;
         }
 
         inputValue = inputDocument.value.toString();
@@ -81,28 +120,23 @@ key_f0_list.forEach((item, index) => {
             inputDocument.value = '';
         }
         else if(keyValue == '+/-') {
-            if(focused_input == 'f008') {
-                return;
-            }
-
-            if(inputValue == '0' || inputValue == ''){
-                return;
-            }
-            // 음수일 경우
-            if(inputValue.indexOf('-') >= 0) {
-                inputValue = inputValue.replace('-', '');
-            }
-            // 양수일 경우
-            else if(inputValue.indexOf('-') < 0) {
-                inputValue = '-' + inputValue;
-            }
-            inputDocument.value = inputValue;
-        }
-        else if(keyValue == '0') {
-            if(inputValue == '0'){
-                return;
-            }
-            inputDocument.value = inputValue + keyValue;
+            return;
+            // if(focused_input == 'f008') {
+            //     return;
+            // }
+            //
+            // if(inputValue == '0' || inputValue == ''){
+            //     return;
+            // }
+            // // 음수일 경우
+            // if(inputValue.indexOf('-') >= 0) {
+            //     inputValue = inputValue.replace('-', '');
+            // }
+            // // 양수일 경우
+            // else if(inputValue.indexOf('-') < 0) {
+            //     inputValue = '-' + inputValue;
+            // }
+            // inputDocument.value = inputValue;
         }
         else if(keyValue == '확인') {
             if(inputValue == '') {
@@ -110,12 +144,51 @@ key_f0_list.forEach((item, index) => {
                 return;
             }
             let convertedValue = Number(inputValue);
-            if(focused_input == 'f008') {
+            if(focused_input == 'f004') {
+                let fixedValue = convertedValue.toFixed(1);
+                if(fixedValue > 10.0 || fixedValue < 0.0) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 10.0 이하)');
+                    return;
+                }
+                f004.value = fixedValue.toString();
+            }
+            else if(focused_input == 'f005') {
+                let fixedValue = convertedValue.toFixed(1);
+                if(fixedValue > 10.0 || fixedValue < 0.0) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 10.0 이하)');
+                    return;
+                }
+                f005.value = fixedValue.toString();
+            }
+            else if(focused_input == 'f006') {
+                let fixedValue = convertedValue.toFixed(1);
+                if(fixedValue > 10.0 || fixedValue < 0.0) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 10.0 이하)');
+                    return;
+                }
+                f006.value = fixedValue.toString();
+            }
+            else if(focused_input == 'f007') {
+                let fixedValue = convertedValue.toFixed(1);
+                if(fixedValue > 10.0 || fixedValue < 0.0) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 10.0 이하)');
+                    return;
+                }
+                f007.value = fixedValue.toString();
+            }
+            else if(focused_input == 'f008') {
                 if(convertedValue > 999999 || convertedValue < 0) {
                     alert('입력 범위 내의 값을 입력해주세요.(0 이상 999999 이하)');
                     return;
                 }
                 f008.value = inputValue;
+            }
+            else if(focused_input == 'f009') {
+                if(convertedValue > 10 || convertedValue < 0) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0 이상 10 이하)');
+                    return;
+                }
+                f009.value = inputValue;
             }
 
             inputDocument.style.background = '';
@@ -123,11 +196,36 @@ key_f0_list.forEach((item, index) => {
             focused_input = '';
         }
         else {
-            if(inputValue == '0') {
-                inputDocument.value = keyValue;
+            if(focused_input == 'f004'
+            || focused_input == 'f005' || focused_input == 'f006'
+            || focused_input == 'f007') {
+                // 소수점이 있을 경우
+                if(inputValue.indexOf('.') > -1) {
+                    inputDocument.value = inputValue + keyValue;
+                }
+                // 소수점이 없을 경우
+                else {
+                    // 리셋하여 입력된 값이 없을 경우
+                    if(inputValue.length == 0) {
+                        inputDocument.value = keyValue;
+                    }
+                    // 입력된 값이 1개일 경우
+                    else if(inputValue.length == 1){
+                        inputDocument.value = inputValue + '.' + keyValue;
+                    }
+                    // 그 외
+                    else {
+                        inputDocument.value = inputValue + keyValue;
+                    }
+                }
             }
             else {
-                inputDocument.value = inputValue + keyValue;
+                if(inputValue == '0') {
+                    inputDocument.value = keyValue;
+                }
+                else {
+                    inputDocument.value = inputValue + keyValue;
+                }
             }
         }
     })
@@ -147,14 +245,10 @@ ipcRenderer.on('get_f0_1_data', (event, data) => {
 
     f002.value = data.f002;
     f003.value = data.f003;
-    f004.value = data.f004;
-    f004Value.innerHTML = (f004.value / 10).toFixed(1);
-    f005.value = data.f005;
-    f005Value.innerHTML = (f005.value / 10).toFixed(1);
-    f006.value = data.f006;
-    f006Value.innerHTML = (f006.value / 10).toFixed(1);
-    f007.value = data.f007;
-    f007Value.innerHTML = (f007.value / 10).toFixed(1);
+    f004.value = data.f004 / 10;
+    f005.value = data.f005 / 10;
+    f006.value = data.f006 / 10;
+    f007.value = data.f007 / 10;
     f008.value = data.f008;
     f009.value = data.f009;
 });
@@ -190,12 +284,12 @@ const setF0_1Data = function() {
         f001: intF001,
         f002: f002.options[f002.selectedIndex].value,
         f003: f003.options[f003.selectedIndex].value,
-        f004: f004.value,
-        f005: f005.value,
-        f006: f006.value,
-        f007: f007.value,
+        f004: f004.value * 10,
+        f005: f005.value * 10,
+        f006: f006.value * 10,
+        f007: f007.value * 10,
         f008: f008.value,
-        f009: f009.value,
+        f009: f009.value
     };
 
     ipcRenderer.send('set_f0_1_data', f0_1Data);

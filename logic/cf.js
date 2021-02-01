@@ -9,36 +9,15 @@ const cf04 = document.getElementById("cf_04");
 const cf05 = document.getElementById("cf_05");
 const cf06 = document.getElementById("cf_06");
 const cf07 = document.getElementById("cf_07");
-// const cf07Value =document.getElementById("cf_07_value");
 const cf08 = document.getElementById("cf_08");
-const cf08Value =document.getElementById("cf_08_value");
 const cf09 = document.getElementById("cf_09");
-const cf09Value =document.getElementById("cf_09_value");
 const cf10 = document.getElementById("cf_10");
-const cf10Value =document.getElementById("cf_10_value");
 const cf11 = document.getElementById("cf_11");
-const cf11Value =document.getElementById("cf_11_value");
 const cf12 = document.getElementById("cf_12");
 const cf13 = document.getElementById("cf_13");
 
 const keypad_cf = document.getElementById("keypad_cf");
 const key_cf_list = document.querySelectorAll(".key_cf");
-
-// cf07.oninput = function() {
-//     cf07Value.innerHTML = this.value;
-// }
-cf08.oninput = function() {
-    cf08Value.innerHTML = (this.value / 10).toFixed(1);
-}
-cf09.oninput = function() {
-    cf09Value.innerHTML = (this.value / 10).toFixed(1);
-}
-cf10.oninput = function() {
-    cf10Value.innerHTML = (this.value / 10).toFixed(1);
-}
-cf11.oninput = function() {
-    cf11Value.innerHTML = (this.value / 10).toFixed(1);
-}
 
 let focused_input = '';
 const background_color = 'pink';
@@ -172,37 +151,21 @@ key_cf_list.forEach((item, index) => {
                 cf03.value = inputValue;
             }
             else if(focused_input == 'cf04') {
-                if(convertedValue > 7.00000 || convertedValue < -7.00000) {
+                let fixedValue = convertedValue.toFixed(5);
+                if(fixedValue > 7.00000 || fixedValue < -7.00000) {
                     alert('입력 범위 내의 값을 입력해주세요.(-7.00000 이상 7.00000 이하)');
                     return;
                 }
 
-                if(convertedValue < 0) {
-                    if(inputValueLength > 8) {
-                        alert('입력 범위 내의 값을 입력해주세요.(-7.00000 이상 7.00000 이하)');
-                        return;
-                    }
-                }
-                else {
-                    if(inputValueLength > 7) {
-                        alert('입력 범위 내의 값을 입력해주세요.(-7.00000 이상 7.00000 이하)');
-                        return;
-                    }
-                }
-
-                cf04.value = inputValue;
+                cf04.value = fixedValue.toString();
             }
             else if(focused_input == 'cf05') {
-                if(convertedValue > 9.99999 || convertedValue < 0.00001) {
+                let fixedValue = convertedValue.toFixed(5);
+                if(fixedValue > 9.99999 || fixedValue < 0.00001) {
                     alert('입력 범위 내의 값을 입력해주세요.(0.00001 이상 9.99999 이하)');
                     return;
                 }
-
-                if(inputValueLength > 7) {
-                    alert('입력 범위 내의 값을 입력해주세요.(0.00001 이상 9.99999 이하)');
-                    return;
-                }
-                cf05.value = inputValue;
+                cf05.value = fixedValue.toString();
             }
             else if(focused_input == 'cf06') {
                 if(convertedValue > 999999 || convertedValue < -999999) {
@@ -219,52 +182,36 @@ key_cf_list.forEach((item, index) => {
                 cf07.value = inputValue;
             }
             else if(focused_input == 'cf08') {
-                if(convertedValue > 9.9 || convertedValue < 0.0) {
+                let fixedValue = convertedValue.toFixed(1);
+                if(fixedValue > 9.9 || fixedValue < 0.0) {
                     alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
                     return;
                 }
-
-                if(inputValueLength > 3) {
-                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
-                    return;
-                }
-                cf08.value = inputValue;
+                cf08.value = fixedValue.toString();
             }
             else if(focused_input == 'cf09') {
-                if(convertedValue > 9.9 || convertedValue < 0.0) {
+                let fixedValue = convertedValue.toFixed(1);
+                if(fixedValue > 9.9 || fixedValue < 0.0) {
                     alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
                     return;
                 }
-
-                if(inputValueLength > 3) {
-                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
-                    return;
-                }
-                cf09.value = inputValue;
+                cf09.value = fixedValue.toString();
             }
             else if(focused_input == 'cf10') {
-                if(convertedValue > 9.9 || convertedValue < 0.0) {
+                let fixedValue = convertedValue.toFixed(1);
+                if(fixedValue > 9.9 || fixedValue < 0.0) {
                     alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
                     return;
                 }
-
-                if(inputValueLength > 3) {
-                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
-                    return;
-                }
-                cf10.value = inputValue;
+                cf10.value = fixedValue.toString();
             }
             else if(focused_input == 'cf11') {
-                if(convertedValue > 9.9 || convertedValue < 0.0) {
+                let fixedValue = convertedValue.toFixed(1);
+                if(fixedValue > 9.9 || fixedValue < 0.0) {
                     alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
                     return;
                 }
-
-                if(inputValueLength > 3) {
-                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
-                    return;
-                }
-                cf11.value = inputValue;
+                cf11.value = fixedValue.toString();
             }
 
             inputDocument.style.background = '';
