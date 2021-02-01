@@ -77,7 +77,7 @@ key_f5_list.forEach((item, index) => {
         inputValueLength = inputValue.length;
 
         if(keyValue == 'C'){
-            inputDocument.value = '0';
+            inputDocument.value = '';
         }
         else if(keyValue == '+/-') {
             if(inputValue == '0' || inputValue == ''){
@@ -93,15 +93,6 @@ key_f5_list.forEach((item, index) => {
             }
             inputDocument.value = inputValue;
         }
-        else if(keyValue == '.') {
-            return;
-        }
-        else if(keyValue == '0') {
-            if(inputValue == '0'){
-                return;
-            }
-            inputDocument.value = inputValue + keyValue;
-        }
         else if(keyValue == '확인') {
             if(inputDocument.value == '') {
                 alert('값을 입력해주세요.');
@@ -109,6 +100,7 @@ key_f5_list.forEach((item, index) => {
             }
             let convertedValue = Number(inputDocument.value);
             if(convertedValue > 999999 || convertedValue < -999999) {
+                alert('입력 범위 내의 값을 입력해주세요.(-999999 이상 999999 이하)');
                 return;
             }
 

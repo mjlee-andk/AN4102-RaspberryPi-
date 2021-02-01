@@ -44,12 +44,9 @@ key_f3_list.forEach((item, index) => {
         inputValueLength = inputValue.length;
 
         if(keyValue == 'C'){
-            inputDocument.value = '0';
+            inputDocument.value = '';
         }
         else if(keyValue == '+/-') {
-            return;
-        }
-        else if(keyValue == '.') {
             return;
         }
         else if(keyValue == '0') {
@@ -65,6 +62,7 @@ key_f3_list.forEach((item, index) => {
             }
             let convertedValue = Number(inputDocument.value);
             if(convertedValue > 99 || convertedValue < 0) {
+                alert('입력 범위 내의 값을 입력해주세요.(99 이상 0 이하)');
                 return;
             }
             f306.value = inputDocument.value;
