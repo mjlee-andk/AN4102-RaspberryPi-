@@ -133,8 +133,8 @@ key_f5_list.forEach((item, index) => {
 })
 
 
-ipcRenderer.on('get_f5_config_data', (event, data) => {
-    log.info('ipcRenderer.on: get_f5_config_data');
+ipcRenderer.on('get_f5_data', (event, data) => {
+    log.info('ipcRenderer.on: get_f5_data');
 
     f501.value = data.f501;
     f502.value = data.f502;
@@ -143,8 +143,8 @@ ipcRenderer.on('get_f5_config_data', (event, data) => {
 });
 
 // F5 Function 값 수정이 완료됨을 알리는 신호
-ipcRenderer.on('set_f5_config_data', (event, arg) => {
-    log.info('ipcRenderer.on: set_f5_config_data');
+ipcRenderer.on('set_f5_data', (event, arg) => {
+    log.info('ipcRenderer.on: set_f5_data');
 
     setTimeout(function(){
         ipcRenderer.send('set_stream_mode', 'ok');
@@ -153,20 +153,20 @@ ipcRenderer.on('set_f5_config_data', (event, arg) => {
     }, CONSTANT['FIVE_HUNDRED_MS']);
 });
 
-const setF5ConfigData = function() {
-    log.info('function: setF5ConfigData');
+const setF5Data = function() {
+    log.info('function: setF5Data');
 
-    const f5ConfigData = {
+    const f5Data = {
         f501: f501.value,
         f502: f502.value,
         f503: f503.value,
         f504: f504.value
     };
 
-    ipcRenderer.send('set_f5_config_data', f5ConfigData);
+    ipcRenderer.send('set_f5_data', f5Data);
     return;
 }
 
 module.exports = {
-    setF5ConfigData: setF5ConfigData
+    setF5Data: setF5Data
 }

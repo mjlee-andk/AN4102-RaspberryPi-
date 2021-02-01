@@ -6,8 +6,8 @@ const f401 = document.getElementById("f4_01");
 const f402 = document.getElementById("f4_02");
 const f403 = document.getElementById("f4_03");
 
-ipcRenderer.on('get_f4_config_data', (event, data) => {
-    log.info('ipcRenderer.on: get_f4_config_data');
+ipcRenderer.on('get_f4_data', (event, data) => {
+    log.info('ipcRenderer.on: get_f4_data');
 
     f401.value = data.f401;
     f402.value = data.f402;
@@ -15,8 +15,8 @@ ipcRenderer.on('get_f4_config_data', (event, data) => {
 });
 
 // F4 Function 값 수정이 완료됨을 알리는 신호
-ipcRenderer.on('set_f4_config_data', (event, arg) => {
-    log.info('ipcRenderer.on: set_f4_config_data');
+ipcRenderer.on('set_f4_data', (event, arg) => {
+    log.info('ipcRenderer.on: set_f4_data');
 
     setTimeout(function(){
         ipcRenderer.send('set_stream_mode', 'ok');
@@ -25,19 +25,19 @@ ipcRenderer.on('set_f4_config_data', (event, arg) => {
     }, CONSTANT['FIVE_HUNDRED_MS']);
 });
 
-const setF4ConfigData = function() {
-    log.info('function: setF4ConfigData');
+const setF4Data = function() {
+    log.info('function: setF4Data');
 
-    const f4ConfigData = {
+    const f4Data = {
         f401: f401.options[f401.selectedIndex].value,
         f402: f402.options[f402.selectedIndex].value,
         f403: f403.options[f403.selectedIndex].value
     };
 
-    ipcRenderer.send('set_f4_config_data', f4ConfigData);
+    ipcRenderer.send('set_f4_data', f4Data);
     return;
 }
 
 module.exports = {
-    setF4ConfigData: setF4ConfigData
+    setF4Data: setF4Data
 }

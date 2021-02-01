@@ -82,8 +82,8 @@ key_f3_list.forEach((item, index) => {
 })
 
 
-ipcRenderer.on('get_f3_config_data', (event, data) => {
-    log.info('ipcRenderer.on: get_f3_config_data');
+ipcRenderer.on('get_f3_data', (event, data) => {
+    log.info('ipcRenderer.on: get_f3_data');
 
     f301.value = data.f301;
     f302.value = data.f302;
@@ -94,8 +94,8 @@ ipcRenderer.on('get_f3_config_data', (event, data) => {
 });
 
 // F3 Function 값 수정이 완료됨을 알리는 신호
-ipcRenderer.on('set_f3_config_data', (event, arg) => {
-    log.info('ipcRenderer.on: set_f3_config_data');
+ipcRenderer.on('set_f3_data', (event, arg) => {
+    log.info('ipcRenderer.on: set_f3_data');
 
     setTimeout(function(){
         ipcRenderer.send('set_stream_mode', 'ok');
@@ -104,10 +104,10 @@ ipcRenderer.on('set_f3_config_data', (event, arg) => {
     }, CONSTANT['FIVE_HUNDRED_MS']);
 });
 
-const setF3ConfigData = function() {
-    log.info('function: setF3ConfigData');
+const setF3Data = function() {
+    log.info('function: setF3Data');
 
-    const f3ConfigData = {
+    const f3Data = {
         f301: f301.options[f301.selectedIndex].value,
         f302: f302.options[f302.selectedIndex].value,
         f303: f303.options[f303.selectedIndex].value,
@@ -116,10 +116,10 @@ const setF3ConfigData = function() {
         f306: f306.value
     };
 
-    ipcRenderer.send('set_f3_config_data', f3ConfigData);
+    ipcRenderer.send('set_f3_data', f3Data);
     return;
 }
 
 module.exports = {
-    setF3ConfigData: setF3ConfigData
+    setF3Data: setF3Data
 }

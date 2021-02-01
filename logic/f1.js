@@ -10,8 +10,8 @@ const f105 = document.getElementById("f1_05");
 const f106 = document.getElementById("f1_06");
 const f107 = document.getElementById("f1_07");
 
-ipcRenderer.on('get_f1_config_data', (event, data) => {
-    log.info('ipcRenderer.on: get_f1_config_data');
+ipcRenderer.on('get_f1_data', (event, data) => {
+    log.info('ipcRenderer.on: get_f1_data');
 
     f101.value = data.f101;
     f102.value = data.f102;
@@ -23,8 +23,8 @@ ipcRenderer.on('get_f1_config_data', (event, data) => {
 });
 
 // F1 Function 값 수정이 완료됨을 알리는 신호
-ipcRenderer.on('set_f1_config_data', (event, arg) => {
-    log.info('ipcRenderer.on: set_f1_config_data');
+ipcRenderer.on('set_f1_data', (event, arg) => {
+    log.info('ipcRenderer.on: set_f1_data');
 
     setTimeout(function(){
         ipcRenderer.send('set_stream_mode', 'ok');
@@ -33,10 +33,10 @@ ipcRenderer.on('set_f1_config_data', (event, arg) => {
     }, CONSTANT['FIVE_HUNDRED_MS']);
 });
 
-const setF1ConfigData = function() {
-    log.info('function: setF1ConfigData');
+const setF1Data = function() {
+    log.info('function: setF1Data');
 
-    const f1ConfigData = {
+    const f1Data = {
         f101: f101.options[f101.selectedIndex].value,
         f102: f102.options[f102.selectedIndex].value,
         f103: f103.options[f103.selectedIndex].value,
@@ -46,10 +46,10 @@ const setF1ConfigData = function() {
         f107: f107.options[f107.selectedIndex].value
     };
 
-    ipcRenderer.send('set_f1_config_data', f1ConfigData);
+    ipcRenderer.send('set_f1_data', f1Data);
     return;
 }
 
 module.exports = {
-    setF1ConfigData: setF1ConfigData
+    setF1Data: setF1Data
 }

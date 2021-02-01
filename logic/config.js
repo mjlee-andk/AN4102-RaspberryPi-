@@ -4,11 +4,11 @@ const CONSTANT = require('../util/constant');
 
 const { setCF } = require('./cf');
 const { setF0_1Data } = require('./f0_1');
-const { setF0_2ConfigData } = require('./f0_2');
-const { setF1ConfigData } = require('./f1');
-const { setF3ConfigData } = require('./f3');
-const { setF4ConfigData } = require('./f4');
-const { setF5ConfigData } = require('./f5');
+const { setF0_2Data } = require('./f0_2');
+const { setF1Data } = require('./f1');
+const { setF3Data } = require('./f3');
+const { setF4Data } = require('./f4');
+const { setF5Data } = require('./f5');
 
 require('./calibration');
 
@@ -37,22 +37,19 @@ configOkBtn.addEventListener('click', function(){
         setF0_1Data();
     }
     else if(f0_2Div.style.display == DISPLAY_BLOCK) {
-        setF0_2ConfigData();
+        setF0_2Data();
     }
     else if(f1Div.style.display == DISPLAY_BLOCK) {
-        setF1ConfigData();
+        setF1Data();
     }
-    // else if(f2Div.style.display == DISPLAY_BLOCK) {
-    //     setF2ConfigData();
-    // }
     else if(f3Div.style.display == DISPLAY_BLOCK) {
-        setF3ConfigData();
+        setF3Data();
     }
     else if(f4Div.style.display == DISPLAY_BLOCK) {
-        setF4ConfigData();
+        setF4Data();
     }
     else if(f5Div.style.display == DISPLAY_BLOCK) {
-        setF5ConfigData();
+        setF5Data();
     }
 
     loader.style.display = "block";
@@ -69,14 +66,6 @@ closeConfigWindowButton.addEventListener('click', function(){
     ipcRenderer.send('set_stream_mode', 'ok');
     closeWindow();
 });
-
-// const romVer = document.getElementById("romVer");
-//
-// ipcRenderer.on('get_rom_ver', (event, data) => {
-//     log.info('ipcRenderer.on: get_rom_ver');
-//
-//     romVer.innerHTML = data;
-// });
 
 //
 // 화면 하단

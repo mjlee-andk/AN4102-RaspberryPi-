@@ -1438,16 +1438,6 @@ const setCompMode = function(param) {
     win.webContents.send('set_comp_mode', param);
 }
 
-ipcMain.on('set_cf_data', (event, data) => {
-    log.info('ipcMain.on: set_cf_data');
-    setCF(data);
-})
-
-ipcMain.on('get_cf_data', (event, arg) => {
-    log.info('ipcMain.on: get_cf_data');
-    getCF();
-})
-
 const writeCommandCallback = function(i, lastIndex, list, callback) {
     setTimeout(function(){
         log.info('write command: ' + list[i]);
@@ -1469,6 +1459,14 @@ const writeCommandCallback = function(i, lastIndex, list, callback) {
     // }, CONSTANT['ONE_HUNDRED_MS'])
 }
 
+ipcMain.on('set_cf_data', (event, data) => {
+    log.info('ipcMain.on: set_cf_data');
+    setCF(data);
+})
+ipcMain.on('get_cf_data', (event, arg) => {
+    log.info('ipcMain.on: get_cf_data');
+    getCF();
+})
 const setCF = function(data) {
     log.info('function: setCF');
 
@@ -1547,12 +1545,10 @@ ipcMain.on('set_f0_1_data', (event, data) => {
     log.info('ipcMain.on: set_f0_1_data');
     setF0_1(data);
 })
-
 ipcMain.on('get_f0_1_data', (event, arg) => {
     log.info('ipcMain.on: get_f0_1_data');
     getF0_1();
 })
-
 const setF0_1 = function(data) {
     log.info('function: setF0_1');
 
@@ -1595,7 +1591,6 @@ const setF0_1 = function(data) {
 
     });
 }
-
 const getF0_1 = function() {
     log.info('function: getF0_1');
 
@@ -1621,47 +1616,77 @@ const getF0_1 = function() {
     }
 }
 
+ipcMain.on('set_f0_2_data', (event, data) => {
+    log.info('ipcMain.on: set_f0_2_data');
+    setF0_2(data);
+})
 ipcMain.on('get_f0_2_data', (event, arg) => {
     log.info('ipcMain.on: get_f0_2_data');
     getF0_2();
 })
+const setF0_2 = function() {
 
+}
 const getF0_2 = function() {
 
 }
 
+ipcMain.on('set_f1_data', (event, data) => {
+    log.info('ipcMain.on: set_f1_data');
+    setF1(data);
+})
 ipcMain.on('get_f1_data', (event, arg) => {
     log.info('ipcMain.on: get_f1_data');
     getF1();
 })
+const setF1 = function() {
 
+}
 const getF1 = function() {
 
 }
 
+ipcMain.on('set_f3_data', (event, data) => {
+    log.info('ipcMain.on: set_f3_data');
+    setF3(data);
+})
 ipcMain.on('get_f3_data', (event, arg) => {
     log.info('ipcMain.on: get_f3_data');
     getF3();
 })
+const setF3 = function() {
 
+}
 const getF3 = function() {
 
 }
 
+ipcMain.on('set_f4_data', (event, data) => {
+    log.info('ipcMain.on: set_f4_data');
+    setF4(data);
+})
 ipcMain.on('get_f4_data', (event, arg) => {
     log.info('ipcMain.on: get_f4_data');
     getF4();
 })
+const setF4 = function() {
 
+}
 const getF4 = function() {
 
 }
 
+ipcMain.on('set_f5_data', (event, data) => {
+    log.info('ipcMain.on: set_f5_data');
+    setF5(data);
+})
 ipcMain.on('get_f5_data', (event, arg) => {
     log.info('ipcMain.on: get_f5_data');
     getF5();
 })
+const setF5 = function() {
 
+}
 const getF5 = function() {
 
 }
