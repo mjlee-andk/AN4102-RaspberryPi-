@@ -9,7 +9,7 @@ const cf04 = document.getElementById("cf_04");
 const cf05 = document.getElementById("cf_05");
 const cf06 = document.getElementById("cf_06");
 const cf07 = document.getElementById("cf_07");
-const cf07Value =document.getElementById("cf_07_value");
+// const cf07Value =document.getElementById("cf_07_value");
 const cf08 = document.getElementById("cf_08");
 const cf08Value =document.getElementById("cf_08_value");
 const cf09 = document.getElementById("cf_09");
@@ -24,9 +24,9 @@ const cf13 = document.getElementById("cf_13");
 const keypad_cf = document.getElementById("keypad_cf");
 const key_cf_list = document.querySelectorAll(".key_cf");
 
-cf07.oninput = function() {
-    cf07Value.innerHTML = this.value;
-}
+// cf07.oninput = function() {
+//     cf07Value.innerHTML = this.value;
+// }
 cf08.oninput = function() {
     cf08Value.innerHTML = (this.value / 10).toFixed(1);
 }
@@ -49,7 +49,8 @@ const makeKeypadSetting = function(element, ev) {
         keypad_cf.style.display = "block";
         focused_input = element;
 
-        if(element == 'cf03' || element == 'cf05' || element == 'cf06') {
+        if(element == 'cf03' || element == 'cf05' || element == 'cf06'
+    || element == 'cf08' || element == 'cf09' || element == 'cf11') {
             keypad_cf.style.left = '30px';
             keypad_cf.style.right = 'auto';
         }
@@ -59,7 +60,8 @@ const makeKeypadSetting = function(element, ev) {
         keypad_cf.style.display = "none";
         focused_input = '';
 
-        if(element == 'cf03' || element == 'cf05' || element == 'cf06') {
+        if(element == 'cf03' || element == 'cf05' || element == 'cf06'
+    || element == 'cf08' || element == 'cf09' || element == 'cf11') {
             keypad_cf.style.left = 'auto';
             keypad_cf.style.right = '30px';
         }
@@ -77,6 +79,21 @@ cf05.addEventListener('click', (event) => {
 })
 cf06.addEventListener('click', (event) => {
     makeKeypadSetting('cf06', event);
+})
+cf07.addEventListener('click', (event) => {
+    makeKeypadSetting('cf07', event);
+})
+cf08.addEventListener('click', (event) => {
+    makeKeypadSetting('cf08', event);
+})
+cf09.addEventListener('click', (event) => {
+    makeKeypadSetting('cf09', event);
+})
+cf10.addEventListener('click', (event) => {
+    makeKeypadSetting('cf10', event);
+})
+cf11.addEventListener('click', (event) => {
+    makeKeypadSetting('cf11', event);
 })
 
 key_cf_list.forEach((item, index) => {
@@ -98,6 +115,21 @@ key_cf_list.forEach((item, index) => {
         if(focused_input == 'cf06') {
             inputDocument = cf06;
         }
+        if(focused_input == 'cf07') {
+            inputDocument = cf07;
+        }
+        if(focused_input == 'cf08') {
+            inputDocument = cf08;
+        }
+        if(focused_input == 'cf09') {
+            inputDocument = cf09;
+        }
+        if(focused_input == 'cf10') {
+            inputDocument = cf10;
+        }
+        if(focused_input == 'cf11') {
+            inputDocument = cf11;
+        }
 
         inputValue = inputDocument.value.toString();
         inputValueLength = inputValue.length;
@@ -107,7 +139,9 @@ key_cf_list.forEach((item, index) => {
         }
         else if(keyValue == '+/-') {
             if(focused_input == 'cf03'
-            || focused_input == 'cf05') {
+            || focused_input == 'cf05' || focused_input == 'cf07'
+            || focused_input == 'cf08' || focused_input == 'cf09'
+            || focused_input == 'cf10' || focused_input == 'cf11') {
                 return;
             }
 
@@ -177,6 +211,61 @@ key_cf_list.forEach((item, index) => {
                 }
                 cf06.value = inputValue;
             }
+            else if(focused_input == 'cf07') {
+                if(convertedValue > 100 || convertedValue < 0) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0 이상 100 이하)');
+                    return;
+                }
+                cf07.value = inputValue;
+            }
+            else if(focused_input == 'cf08') {
+                if(convertedValue > 9.9 || convertedValue < 0.0) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
+                    return;
+                }
+
+                if(inputValueLength > 3) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
+                    return;
+                }
+                cf08.value = inputValue;
+            }
+            else if(focused_input == 'cf09') {
+                if(convertedValue > 9.9 || convertedValue < 0.0) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
+                    return;
+                }
+
+                if(inputValueLength > 3) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
+                    return;
+                }
+                cf09.value = inputValue;
+            }
+            else if(focused_input == 'cf10') {
+                if(convertedValue > 9.9 || convertedValue < 0.0) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
+                    return;
+                }
+
+                if(inputValueLength > 3) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
+                    return;
+                }
+                cf10.value = inputValue;
+            }
+            else if(focused_input == 'cf11') {
+                if(convertedValue > 9.9 || convertedValue < 0.0) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
+                    return;
+                }
+
+                if(inputValueLength > 3) {
+                    alert('입력 범위 내의 값을 입력해주세요.(0.0 이상 9.9 이하)');
+                    return;
+                }
+                cf11.value = inputValue;
+            }
 
             inputDocument.style.background = '';
             keypad_cf.style.display = "none";
@@ -186,7 +275,9 @@ key_cf_list.forEach((item, index) => {
         }
         else {
             if(focused_input == 'cf04'
-            || focused_input == 'cf05') {
+            || focused_input == 'cf05' || focused_input == 'cf08'
+            || focused_input == 'cf09' || focused_input == 'cf10'
+            || focused_input == 'cf11') {
                 // 소수점이 있을 경우
                 if(inputValue.indexOf('.') > -1) {
                     inputDocument.value = inputValue + keyValue;
@@ -233,19 +324,19 @@ ipcRenderer.on('get_cf_data', (event, data) => {
     cf06.value = data.cf06;
 
     cf07.value = data.cf07;
-    cf07Value.innerHTML = cf07.value;
+    // cf07Value.innerHTML = cf07.value;
 
-    cf08.value = data.cf08;
-    cf08Value.innerHTML = (cf08.value / 10).toFixed(1);
+    cf08.value = data.cf08 / 10;
+    // cf08Value.innerHTML = (cf08.value / 10).toFixed(1);
 
-    cf09.value = data.cf09;
-    cf09Value.innerHTML = (cf09.value / 10).toFixed(1);
+    cf09.value = data.cf09 / 10;
+    // cf09Value.innerHTML = (cf09.value / 10).toFixed(1);
 
-    cf10.value = data.cf10;
-    cf10Value.innerHTML = (cf10.value / 10).toFixed(1);
+    cf10.value = data.cf10 / 10;
+    // cf10Value.innerHTML = (cf10.value / 10).toFixed(1);
 
-    cf11.value = data.cf11;
-    cf11Value.innerHTML = (cf11.value / 10).toFixed(1);
+    cf11.value = data.cf11 / 10;
+    // cf11Value.innerHTML = (cf11.value / 10).toFixed(1);
 
     cf12.checked = false;
     if(data.cf12 == 1) {
@@ -277,10 +368,10 @@ const setCF = function() {
         cf05: cf05.value * 100000,
         cf06: cf06.value,
         cf07: cf07.value,
-        cf08: cf08.value,
-        cf09: cf09.value,
-        cf10: cf10.value,
-        cf11: cf11.value,
+        cf08: cf08.value * 10,
+        cf09: cf09.value * 10,
+        cf10: cf10.value * 10,
+        cf11: cf11.value * 10,
         cf12: cf12.checked == true ? 1 : 0,
         cf13: cf13.options[cf13.selectedIndex].value
     };

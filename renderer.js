@@ -450,6 +450,9 @@ ipcRenderer.on('print', (event, data) => {
 });
 
 ipcRenderer.on('set_comp_mode', (event, data) => {
+    comS1Title.style.display = 'inline-block';
+    comS1Value.style.display = 'inline-block';
+
     // 2단 투입, 2단 배출
     if(data == CONSTANT['COMP_MODE_INPUT'] || data == CONSTANT['COMP_MODE_EMISSION']) {
         comS1Title.innerHTML = 'Fi';
@@ -484,6 +487,7 @@ ipcRenderer.on('set_comp_mode', (event, data) => {
     // 체커
     else if(data == CONSTANT['COMP_MODE_CHECKER']) {
         comS1Title.style.display = 'none';
+        comS1Value.style.display = 'none';
 
         comS2Title.innerHTML = 'SP1';
         comS3Title.innerHTML = 'SP2';
