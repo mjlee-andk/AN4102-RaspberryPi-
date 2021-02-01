@@ -461,12 +461,12 @@ ipcRenderer.on('set_comp_mode', (event, data) => {
         comS4Title.innerHTML = 'Ov';
         comS5Title.innerHTML = 'Ud';
 
-        startBtn.style.display = "inline-block";
-        stopBtn.style.display = "inline-block";
-        onoffBtn.style.display = "inline-block";
-        grossnetBtn.style.display = "inline-block";
-        zeroBtn.style.display = "inline-block";
-        printBtn.style.display = "inline-block";
+        startBtn.parentElement.style.display = "inline-block";
+        stopBtn.parentElement.style.display = "inline-block";
+        onoffBtn.parentElement.style.display = "inline-block";
+        grossnetBtn.parentElement.style.display = "inline-block";
+        zeroBtn.parentElement.style.display = "inline-block";
+        printBtn.parentElement.style.display = "inline-block";
     }
     // 리미트
     else if(data == CONSTANT['COMP_MODE_LIMIT']) {
@@ -476,12 +476,12 @@ ipcRenderer.on('set_comp_mode', (event, data) => {
         comS4Title.innerHTML = 'Ov';
         comS5Title.innerHTML = 'Ud';
 
-        startBtn.style.display = "none";
-        stopBtn.style.display = "none";
-        onoffBtn.style.display = "inline-block";
-        grossnetBtn.style.display = "inline-block";
-        zeroBtn.style.display = "inline-block";
-        printBtn.style.display = "inline-block";
+        startBtn.parentElement.style.display = "none";
+        stopBtn.parentElement.style.display = "none";
+        onoffBtn.parentElement.style.display = "inline-block";
+        grossnetBtn.parentElement.style.display = "inline-block";
+        zeroBtn.parentElement.style.display = "inline-block";
+        printBtn.parentElement.style.display = "inline-block";
 
     }
     // 체커
@@ -494,12 +494,12 @@ ipcRenderer.on('set_comp_mode', (event, data) => {
         comS4Title.innerHTML = 'Ov';
         comS5Title.innerHTML = 'Ud';
 
-        startBtn.style.display = "none";
-        stopBtn.style.display = "none";
-        onoffBtn.style.display = "inline-block";
-        grossnetBtn.style.display = "inline-block";
-        zeroBtn.style.display = "inline-block";
-        printBtn.style.display = "inline-block";
+        startBtn.parentElement.style.display = "none";
+        stopBtn.parentElement.style.display = "none";
+        onoffBtn.parentElement.style.display = "inline-block";
+        grossnetBtn.parentElement.style.display = "inline-block";
+        zeroBtn.parentElement.style.display = "inline-block";
+        printBtn.parentElement.style.display = "inline-block";
     }
 });
 
