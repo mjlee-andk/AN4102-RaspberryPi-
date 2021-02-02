@@ -47,10 +47,11 @@ configOkBtn.addEventListener('click', function(){
     }
     else if(f4Div.style.display == DISPLAY_BLOCK) {
         setF4Data();
-    }
-    else if(f5Div.style.display == DISPLAY_BLOCK) {
         setF5Data();
     }
+    // else if(f5Div.style.display == DISPLAY_BLOCK) {
+    //     setF5Data();
+    // }
 
     loader.style.display = "block";
 })

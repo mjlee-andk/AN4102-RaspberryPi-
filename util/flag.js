@@ -131,6 +131,7 @@ class f0Flag {
 
 class f1Flag {
     constructor() {
+        this.isReadState = true;
         this.f101 = 0;
         this.f102 = 0;
         this.f103 = 2;
@@ -153,6 +154,7 @@ class f2Flag {
 
 class f3Flag {
     constructor() {
+        this.isReadState = true;
         this.f301 = 0;
         this.f302 = 0;
         this.f303 = 2;
@@ -164,6 +166,7 @@ class f3Flag {
 
 class f4Flag {
     constructor() {
+        this.isReadState = true;
         this.f401 = 0;
         this.f402 = 0;
         this.f403 = 0;
@@ -172,6 +175,7 @@ class f4Flag {
 
 class f5Flag {
     constructor() {
+        this.isReadState = true;
         this.f501 = 0;
         this.f502 = 10000;
         this.f503 = 0;
