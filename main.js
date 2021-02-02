@@ -63,7 +63,7 @@ const createWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
     win.loadFile('index.html');
 
@@ -88,7 +88,7 @@ const openConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
 
     configWin.loadFile('view/config.html');
@@ -112,7 +112,7 @@ const openPCConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
 
     pcConfigWin.loadFile('view/pcconfig.html');
@@ -526,23 +526,6 @@ const readHeader = function(rx) {
                 if(header == 'F107') {
                     configWin.webContents.send('set_f1_data', 'ok');
                     f1Config.isReadState = false;
-                }
-            }
-        }
-
-        if(headerCategory == 'F2') {
-            const data = Number(body);
-            f2Config[header.toLowerCase()] = data;
-
-            if(f2Config.isReadState) {
-                if(header == 'F205') {
-                    configWin.webContents.send('get_f2_data', f2Config);
-                }
-            }
-            else {
-                if(header == 'F205') {
-                    configWin.webContents.send('set_f2_data', 'ok');
-                    f2Config.isReadState = false;
                 }
             }
         }
