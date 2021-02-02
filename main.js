@@ -58,7 +58,7 @@ const createWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
     win.loadFile('index.html');
 
@@ -82,7 +82,7 @@ const openConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
 
     configWin.loadFile('view/config.html');
@@ -105,7 +105,7 @@ const openPCConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
 
     pcConfigWin.loadFile('view/pcconfig.html');
@@ -655,14 +655,17 @@ const makeFormat = function(data) {
         scale.isZero = false;
     }
 
-    scale.unit = unit.length;   // kg
-    if(unit.length == 1) {
-        if(unit == 'g') {
-            scale.unit = 1; // g
-        }
-        else {
-            scale.unit = 3; // t
-        }
+    if(unit == 'kg') {
+        scale.unit = 0;
+    }
+    else if(unit == 'g') {
+        scale.unit = 1;
+    }
+    else if(unit == 't') {
+        scale.unit = 2;
+    }
+    else if(unit == 'lb') {
+        scale.unit = 3;
     }
 
     return result;

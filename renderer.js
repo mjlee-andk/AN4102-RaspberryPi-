@@ -334,19 +334,19 @@ const setFontColor = function(font_color) {
 
 ipcRenderer.on('rx_data', (event, data) => {
     displayMsg.innerHTML = data.displayMsg;
-
+    console.log('data.unit', data.unit);
     // 단위 표시
-    if(data.unit == 1) {
+    if(data.unit == 0) {
+        unitTag.innerHTML = 'kg';
+    }
+    else if(data.unit == 1) {
         unitTag.innerHTML = 'g';
     }
     else if(data.unit == 2) {
-        unitTag.innerHTML = 'kg';
-    }
-    else if(data.unit == 3) {
         unitTag.innerHTML = 't';
     }
-    else {
-        unitTag.innerHTML = '';
+    else if(data.unit == 3) {
+        unitTag.innerHTML = 'lb';
     }
 
     // 상태 표시
