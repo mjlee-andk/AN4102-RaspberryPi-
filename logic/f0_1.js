@@ -197,7 +197,7 @@ key_f0_list.forEach((item, index) => {
 ipcRenderer.on('get_f0_1_data', (event, data) => {
     log.info('ipcRenderer.on: get_f0_1_data');
 
-    let binData = data.f001.toString(2);
+    let binData = data.F001.toString(2);
     let binDataLength = binData.length;
 
     for(let i = 0; i < 6 - binDataLength; i++) {
@@ -211,14 +211,14 @@ ipcRenderer.on('get_f0_1_data', (event, data) => {
     f001_5.checked = binData.charAt(4) == '1' ? true : false;
     f001_6.checked = binData.charAt(5) == '1' ? true : false;
 
-    f002.value = data.f002;
-    f003.value = data.f003;
-    f004.value = data.f004 / 10;
-    f005.value = data.f005 / 10;
-    f006.value = data.f006 / 10;
-    f007.value = data.f007 / 10;
-    f008.value = data.f008;
-    f009.value = data.f009;
+    f002.value = data.F002;
+    f003.value = data.F003;
+    f004.value = data.F004 / 10;
+    f005.value = data.F005 / 10;
+    f006.value = data.F006 / 10;
+    f007.value = data.F007 / 10;
+    f008.value = data.F008;
+    f009.value = data.F009;
 });
 
 // F0_1 Function 값 수정이 완료됨을 알리는 신호
@@ -249,15 +249,15 @@ const setF0_1Data = function() {
     intF001 = parseInt(binF001, 2);
 
     const f0_1Data = {
-        f001: intF001,
-        f002: f002.options[f002.selectedIndex].value,
-        f003: f003.options[f003.selectedIndex].value,
-        f004: f004.value * 10,
-        f005: f005.value * 10,
-        f006: f006.value * 10,
-        f007: f007.value * 10,
-        f008: f008.value,
-        f009: f009.value
+        F001: intF001,
+        F002: f002.options[f002.selectedIndex].value,
+        F003: f003.options[f003.selectedIndex].value,
+        F004: f004.value * 10,
+        F005: f005.value * 10,
+        F006: f006.value * 10,
+        F007: f007.value * 10,
+        F008: f008.value,
+        F009: f009.value
     };
 
     ipcRenderer.send('set_f0_1_data', f0_1Data);

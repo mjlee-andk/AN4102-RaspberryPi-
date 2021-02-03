@@ -92,15 +92,15 @@ key_f0_list.forEach((item, index) => {
 ipcRenderer.on('get_f0_2_data', (event, data) => {
     log.info('ipcRenderer.on: get_f0_2_data');
 
-    f010.value = data.f010;
-    f011.value = data.f011;
-    f012.value = data.f012;
-    f013.value = data.f013;
-    f014.value = data.f014;
-    f015.value = data.f015;
-    f016.value = data.f016;
-    f017.value = data.f017;
-    f018.value = data.f018;
+    f010.value = data.F010;
+    f011.value = data.F011;
+    f012.value = data.F012;
+    f013.value = data.F013;
+    f014.value = data.F014;
+    f015.value = data.F015;
+    f016.value = data.F016;
+    f017.value = data.F017;
+    f018.value = data.F018;
 });
 
 // F0_2 Function 값 수정이 완료됨을 알리는 신호
@@ -118,15 +118,15 @@ const setF0_2Data = function() {
     log.info('function: setF0_2Data');
 
     const f0_2Data = {
-        f010: f010.options[f010.selectedIndex].value,
-        f011: f011.value,
-        f012: f012.options[f012.selectedIndex].value,
-        f013: f013.options[f013.selectedIndex].value,
-        f014: f014.options[f014.selectedIndex].value,
-        f015: f015.options[f015.selectedIndex].value,
-        f016: f016.options[f016.selectedIndex].value,
-        f017: f017.options[f017.selectedIndex].value,
-        f018: f018.options[f018.selectedIndex].value
+        F010: f010.options[f010.selectedIndex].value,
+        F011: f011.value,
+        F012: f012.options[f012.selectedIndex].value,
+        F013: f013.options[f013.selectedIndex].value,
+        F014: f014.options[f014.selectedIndex].value,
+        F015: f015.options[f015.selectedIndex].value,
+        F016: f016.options[f016.selectedIndex].value,
+        F017: f017.options[f017.selectedIndex].value,
+        F018: f018.options[f018.selectedIndex].value
     };
 
     ipcRenderer.send('set_f0_2_data', f0_2Data);

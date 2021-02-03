@@ -85,12 +85,12 @@ key_f3_list.forEach((item, index) => {
 ipcRenderer.on('get_f3_data', (event, data) => {
     log.info('ipcRenderer.on: get_f3_data');
 
-    f301.value = data.f301;
-    f302.value = data.f302;
-    f303.value = data.f303;
-    f304.value = data.f304;
-    f305.value = data.f305;
-    f306.value = data.f306;
+    f301.value = data.F301;
+    f302.value = data.F302;
+    f303.value = data.F303;
+    f304.value = data.F304;
+    f305.value = data.F305;
+    f306.value = data.F306;
 });
 
 // F3 Function 값 수정이 완료됨을 알리는 신호
@@ -108,12 +108,12 @@ const setF3Data = function() {
     log.info('function: setF3Data');
 
     const f3Data = {
-        f301: f301.options[f301.selectedIndex].value,
-        f302: f302.options[f302.selectedIndex].value,
-        f303: f303.options[f303.selectedIndex].value,
-        f304: f304.options[f304.selectedIndex].value,
-        f305: f305.options[f305.selectedIndex].value,
-        f306: f306.value
+        F301: f301.options[f301.selectedIndex].value,
+        F302: f302.options[f302.selectedIndex].value,
+        F303: f303.options[f303.selectedIndex].value,
+        F304: f304.options[f304.selectedIndex].value,
+        F305: f305.options[f305.selectedIndex].value,
+        F306: f306.value
     };
 
     ipcRenderer.send('set_f3_data', f3Data);

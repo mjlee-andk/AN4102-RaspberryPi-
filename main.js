@@ -63,7 +63,7 @@ const createWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
     win.loadFile('index.html');
 
@@ -88,7 +88,7 @@ const openConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
 
     configWin.loadFile('view/config.html');
@@ -112,7 +112,7 @@ const openPCConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
 
     pcConfigWin.loadFile('view/pcconfig.html');
@@ -129,10 +129,6 @@ const openPCConfigWindow = function() {
     })
 }
 
-
-
-
-
 // 커맨드 모드로 변경
 const setCommandMode = function() {
     log.info('function: setCommandMode');
@@ -148,57 +144,57 @@ const setCommandMode = function() {
     });
 }
 
-// RSSET 커맨드
-const commandRsset = function() {
-    log.info('function: commandRsset');
-    let command = 'RSSET' + '\r\n';
+// // RSSET 커맨드
+// const commandRsset = function() {
+//     log.info('function: commandRsset');
+//     let command = 'RSSET' + '\r\n';
+//
+//     scale.f = true;
+//     sp.write(command, function(err){
+//         if(err) {
+//             log.error('command: RSSET');
+//             log.error(err);
+//             serialConfig = new uartFlag();
+//             configWin.webContents.send('set_serial_config_data', 'fail');
+//             return;
+//         }
+//     })
+// }
 
-    scale.f = true;
-    sp.write(command, function(err){
-        if(err) {
-            log.error('command: RSSET');
-            log.error(err);
-            serialConfig = new uartFlag();
-            configWin.webContents.send('set_serial_config_data', 'fail');
-            return;
-        }
-    })
-}
-
-// setok 결과처리
-const resultSetok = function(){
-    const localStorage = new Store();
-
-    localStorage.set('pc_config.baudrate', serialConfig.baudrate);
-    localStorage.set('pc_config.databits', serialConfig.databits);
-    localStorage.set('pc_config.parity', serialConfig.parity);
-    localStorage.set('pc_config.stopbits', serialConfig.stopbits);
-    localStorage.set('pc_config.terminator', serialConfig.terminator);
-
-    pcConfig.baudrate = serialConfig.baudrate;
-    pcConfig.databits = serialConfig.databits;
-    pcConfig.parity = serialConfig.parity;
-    pcConfig.stopbits = serialConfig.stopbits;
-    pcConfig.terminator = serialConfig.terminator;
-
-    configWin.webContents.send('set_serial_config_data', 'ok');
-
-    try {
-        sp.close(function(err){
-            if(err) {
-                log.error('error: SETOK');
-                log.error(err);
-                return;
-            }
-            log.info('closed');
-            startProgram();
-        });
-    }
-    catch(e) {
-        log.error('Cannot open port.');
-        log.error(e);
-    }
-}
+// // setok 결과처리
+// const resultSetok = function(){
+//     const localStorage = new Store();
+//
+//     localStorage.set('pc_config.baudrate', serialConfig.baudrate);
+//     localStorage.set('pc_config.databits', serialConfig.databits);
+//     localStorage.set('pc_config.parity', serialConfig.parity);
+//     localStorage.set('pc_config.stopbits', serialConfig.stopbits);
+//     localStorage.set('pc_config.terminator', serialConfig.terminator);
+//
+//     pcConfig.baudrate = serialConfig.baudrate;
+//     pcConfig.databits = serialConfig.databits;
+//     pcConfig.parity = serialConfig.parity;
+//     pcConfig.stopbits = serialConfig.stopbits;
+//     pcConfig.terminator = serialConfig.terminator;
+//
+//     configWin.webContents.send('set_serial_config_data', 'ok');
+//
+//     try {
+//         sp.close(function(err){
+//             if(err) {
+//                 log.error('error: SETOK');
+//                 log.error(err);
+//                 return;
+//             }
+//             log.info('closed');
+//             startProgram();
+//         });
+//     }
+//     catch(e) {
+//         log.error('Cannot open port.');
+//         log.error(e);
+//     }
+// }
 
 // OK 커맨드
 const commandOk = function() {
@@ -473,26 +469,25 @@ const readHeader = function(rx) {
             }
         }
 
-        if(header == 'STOOK') {
-            commandRsset();
-        }
+        // if(header == 'STOOK') {
+        //     commandRsset();
+        // }
+        //
+        // if(header == 'SETOK') {
+        //     resultSetok();
+        // }
 
-        if(header == 'SETOK') {
-            resultSetok();
-        }
+        // // 버전 확인
+        // if(header == 'VER') {
+        //     const data = Number(body)/100;
+        //     configWin.webContents.send('get_rom_ver', data);
+        //
+        //     return;
+        // }
 
-        // 버전 확인
-        if(header == 'VER') {
-            const data = Number(body)/100;
-            configWin.webContents.send('get_rom_ver', data);
-
-            return;
-        }
-
-        // F0펑션
         if(headerCategory == 'F0') {
             const data = Number(body);
-            f0Config[header.toLowerCase()] = data;
+            f0Config[header] = data;
             if(f0Config.isReadState) {
                 if(header == 'F009') {
                     configWin.webContents.send('get_f0_1_data', f0Config);
@@ -515,7 +510,7 @@ const readHeader = function(rx) {
 
         if(headerCategory == 'F1') {
             const data = Number(body);
-            f1Config[header.toLowerCase()] = data;
+            f1Config[header] = data;
 
             if(f1Config.isReadState) {
                 if(header == 'F107') {
@@ -532,7 +527,7 @@ const readHeader = function(rx) {
 
         if(headerCategory == 'F3') {
             const data = Number(body);
-            f3Config[header.toLowerCase()] = data;
+            f3Config[header] = data;
 
             if(f3Config.isReadState) {
                 if(header == 'F306') {
@@ -549,7 +544,7 @@ const readHeader = function(rx) {
 
         if(headerCategory == 'F4') {
             const data = Number(body);
-            f4Config[header.toLowerCase()] = data;
+            f4Config[header] = data;
 
             if(f4Config.isReadState) {
                 if(header == 'F403') {
@@ -566,7 +561,7 @@ const readHeader = function(rx) {
 
         if(headerCategory == 'F5') {
             const data = Number(body);
-            f5Config[header.toLowerCase()] = data;
+            f5Config[header] = data;
 
             if(f5Config.isReadState) {
                 if(header == 'F504') {
@@ -581,10 +576,9 @@ const readHeader = function(rx) {
             }
         }
 
-        // CF펑션
         if(headerCategory == 'CF') {
             const data = Number(body);
-            cfConfig[header.toLowerCase()] = data;
+            cfConfig[header] = data;
             if(cfConfig.isReadState) {
                 // 캘리브레이션 - 스팬 입력 전압
                 if(header == 'CF05') {
@@ -607,7 +601,6 @@ const readHeader = function(rx) {
 
     // 컴퍼레이터 버전정보
     // CALZERO, CALSPAN
-    // INCOK, INFOK
     // ?, I
     else if(splitedDataLength == 1) {
         const header = splitedData[0];
@@ -628,30 +621,30 @@ const readHeader = function(rx) {
             configWin.webContents.send('set_cal_span', 'ok');
             return;
         }
-        if(header == 'INFOK' || header == 'INCOK') {
-            // 초기화 된 설정값으로 변경 후 재연결
-            const currentPort = pcConfig.port;
-            pcConfig = new uartFlag(currentPort, 24, 8, CONSTANT['PARITY_NONE'], 1, CONSTANT['CRLF']);
-            const localStorage = new Store();
-
-            localStorage.set('pc_config.baudrate', 24);
-            localStorage.set('pc_config.databits', 8);
-            localStorage.set('pc_config.parity', CONSTANT['PARITY_NONE']);
-            localStorage.set('pc_config.stopbits', 1);
-            localStorage.set('pc_config.terminator', CONSTANT['CRLF']);
-            localStorage.set('pc_config.fontcolor', CONSTANT['FONT_COLOR_BLUE']);
-
-            sp.close(function(err){
-                if(err) {
-                    log.error('error: INFOK/INCOK');
-                    log.error(err);
-                    return;
-                }
-                configWin.webContents.send('init_finish', 'ok');
-                startProgram();
-            });
-            return;
-        }
+        // if(header == 'INFOK' || header == 'INCOK') {
+        //     // 초기화 된 설정값으로 변경 후 재연결
+        //     const currentPort = pcConfig.port;
+        //     pcConfig = new uartFlag(currentPort, 24, 8, CONSTANT['PARITY_NONE'], 1, CONSTANT['CRLF']);
+        //     const localStorage = new Store();
+        //
+        //     localStorage.set('pc_config.baudrate', 24);
+        //     localStorage.set('pc_config.databits', 8);
+        //     localStorage.set('pc_config.parity', CONSTANT['PARITY_NONE']);
+        //     localStorage.set('pc_config.stopbits', 1);
+        //     localStorage.set('pc_config.terminator', CONSTANT['CRLF']);
+        //     localStorage.set('pc_config.fontcolor', CONSTANT['FONT_COLOR_BLUE']);
+        //
+        //     sp.close(function(err){
+        //         if(err) {
+        //             log.error('error: INFOK/INCOK');
+        //             log.error(err);
+        //             return;
+        //         }
+        //         configWin.webContents.send('init_finish', 'ok');
+        //         startProgram();
+        //     });
+        //     return;
+        // }
     }
 }
 
@@ -707,12 +700,6 @@ const makeFormat = function(data) {
     return result;
 }
 
-
-
-
-
-
-
 const openPort = function() {
     log.info('function: openPort');
     try {
@@ -763,8 +750,6 @@ const confirmConnection = function() {
         win.webContents.send('rx_data', scale);
     }
 }
-
-
 
 ipcMain.on('open_pc_config_window', (event, arg) => {
     log.info('ipcMain.on: open_pc_config_window');
@@ -929,19 +914,19 @@ const setCF = function(data) {
 
     cfConfig.isReadState = false;
     let commandList = new Array();
-    for(var i = 0; i < 13; i++) {
+    for(var i = 1; i < 14; i++) {
         let command = '';
         let content = '';
 
         // 헤더 정리
         let header = 'CF';
-        if(i < 9) {
+        if(i < 10) {
             header = 'CF0';
         }
-        header = header + (i+1).toString();
+        header = header + i.toString();
 
         // 내용 정리
-        let tmpValue = data['cf' + header.substr(2,2)].toString();
+        let tmpValue = data[header].toString();
         if(header == 'CF01' || header == 'CF02' || header == 'CF12' || header == 'CF13') {
             content = tmpValue;
         }
@@ -974,15 +959,15 @@ const getCF = function() {
     log.info('function: getCF');
 
     cfConfig.isReadState = true;
-    for(var i = 0; i < 13; i++) {
+    for(var i = 1; i < 14; i++) {
         let command = '';
 
         // 헤더 정리
         let header = '?CF';
-        if(i < 9) {
+        if(i < 10) {
             header = '?CF0';
         }
-        header = header + (i+1).toString();
+        header = header + i.toString();
 
         // 최종 커맨드
         command = header + '\r\n';
@@ -1011,16 +996,16 @@ const setF0_1 = function(data) {
 
     f0Config.isReadState = false;
     let commandList = new Array();
-    for(var i = 0; i < 9; i++) {
+    for(var i = 1; i < 10; i++) {
         let command = '';
         let content = '';
 
         // 헤더 정리
         let header = 'F00';
-        header = header + (i+1).toString();
+        header = header + i.toString();
 
         // 내용 정리
-        let tmpValue = data['f00' + (i+1)].toString();
+        let tmpValue = data[header].toString();
         if(header == 'F002' || header == 'F003') {
             content = tmpValue;
         }
@@ -1052,12 +1037,12 @@ const getF0_1 = function() {
     log.info('function: getF0_1');
 
     f0Config.isReadState = true;
-    for(var i = 0; i < 9; i++) {
+    for(var i = 1; i < 10; i++) {
         let command = '';
 
         // 헤더 정리
         let header = '?F00';
-        header = header + (i+1).toString();
+        header = header + i.toString();
 
         // 최종 커맨드
         command = header + '\r\n';
@@ -1081,7 +1066,7 @@ ipcMain.on('get_f0_2_data', (event, arg) => {
     log.info('ipcMain.on: get_f0_2_data');
     getF0_2();
 })
-const setF0_2 = function() {
+const setF0_2 = function(data) {
     log.info('function: setF0_2');
 
     f0Config.isReadState = false;
@@ -1095,7 +1080,7 @@ const setF0_2 = function() {
         header = header + i.toString();
 
         // 내용 정리
-        let tmpValue = data['f01' + i].toString();
+        let tmpValue = data[header].toString();
         if(header == 'F011') {
             // 부호 붙여주기
             let numValue = Number(tmpValue);
@@ -1156,7 +1141,7 @@ ipcMain.on('get_f1_data', (event, arg) => {
     log.info('ipcMain.on: get_f1_data');
     getF1();
 })
-const setF1 = function() {
+const setF1 = function(data) {
     log.info('function: setF1');
 
     f1Config.isReadState = false;
@@ -1170,7 +1155,7 @@ const setF1 = function() {
         header = header + i.toString();
 
         // 내용 정리
-        let tmpValue = data['f10' + i].toString();
+        let tmpValue = data[header].toString();
         content = tmpValue;
 
         // 최종 커맨드
@@ -1185,12 +1170,12 @@ const getF1 = function() {
     log.info('function: getF1');
 
     f1Config.isReadState = true;
-    for(var i = 0; i < 7; i++) {
+    for(var i = 1; i < 8; i++) {
         let command = '';
 
         // 헤더 정리
         let header = '?F10';
-        header = header + (i+1).toString();
+        header = header + i.toString();
 
         // 최종 커맨드
         command = header + '\r\n';
@@ -1214,7 +1199,7 @@ ipcMain.on('get_f3_data', (event, arg) => {
     log.info('ipcMain.on: get_f3_data');
     getF3();
 })
-const setF3 = function() {
+const setF3 = function(data) {
     log.info('function: setF3');
 
     f3Config.isReadState = false;
@@ -1228,7 +1213,7 @@ const setF3 = function() {
         header = header + i.toString();
 
         // 내용 정리
-        let tmpValue = data['f30' + i].toString();
+        let tmpValue = data[header].toString();
         content = tmpValue;
 
         // 최종 커맨드
@@ -1272,7 +1257,7 @@ ipcMain.on('get_f4_data', (event, arg) => {
     log.info('ipcMain.on: get_f4_data');
     getF4();
 })
-const setF4 = function() {
+const setF4 = function(data) {
     log.info('function: setF4');
 
     f4Config.isReadState = false;
@@ -1286,7 +1271,7 @@ const setF4 = function() {
         header = header + i.toString();
 
         // 내용 정리
-        let tmpValue = data['f40' + i].toString();
+        let tmpValue = data[header].toString();
         content = tmpValue;
 
         // 최종 커맨드
@@ -1330,7 +1315,7 @@ ipcMain.on('get_f5_data', (event, arg) => {
     log.info('ipcMain.on: get_f5_data');
     getF5();
 })
-const setF5 = function() {
+const setF5 = function(data) {
     log.info('function: setF5');
 
     f5Config.isReadState = false;
@@ -1344,7 +1329,7 @@ const setF5 = function() {
         header = header + i.toString();
 
         // 내용 정리
-        let tmpValue = data['f50' + i].toString();
+        let tmpValue = data[header].toString();
         content = tmpValue;
 
         // 최종 커맨드
@@ -1657,7 +1642,5 @@ const createSocketServer = function(ls) {
         log.info('listening on 3100...');
     });
 }
-
-
 
 app.whenReady().then(createWindow)

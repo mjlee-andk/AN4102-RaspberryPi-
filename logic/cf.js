@@ -263,33 +263,25 @@ key_cf_list.forEach((item, index) => {
 ipcRenderer.on('get_cf_data', (event, data) => {
     log.info('ipcRenderer.on: get_cf_data');
 
-    cf01.value = data.cf01;
-    cf02.value = data.cf02;
-    cf03.value = data.cf03;
-    cf04.value = data.cf04 / 100000;
-    cf05.value = data.cf05 / 100000;
-    cf06.value = data.cf06;
+    cf01.value = data.CF01;
+    cf02.value = data.CF02;
+    cf03.value = data.CF03;
+    cf04.value = data.CF04 / 100000;
+    cf05.value = data.CF05 / 100000;
+    cf06.value = data.CF06;
 
-    cf07.value = data.cf07;
-    // cf07Value.innerHTML = cf07.value;
+    cf07.value = data.CF07;
 
-    cf08.value = data.cf08 / 10;
-    // cf08Value.innerHTML = (cf08.value / 10).toFixed(1);
-
-    cf09.value = data.cf09 / 10;
-    // cf09Value.innerHTML = (cf09.value / 10).toFixed(1);
-
-    cf10.value = data.cf10 / 10;
-    // cf10Value.innerHTML = (cf10.value / 10).toFixed(1);
-
-    cf11.value = data.cf11 / 10;
-    // cf11Value.innerHTML = (cf11.value / 10).toFixed(1);
+    cf08.value = data.CF08 / 10;
+    cf09.value = data.CF09 / 10;
+    cf10.value = data.CF10 / 10;
+    cf11.value = data.CF11 / 10;
 
     cf12.checked = false;
-    if(data.cf12 == 1) {
+    if(data.CF12 == 1) {
         cf12.checked = true;
     }
-    cf13.value = data.cf13;
+    cf13.value = data.CF13;
 });
 
 // CF Function 값 수정이 완료됨을 알리는 신호
@@ -308,19 +300,19 @@ const setCF = function() {
     log.info('function: setCF');
 
     const cfConfigData = {
-        cf01: cf01.options[cf01.selectedIndex].value,
-        cf02: cf02.options[cf02.selectedIndex].value,
-        cf03: cf03.value,
-        cf04: cf04.value * 100000,
-        cf05: cf05.value * 100000,
-        cf06: cf06.value,
-        cf07: cf07.value,
-        cf08: cf08.value * 10,
-        cf09: cf09.value * 10,
-        cf10: cf10.value * 10,
-        cf11: cf11.value * 10,
-        cf12: cf12.checked == true ? 1 : 0,
-        cf13: cf13.options[cf13.selectedIndex].value
+        CF01: cf01.options[cf01.selectedIndex].value,
+        CF02: cf02.options[cf02.selectedIndex].value,
+        CF03: cf03.value,
+        CF04: cf04.value * 100000,
+        CF05: cf05.value * 100000,
+        CF06: cf06.value,
+        CF07: cf07.value,
+        CF08: cf08.value * 10,
+        CF09: cf09.value * 10,
+        CF10: cf10.value * 10,
+        CF11: cf11.value * 10,
+        CF12: cf12.checked == true ? 1 : 0,
+        CF13: cf13.options[cf13.selectedIndex].value
     };
 
     ipcRenderer.send('set_cf_data', cfConfigData);

@@ -89,97 +89,97 @@ class uartFlag {
 class cfFlag {
     constructor() {
         this.isReadState = true;
-        this.cf01 = 1;
-        this.cf02 = 0;
-        this.cf03 = 10000;
-        this.cf04 = 0.00000;
-        this.cf05 = 3.20000;
-        this.cf06 = 10000;
-        this.cf07 = 100;
-        this.cf08 = 2.0;
-        this.cf09 = 1.5;
-        this.cf10 = 1.0;
-        this.cf11 = 2.0;
-        this.cf12 = 0;
-        this.cf13 = 0;
+        this.CF01 = 1;
+        this.CF02 = 0;
+        this.CF03 = 10000;
+        this.CF04 = 0.00000;
+        this.CF05 = 3.20000;
+        this.CF06 = 10000;
+        this.CF07 = 100;
+        this.CF08 = 2.0;
+        this.CF09 = 1.5;
+        this.CF10 = 1.0;
+        this.CF11 = 2.0;
+        this.CF12 = 0;
+        this.CF13 = 0;
     }
 }
 
 class f0Flag {
     constructor() {
         this.isReadState = true;
-        this.f001 = 0;
-        this.f002 = 8;
-        this.f003 = 0;
-        this.f004 = 0.0;
-        this.f005 = 0.0;
-        this.f006 = 0.0;
-        this.f007 = 0.0;
-        this.f008 = 0;
-        this.f009 = 0;
-        this.f010 = 0;
-        this.f011 = 0;
-        this.f012 = 0;
-        this.f013 = 0;
-        this.f014 = 0;
-        this.f015 = 0;
-        this.f016 = 0;
-        this.f017 = 0;
-        this.f018 = 0;
+        this.F001 = 0;
+        this.F002 = 8;
+        this.F003 = 0;
+        this.F004 = 0.0;
+        this.F005 = 0.0;
+        this.F006 = 0.0;
+        this.F007 = 0.0;
+        this.F008 = 0;
+        this.F009 = 0;
+        this.F010 = 0;
+        this.F011 = 0;
+        this.F012 = 0;
+        this.F013 = 0;
+        this.F014 = 0;
+        this.F015 = 0;
+        this.F016 = 0;
+        this.F017 = 0;
+        this.F018 = 0;
     }
 }
 
 class f1Flag {
     constructor() {
         this.isReadState = true;
-        this.f101 = 0;
-        this.f102 = 0;
-        this.f103 = 2;
-        this.f104 = 0;
-        this.f105 = 2;
-        this.f106 = 2;
-        this.f107 = 0;
+        this.F101 = 0;
+        this.F102 = 0;
+        this.F103 = 2;
+        this.F104 = 0;
+        this.F105 = 2;
+        this.F106 = 2;
+        this.F107 = 0;
     }
 }
 
 class f2Flag {
     constructor() {
-        this.f201 = 2;
-        this.f202 = 1;
-        this.f203 = 2;
-        this.f204 = 0;
-        this.f205 = 0;
+        this.F201 = 2;
+        this.F202 = 1;
+        this.F203 = 2;
+        this.F204 = 0;
+        this.F205 = 0;
     }
 }
 
 class f3Flag {
     constructor() {
         this.isReadState = true;
-        this.f301 = 0;
-        this.f302 = 0;
-        this.f303 = 2;
-        this.f304 = 0;
-        this.f305 = 2;
-        this.f306 = 0;
+        this.F301 = 0;
+        this.F302 = 0;
+        this.F303 = 2;
+        this.F304 = 0;
+        this.F305 = 2;
+        this.F306 = 0;
     }
 }
 
 class f4Flag {
     constructor() {
         this.isReadState = true;
-        this.f401 = 0;
-        this.f402 = 0;
-        this.f403 = 0;
+        this.F401 = 0;
+        this.F402 = 0;
+        this.F403 = 0;
     }
 }
 
 class f5Flag {
     constructor() {
         this.isReadState = true;
-        this.f501 = 0;
-        this.f502 = 10000;
-        this.f503 = 0;
-        this.f504 = 10000;
+        this.F501 = 0;
+        this.F502 = 10000;
+        this.F503 = 0;
+        this.F504 = 10000;
     }
 }
 

@@ -13,13 +13,13 @@ const f107 = document.getElementById("f1_07");
 ipcRenderer.on('get_f1_data', (event, data) => {
     log.info('ipcRenderer.on: get_f1_data');
 
-    f101.value = data.f101;
-    f102.value = data.f102;
-    f103.value = data.f103;
-    f104.value = data.f104;
-    f105.value = data.f105;
-    f106.value = data.f106;
-    f107.value = data.f107;
+    f101.value = data.F101;
+    f102.value = data.F102;
+    f103.value = data.F103;
+    f104.value = data.F104;
+    f105.value = data.F105;
+    f106.value = data.F106;
+    f107.value = data.F107;
 });
 
 // F1 Function 값 수정이 완료됨을 알리는 신호
@@ -37,13 +37,13 @@ const setF1Data = function() {
     log.info('function: setF1Data');
 
     const f1Data = {
-        f101: f101.options[f101.selectedIndex].value,
-        f102: f102.options[f102.selectedIndex].value,
-        f103: f103.options[f103.selectedIndex].value,
-        f104: f104.options[f104.selectedIndex].value,
-        f105: f105.options[f105.selectedIndex].value,
-        f106: f106.options[f106.selectedIndex].value,
-        f107: f107.options[f107.selectedIndex].value
+        F101: f101.options[f101.selectedIndex].value,
+        F102: f102.options[f102.selectedIndex].value,
+        F103: f103.options[f103.selectedIndex].value,
+        F104: f104.options[f104.selectedIndex].value,
+        F105: f105.options[f105.selectedIndex].value,
+        F106: f106.options[f106.selectedIndex].value,
+        F107: f107.options[f107.selectedIndex].value
     };
 
     ipcRenderer.send('set_f1_data', f1Data);

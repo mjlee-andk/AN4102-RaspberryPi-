@@ -136,10 +136,10 @@ key_f5_list.forEach((item, index) => {
 ipcRenderer.on('get_f5_data', (event, data) => {
     log.info('ipcRenderer.on: get_f5_data');
 
-    f501.value = data.f501;
-    f502.value = data.f502;
-    f503.value = data.f503;
-    f504.value = data.f504;
+    f501.value = data.F501;
+    f502.value = data.F502;
+    f503.value = data.F503;
+    f504.value = data.F504;
 });
 
 // F5 Function 값 수정이 완료됨을 알리는 신호
@@ -157,10 +157,10 @@ const setF5Data = function() {
     log.info('function: setF5Data');
 
     const f5Data = {
-        f501: f501.value,
-        f502: f502.value,
-        f503: f503.value,
-        f504: f504.value
+        F501: f501.value,
+        F502: f502.value,
+        F503: f503.value,
+        F504: f504.value
     };
 
     ipcRenderer.send('set_f5_data', f5Data);
