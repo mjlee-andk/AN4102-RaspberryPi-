@@ -1274,25 +1274,6 @@ const getF5 = function() {
     }
 }
 
-// ipcMain.on('get_cal_data', (event, arg) => {
-//     log.info('ipcMain.on: get_cal_data');
-//     getCF05();
-// });
-// const getCF05 = function() {
-//     log.info('function: getCF05');
-//     let command = '?CF05' + '\r\n';
-//     cfConfig.isReadState = true;
-//
-//     log.info('command: ?CF05')
-//     sp.write(command, function(err){
-//         if(err) {
-//             log.error('command: ?CF05');
-//             log.error(err);
-//             return;
-//         }
-//     })
-// }
-
 // 2단 투입 시작
 ipcMain.on('start', (event, arg) =>{
     log.info('ipcMain.on: start');
