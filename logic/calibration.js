@@ -75,8 +75,8 @@ ipcRenderer.on('set_cal_span', (event, arg) => {
     }
 });
 
-ipcRenderer.on('get_cal_data', (event, data) => {
-    log.info('ipcRenderer.on: get_cal_data');
-
-    spanValueText.value = data.cf05;
-});
+// ipcRenderer.on('get_cal_data', (event, data) => {
+//     log.info('ipcRenderer.on: get_cal_data');
+//
+//     spanValueText.value = data.cf05;
+// });

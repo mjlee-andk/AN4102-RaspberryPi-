@@ -204,10 +204,16 @@ body {
     background-color: #ffffff;
 }
 
-.btn_active {
-    color: #ffffff;
-    border: #000000 solid 1px;
-    background-color: #000000;
+.btn_clicked {
+    color: #ffffff !important;
+    border: #000000 solid 1px !important;
+    background-color: #000000 !important;
+}
+
+.btn_unclicked {
+    color: #000000 !important;
+    border: #000000 solid 1px !important;
+    background-color: #ffffff !important;
 }
 
 /* ### ### ### 01 */

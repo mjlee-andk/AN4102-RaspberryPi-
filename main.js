@@ -63,7 +63,7 @@ const createWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
     win.loadFile('index.html');
 
@@ -88,7 +88,7 @@ const openConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
 
     configWin.loadFile('view/config.html');
@@ -112,7 +112,7 @@ const openPCConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
 
     pcConfigWin.loadFile('view/pcconfig.html');
@@ -129,72 +129,6 @@ const openPCConfigWindow = function() {
     })
 }
 
-// 커맨드 모드로 변경
-const setCommandMode = function() {
-    log.info('function: setCommandMode');
-
-    const command = 'F205,1' + '\r\n';
-    sp.write(command, function(err){
-        if(err) {
-            log.error('command: F205,1');
-            log.error(err);
-            return;
-        }
-        openConfigWindow();
-    });
-}
-
-// // RSSET 커맨드
-// const commandRsset = function() {
-//     log.info('function: commandRsset');
-//     let command = 'RSSET' + '\r\n';
-//
-//     scale.f = true;
-//     sp.write(command, function(err){
-//         if(err) {
-//             log.error('command: RSSET');
-//             log.error(err);
-//             serialConfig = new uartFlag();
-//             configWin.webContents.send('set_serial_config_data', 'fail');
-//             return;
-//         }
-//     })
-// }
-
-// // setok 결과처리
-// const resultSetok = function(){
-//     const localStorage = new Store();
-//
-//     localStorage.set('pc_config.baudrate', serialConfig.baudrate);
-//     localStorage.set('pc_config.databits', serialConfig.databits);
-//     localStorage.set('pc_config.parity', serialConfig.parity);
-//     localStorage.set('pc_config.stopbits', serialConfig.stopbits);
-//     localStorage.set('pc_config.terminator', serialConfig.terminator);
-//
-//     pcConfig.baudrate = serialConfig.baudrate;
-//     pcConfig.databits = serialConfig.databits;
-//     pcConfig.parity = serialConfig.parity;
-//     pcConfig.stopbits = serialConfig.stopbits;
-//     pcConfig.terminator = serialConfig.terminator;
-//
-//     configWin.webContents.send('set_serial_config_data', 'ok');
-//
-//     try {
-//         sp.close(function(err){
-//             if(err) {
-//                 log.error('error: SETOK');
-//                 log.error(err);
-//                 return;
-//             }
-//             log.info('closed');
-//             startProgram();
-//         });
-//     }
-//     catch(e) {
-//         log.error('Cannot open port.');
-//         log.error(e);
-//     }
-// }
 
 // OK 커맨드
 const commandOk = function() {
@@ -469,22 +403,6 @@ const readHeader = function(rx) {
             }
         }
 
-        // if(header == 'STOOK') {
-        //     commandRsset();
-        // }
-        //
-        // if(header == 'SETOK') {
-        //     resultSetok();
-        // }
-
-        // // 버전 확인
-        // if(header == 'VER') {
-        //     const data = Number(body)/100;
-        //     configWin.webContents.send('get_rom_ver', data);
-        //
-        //     return;
-        // }
-
         if(headerCategory == 'F0') {
             const data = Number(body);
             f0Config[header] = data;
@@ -608,7 +526,8 @@ const readHeader = function(rx) {
             log.error('COMMAND NOT DEFINE');
         }
         if(header == 'I') {
-            log.error('COMMAND NOT RUN');
+            // log.error('COMMAND NOT RUN');
+            log.error('CALIBRATION ERROR');
         }
         if(header.substr(0, 1) == '@') {
             log.info('COMPARATOR VERSION INFO:', header);
@@ -621,30 +540,6 @@ const readHeader = function(rx) {
             configWin.webContents.send('set_cal_span', 'ok');
             return;
         }
-        // if(header == 'INFOK' || header == 'INCOK') {
-        //     // 초기화 된 설정값으로 변경 후 재연결
-        //     const currentPort = pcConfig.port;
-        //     pcConfig = new uartFlag(currentPort, 24, 8, CONSTANT['PARITY_NONE'], 1, CONSTANT['CRLF']);
-        //     const localStorage = new Store();
-        //
-        //     localStorage.set('pc_config.baudrate', 24);
-        //     localStorage.set('pc_config.databits', 8);
-        //     localStorage.set('pc_config.parity', CONSTANT['PARITY_NONE']);
-        //     localStorage.set('pc_config.stopbits', 1);
-        //     localStorage.set('pc_config.terminator', CONSTANT['CRLF']);
-        //     localStorage.set('pc_config.fontcolor', CONSTANT['FONT_COLOR_BLUE']);
-        //
-        //     sp.close(function(err){
-        //         if(err) {
-        //             log.error('error: INFOK/INCOK');
-        //             log.error(err);
-        //             return;
-        //         }
-        //         configWin.webContents.send('init_finish', 'ok');
-        //         startProgram();
-        //     });
-        //     return;
-        // }
     }
 }
 
@@ -756,6 +651,20 @@ ipcMain.on('open_pc_config_window', (event, arg) => {
     openPCConfigWindow();
 })
 
+// 커맨드 모드로 변경
+const setCommandMode = function() {
+    log.info('function: setCommandMode');
+
+    const command = 'F205,1' + '\r\n';
+    sp.write(command, function(err){
+        if(err) {
+            log.error('command: F205,1');
+            log.error(err);
+            return;
+        }
+        openConfigWindow();
+    });
+}
 ipcMain.on('open_config_window', (event, arg) => {
     log.info('ipcMain.on: open_config_window');
     setCommandMode();
@@ -1365,24 +1274,24 @@ const getF5 = function() {
     }
 }
 
-ipcMain.on('get_cal_data', (event, arg) => {
-    log.info('ipcMain.on: get_cal_data');
-    getCF05();
-});
-const getCF05 = function() {
-    log.info('function: getCF05');
-    let command = '?CF05' + '\r\n';
-    cfConfig.isReadState = true;
-
-    log.info('command: ?CF05')
-    sp.write(command, function(err){
-        if(err) {
-            log.error('command: ?CF05');
-            log.error(err);
-            return;
-        }
-    })
-}
+// ipcMain.on('get_cal_data', (event, arg) => {
+//     log.info('ipcMain.on: get_cal_data');
+//     getCF05();
+// });
+// const getCF05 = function() {
+//     log.info('function: getCF05');
+//     let command = '?CF05' + '\r\n';
+//     cfConfig.isReadState = true;
+//
+//     log.info('command: ?CF05')
+//     sp.write(command, function(err){
+//         if(err) {
+//             log.error('command: ?CF05');
+//             log.error(err);
+//             return;
+//         }
+//     })
+// }
 
 // 2단 투입 시작
 ipcMain.on('start', (event, arg) =>{

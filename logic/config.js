@@ -169,33 +169,50 @@ const setDivDisplay = function(tab) {
 const setButtonActive = function(tab) {
     log.info('function: setButtonActive');
 
-    cfBtn.classList.remove("btn_active");
-    f0_1Btn.classList.remove("btn_active");
-    f0_2Btn.classList.remove("btn_active");
-    f1Btn.classList.remove("btn_active");
-    f3Btn.classList.remove("btn_active");
-    f4f5Btn.classList.remove("btn_active");
-    calBtn.classList.remove("btn_active");
+    cfBtn.classList.remove("btn_clicked");
+    f0_1Btn.classList.remove("btn_clicked");
+    f0_2Btn.classList.remove("btn_clicked");
+    f1Btn.classList.remove("btn_clicked");
+    f3Btn.classList.remove("btn_clicked");
+    f4f5Btn.classList.remove("btn_clicked");
+    calBtn.classList.remove("btn_clicked");
+
+    cfBtn.classList.add("btn_unclicked");
+    f0_1Btn.classList.add("btn_unclicked");
+    f0_2Btn.classList.add("btn_unclicked");
+    f1Btn.classList.add("btn_unclicked");
+    f3Btn.classList.add("btn_unclicked");
+    f4f5Btn.classList.add("btn_unclicked");
+    calBtn.classList.add("btn_unclicked");
 
     if(tab == 'cfBtn') {
-        cfBtn.classList.add("btn_active");
+        cfBtn.classList.add("btn_clicked");
+        cfBtn.classList.remove("btn_unclicked");
     }
     else if(tab == 'f0_1Btn') {
-        f0_1Btn.classList.add("btn_active");
+        f0_1Btn.classList.add("btn_clicked");
+        f0_1Btn.classList.remove("btn_unclicked");
     }
     else if(tab == 'f0_2Btn') {
-        f0_2Btn.classList.add("btn_active");
+        f0_2Btn.classList.add("btn_clicked");
+        f0_2Btn.classList.remove("btn_unclicked");
     }
     else if(tab == 'f1Btn') {
-        f1Btn.classList.add("btn_active");
+        f1Btn.classList.add("btn_clicked");
+        f1Btn.classList.remove("btn_unclicked");
     }
     else if(tab == 'f3Btn') {
-        f3Btn.classList.add("btn_active");
+        f3Btn.classList.add("btn_clicked");
+        f3Btn.classList.remove("btn_unclicked");
     }
     else if(tab == 'f4f5Btn') {
-        f4f5Btn.classList.add("btn_active");
+        f4f5Btn.classList.add("btn_clicked");
+        f4f5Btn.classList.remove("btn_unclicked");
     }
     else if(tab == 'calBtn') {
-        calBtn.classList.add("btn_active");
+        calBtn.classList.add("btn_clicked");
+        calBtn.classList.remove("btn_unclicked");
     }
 }
+setDivDisplay('cfBtn');
+setButtonActive('cfBtn');
