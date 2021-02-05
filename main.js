@@ -308,6 +308,7 @@ const readHeader = function(rx) {
         // 안정
         if(header1 == 'ST') {
             scale.isStable = true;
+            scale.isZero = false;
             if(header2 == 'NT') {
                 scale.isNet = true;
             }
@@ -315,21 +316,33 @@ const readHeader = function(rx) {
 
         // 불안정
         else if(header1 == 'US') {
+            scale.isStable = false;
+            scale.isZero = false;
             if(header2 == 'NT') {
                 scale.isNet = true;
             }
         }
 
-        // 홀드
-        else if(header1 == 'HD') {
-            scale.isHold = true;
+        else if(header1 == 'ZT') {
+            scale.isStable = true;
+            scale.isZero = true;
         }
 
-        // 홀드중
-        else if (header1 == 'HG') {
-            scale.isHold = true;
-            scale.isHg = true;
+        else if(header1 == 'ZS') {
+            scale.isStable = false;
+            scale.isZero = true;
         }
+
+        // // 홀드
+        // else if(header1 == 'HD') {
+        //     scale.isHold = true;
+        // }
+        //
+        // // 홀드중
+        // else if (header1 == 'HG') {
+        //     scale.isHold = true;
+        //     scale.isHg = true;
+        // }
 
         // 오버
         else if (header1 == 'OL') {
@@ -572,12 +585,12 @@ const makeFormat = function(data) {
 
     result = getDecimalPoint(value);
 
-    if(result.substr(0,1).includes('0')) {
-        scale.isZero = true;
-    }
-    else {
-        scale.isZero = false;
-    }
+    // if(result.substr(0,1).includes('0')) {
+    //     scale.isZero = true;
+    // }
+    // else {
+    //     scale.isZero = false;
+    // }
 
     if(unit == 'kg') {
         scale.unit = 0;
