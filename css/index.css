@@ -266,6 +266,16 @@ body {
     flex-direction: column;
 }
 
+.row_content button {
+    width: 80px;
+    height: 70px;
+    border-radius: 12px;
+    color: #000000;
+    border: #000000 solid 1px;
+    padding: 10px;
+    background-color: #ffffff;
+}
+
 .row_content {
     width: 70%;
 }
