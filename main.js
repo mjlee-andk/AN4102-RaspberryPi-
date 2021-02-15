@@ -333,17 +333,6 @@ const readHeader = function(rx) {
             scale.isZero = true;
         }
 
-        // // 홀드
-        // else if(header1 == 'HD') {
-        //     scale.isHold = true;
-        // }
-        //
-        // // 홀드중
-        // else if (header1 == 'HG') {
-        //     scale.isHold = true;
-        //     scale.isHg = true;
-        // }
-
         // 오버
         else if (header1 == 'OL') {
             scale.displayMsg = '   .  ';
@@ -367,29 +356,6 @@ const readHeader = function(rx) {
             scale.comparator = true;
             scale.comparator_mode = Number(body);
             setCompMode(scale.comparator_mode);
-
-            // // 모드별 분류 : 2단 투입, 2단 배출, 리미트, 체커
-            // if(scale.comparator_mode == CONSTANT['COMP_MODE_INPUT'] || scale.comparator_mode == CONSTANT['COMP_MODE_EMISSION']) {
-            //     scale.s1_title = 'Fi';
-            //     scale.s2_title = 'Fr';
-            //     scale.s3_title = 'Pl';
-            //     scale.s4_title = 'Ov';
-            //     scale.s5_title = 'Ud';
-            // }
-            // else if(scale.comparator_mode == CONSTANT['COMP_MODE_LIMIT']) {
-            //     scale.s1_title = 'Fi';
-            //     scale.s2_title = 'SP1';
-            //     scale.s3_title = 'SP2';
-            //     scale.s4_title = 'Ov';
-            //     scale.s5_title = 'Ud';
-            // }
-            // else if(scale.comparator_mode == CONSTANT['COMP_MODE_CHECKER']) {
-            //     scale.s1_title = 'Fi';
-            //     scale.s2_title = 'SP1';
-            //     scale.s3_title = 'SP2';
-            //     scale.s4_title = 'Ov';
-            //     scale.s5_title = 'Ud';
-            // }
         }
         // 컴퍼레이터 설정값 읽기
         if(scale.comparator) {
@@ -585,13 +551,6 @@ const makeFormat = function(data) {
 
     result = getDecimalPoint(value);
 
-    // if(result.substr(0,1).includes('0')) {
-    //     scale.isZero = true;
-    // }
-    // else {
-    //     scale.isZero = false;
-    // }
-
     if(unit == 'kg') {
         scale.unit = 0;
     }
@@ -647,14 +606,13 @@ const confirmConnection = function() {
     }
     scale.waiting_sec++;
     if(scale.waiting_sec > 2) {
-        // console.log('waiting sec', scale.waiting_sec);
         scale.displayMsg = '-----';
         scale.unit = 0;
         scale.isStable = false;
-        scale.isHold = false;
+        // scale.isHold = false;
         scale.isZero = false;
         scale.isNet = false;
-        scale.isHg = false;
+        // scale.isHg = false;
         win.webContents.send('rx_data', scale);
     }
 }
@@ -820,7 +778,6 @@ const writeCommandCallback = function(i, lastIndex, list, callback) {
             writeCommandCallback(i+1, lastIndex, list, callback);
         }
     }, 300)
-    // }, CONSTANT['ONE_HUNDRED_MS'])
 }
 
 ipcMain.on('set_cf_data', (event, data) => {

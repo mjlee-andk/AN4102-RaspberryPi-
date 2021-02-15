@@ -36,6 +36,10 @@ const makeKeypadSetting = function(element, ev) {
         }
     }
     else {
+        // if(ev.target.value == '') {
+        //     alert('값을 입력해주세요.');
+        //     return;
+        // }
         ev.target.style.background = '';
         keypad_f0.style.display = "none";
         focused_input = '';
