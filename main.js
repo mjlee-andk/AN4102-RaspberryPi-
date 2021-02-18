@@ -63,7 +63,7 @@ const createWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
     win.loadFile('index.html');
 
@@ -88,7 +88,7 @@ const openConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
 
     configWin.loadFile('view/config.html');
@@ -112,7 +112,7 @@ const openPCConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: true
+        fullscreen: false
     })
 
     pcConfigWin.loadFile('view/pcconfig.html');
@@ -250,6 +250,9 @@ const convertHexStringToBinary = function(hex) {
     return result;
 }
 
+
+let sec_cnt = 0;
+
 const readHeader = function(rx) {
     const separator = ',';
     const splitedData = rx.split(separator);
@@ -288,7 +291,7 @@ const readHeader = function(rx) {
                 scale.s5_value = convertComparatorValue(scale.s5_value, decimalPoint);
 
                 win.webContents.send('set_comp_value', scale);
-            }, CONSTANT['ONE_HUNDRED_MS']);
+            }, CONSTANT['FIVE_HUNDRED_MS']);
         }
 
         const seqStateBinary = convertHexStringToBinary(seqState);
@@ -303,7 +306,14 @@ const readHeader = function(rx) {
         scale.compStateLO = compStateBinary.charAt(2) == '1' ? true : false;
         scale.compStateNG = compStateBinary.charAt(3) == '1' ? true : false;
 
-        scale.displayMsg = makeFormat(body);
+
+        sec_cnt++;
+        if(sec_cnt == 10) {
+            sec_cnt = 0;
+            scale.displayMsg = makeFormat(body);
+            console.log('current weight', scale.displayMsg);
+        }
+        // scale.displayMsg = makeFormat(body);
 
         // 안정
         if(header1 == 'ST') {
@@ -1377,6 +1387,10 @@ const stopWaitTimer = function() {
     clearInterval(timer);
     isPause = true;
 }
+
+
+
+
 
 const startProgram = function() {
     log.info('function: startProgram');
