@@ -35,6 +35,13 @@ const makeKeypadSetting = function(element, ev) {
         }
     }
     else {
+        if(element != focused_input) {            
+            return;
+        }
+        if(ev.target.value == '') {
+            alert('값을 입력해주세요.');
+            return;
+        }
         ev.target.style.background = '';
         keypad_cf.style.display = "none";
         focused_input = '';
