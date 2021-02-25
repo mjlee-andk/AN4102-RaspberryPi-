@@ -171,15 +171,14 @@ ipcMain.on('set_comp_value', (event, data) => {
         }
 
         // 부호 제외 6자리 맞추기
-        let compValueLength = compValue.toString().length;
         let sendValue = compValue.toString().replace('.', '');
+        let compValueLength = sendValue.length;
 
         for(let i = 0; i < 6 - compValueLength; i++) {
             sendValue = '0' + sendValue;
         }
 
         command = command + sendValue + '\r\n';
-
         setTimeout(function(){
             log.info('command: WDS');
             sp.write(command, function(err){
@@ -217,9 +216,9 @@ ipcMain.on('set_comp_value', (event, data) => {
                         }
                         scale.comparator = true;
                     })
-                }, CONSTANT['ONE_HUNDRED_MS'])
+                }, 200)
             })
-        }, CONSTANT['ONE_HUNDRED_MS'])
+        }, 200)
     });
 })
 
@@ -230,15 +229,18 @@ ipcMain.on('commandOk', (event, arg) => {
 const convertComparatorValue = function(value, dp) {
     log.info('function: convertComparatorValue');
     let result;
+    let len;
     result = value.toString().replace('.', '');
-    result =
-    Number(
-        result.slice(0, result.length-dp)
-        + '.'
-        + result.slice(result.length-dp)
-    ).toFixed(dp);
+    len = result.length;
 
-    return result;
+    for(let i = 0; i < 6 - len; i++) {
+        result = '0' + result;
+    }
+    return Number(
+        result.slice(0, 6-dp)
+        + '.'
+        + result.slice(6-dp)
+    ).toFixed(dp);
 }
 
 const convertHexStringToBinary = function(hex) {
@@ -246,7 +248,7 @@ const convertHexStringToBinary = function(hex) {
     if(hex == '') {
         return;
     }
-    result = ('0000'+ parseInt(hex, 16).toString(2)).slice(-4);
+    result = ('0000' + parseInt(hex, 16).toString(2)).slice(-4);
     return result;
 }
 
@@ -305,7 +307,6 @@ const readHeader = function(rx) {
         scale.compStateOK = compStateBinary.charAt(1) == '1' ? true : false;
         scale.compStateLO = compStateBinary.charAt(2) == '1' ? true : false;
         scale.compStateNG = compStateBinary.charAt(3) == '1' ? true : false;
-
 
         sec_cnt++;
         if(sec_cnt == 10) {
@@ -541,6 +542,8 @@ const getDecimalPoint = function(value) {
     }
     let result = '';
     const pointPos = value.indexOf('.');
+    // console.log('value: ', value);
+    // console.log('pointPos: ', pointPos);
 
     if(pointPos > 0) {
         decimalPoint = 7-pointPos
@@ -562,7 +565,8 @@ const makeFormat = function(data) {
     const value = data.substr(0,8);
     const unit = data.substr(8,2).trim();
 
-    result = getDecimalPoint(value);
+    // result = getDecimalPoint(value);
+    getDecimalPoint(value);
 
     if(unit == 'kg') {
         scale.unit = 0;
@@ -577,7 +581,7 @@ const makeFormat = function(data) {
         scale.unit = 3;
     }
 
-    return result;
+    return parseFloat(value).toFixed(decimalPoint);
 }
 
 const openPort = function() {
@@ -737,6 +741,7 @@ const setStreamMode = function() {
             log.error(err);
             return;
         }
+        scale.comparator = true; // 설정에서 소수점 자리를 변경한 경우 컴퍼레이터 값 소수점도 같이 변경해줘야 하므로 true를 넣어서 검사하도록 수정함.
     });
 }
 

@@ -225,7 +225,8 @@ key_btn_subweight_list.forEach((item, index) => {
             if(inputValLength <= 0) {
                 return;
             }
-            comp_value.innerHTML = comp_value.innerHTML.substring(0, inputValLength - 1);
+            // comp_value.innerHTML = comp_value.innerHTML.substring(0, inputValLength - 1);
+            comp_value.innerHTML = '';
         }
         else if(keyValue == '확인'){
             if(inputValLength == 0) {
