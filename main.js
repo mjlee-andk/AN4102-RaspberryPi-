@@ -551,6 +551,7 @@ const getDecimalPoint = function(value) {
     }
     // 소수점 없음
     else {
+        decimalPoint = 0;
         result = Number(value).toString();
     }
     return result;
@@ -580,7 +581,8 @@ const makeFormat = function(data) {
     else if(unit == 'lb') {
         scale.unit = 3;
     }
-
+    // console.log('value', value);
+    // console.log('decimalPoint', decimalPoint);
     return parseFloat(value).toFixed(decimalPoint);
 }
 
