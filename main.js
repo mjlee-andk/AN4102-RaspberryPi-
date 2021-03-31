@@ -252,7 +252,6 @@ const convertHexStringToBinary = function(hex) {
     return result;
 }
 
-
 let sec_cnt = 0;
 
 const readHeader = function(rx) {
@@ -273,8 +272,6 @@ const readHeader = function(rx) {
         const body = splitedData[4];
 
         scale.isStable = false;
-        scale.isHold = false;
-        scale.isHg = false;
         scale.isNet = false;
         scale.isZero = false;
         scale.block = false;
@@ -314,10 +311,6 @@ const readHeader = function(rx) {
             scale.displayMsg = makeFormat(body);
             console.log('current weight', scale.displayMsg);
         }
-        else {
-
-        }
-        // scale.displayMsg = makeFormat(body);
 
         // 안정
         if(header1 == 'ST') {
@@ -542,8 +535,6 @@ const getDecimalPoint = function(value) {
     }
     let result = '';
     const pointPos = value.indexOf('.');
-    // console.log('value: ', value);
-    // console.log('pointPos: ', pointPos);
 
     if(pointPos > 0) {
         decimalPoint = 7-pointPos
@@ -581,8 +572,6 @@ const makeFormat = function(data) {
     else if(unit == 'lb') {
         scale.unit = 3;
     }
-    // console.log('value', value);
-    // console.log('decimalPoint', decimalPoint);
     return parseFloat(value).toFixed(decimalPoint);
 }
 
@@ -628,10 +617,8 @@ const confirmConnection = function() {
         scale.displayMsg = '-----';
         scale.unit = 0;
         scale.isStable = false;
-        // scale.isHold = false;
         scale.isZero = false;
         scale.isNet = false;
-        // scale.isHg = false;
         win.webContents.send('rx_data', scale);
     }
 }

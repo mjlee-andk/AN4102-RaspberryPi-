@@ -547,23 +547,23 @@ ipcRenderer.on('main_button_active', (event, isActive) => {
 })
 
 startBtn.addEventListener('click', function(){
-      ipcRenderer.send('start', 'ok');
+    ipcRenderer.send('start', 'ok');
 })
 
 stopBtn.addEventListener('click', function(){
-      ipcRenderer.send('stop', 'ok');
+    ipcRenderer.send('stop', 'ok');
 })
 
 onoffBtn.addEventListener('click', function(){
-      ipcRenderer.send('onoff', 'ok');
+    ipcRenderer.send('onoff', 'ok');
 })
 
 grossnetBtn.addEventListener('click', function(){
-      ipcRenderer.send('grossnet', 'ok');
+    ipcRenderer.send('grossnet', 'ok');
 })
 
 zeroBtn.addEventListener('click', function(){
-      ipcRenderer.send('zero', 'ok');
+    ipcRenderer.send('zero', 'ok');
 })
 
 printBtn.addEventListener('click', function(){
