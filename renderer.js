@@ -3,6 +3,8 @@ const log = require('electron-log'); // 로그 기록
 const CONSTANT = require('./util/constant');
 const COLOR = require('./util/color');
 
+const alert_text = 'ON 버튼을 눌러 설정을 입력해주세요.';
+
 let colorName = '';
 let isProgramOn = false;
 
@@ -40,7 +42,7 @@ let comp_flag = -1; // 현재 선택한 컴퍼레이터 값 구분자. -1이 아
 
 comS1Value.addEventListener("click", function(){
     if(!isProgramOn) {
-        alert('프로그램을 켜주세요.');
+        alert(alert_text);
         return;
     }
     if(keypad_subweight.style.display == "none") {
@@ -64,7 +66,7 @@ comS1Value.addEventListener("click", function(){
 });
 comS2Value.addEventListener("click", function(){
     if(!isProgramOn) {
-        alert('프로그램을 켜주세요.');
+        alert(alert_text);
         return;
     }
     if(keypad_subweight.style.display == "none") {
@@ -88,7 +90,7 @@ comS2Value.addEventListener("click", function(){
 });
 comS3Value.addEventListener("click", function(){
     if(!isProgramOn) {
-        alert('프로그램을 켜주세요.');
+        alert(alert_text);
         return;
     }
     if(keypad_subweight.style.display == "none") {
@@ -112,7 +114,7 @@ comS3Value.addEventListener("click", function(){
 });
 comS4Value.addEventListener("click", function(){
     if(!isProgramOn) {
-        alert('프로그램을 켜주세요.');
+        alert(alert_text);
         return;
     }
     if(keypad_subweight.style.display == "none") {
@@ -136,7 +138,7 @@ comS4Value.addEventListener("click", function(){
 });
 comS5Value.addEventListener("click", function(){
     if(!isProgramOn) {
-        alert('프로그램을 켜주세요.');
+        alert(alert_text);
         return;
     }
     if(keypad_subweight.style.display == "none") {
@@ -225,8 +227,8 @@ key_btn_subweight_list.forEach((item, index) => {
             if(inputValLength <= 0) {
                 return;
             }
-            // comp_value.innerHTML = comp_value.innerHTML.substring(0, inputValLength - 1);
-            comp_value.innerHTML = '';
+            comp_value.innerHTML = comp_value.innerHTML.substring(0, inputValLength - 1);
+            // comp_value.innerHTML = '';
         }
         else if(keyValue == '확인'){
             if(inputValLength == 0) {
@@ -593,7 +595,7 @@ const setOnOffView = function() {
         powerButton.innerHTML = 'ON';
         openPCConfigWindowButton.disabled = false;
 
-        displayMsg.innerHTML = '000000';
+        displayMsg.innerHTML = 'Standby';
         unitTag.innerHTML = '';
 
         labelStableClass.style.color = COLOR['WHITE'];

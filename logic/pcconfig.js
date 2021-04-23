@@ -6,6 +6,8 @@ const CONSTANT = require('../util/constant');
 const pcConfigOkButton = document.getElementById("pcConfigOkButton");
 const pcConfigCloseButton = document.getElementById("pcConfigCloseButton");
 
+const confirm_text = 'DEVICE 설정을 변경하시겠습니까? 설정값을 변경할 경우 계량에 문제가 발생할 수 있습니다.';
+
 let portSelect = document.getElementById("portSelect");
 let baudrateSelect = document.getElementById("baudrateSelect");
 let dataBitsRadios1 = document.getElementById("dataBitsRadios1");
@@ -23,8 +25,15 @@ let fontColorRadios2 = document.getElementById("fontColorRadios2");
 let fontColorRadios3 = document.getElementById("fontColorRadios3");
 
 pcConfigOkButton.addEventListener('click', function() {
-    pcConfigSetData();
-    closeWindow();
+    if(confirm(confirm_text)) {
+        pcConfigSetData();
+        closeWindow();
+    }
+    else {
+        return;
+    }
+    // pcConfigSetData();
+    // closeWindow();
 })
 
 pcConfigCloseButton.addEventListener('click', function() {
