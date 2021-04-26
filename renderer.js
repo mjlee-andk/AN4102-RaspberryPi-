@@ -11,7 +11,7 @@ let isProgramOn = false;
 // 메인 화면 상단 버튼
 let openPCConfigWindowButton = document.getElementById("openPCConfigWindow");
 let openConfigWindowButton = document.getElementById("openConfigWindow");
-const closeMainWindowButton = document.getElementById("closeMainWindow");
+// const closeMainWindowButton = document.getElementById("closeMainWindow");
 // 계량값 표시부
 let displayMsg = document.getElementById("displayMsg");
 let unitTag = document.getElementById("unit");
@@ -20,6 +20,7 @@ let labelStableClass = document.getElementById("state_stable");
 let labelHoldClass = document.getElementById("state_hold");
 let labelZeroClass = document.getElementById("state_zero");
 let labelNetClass = document.getElementById("state_net");
+let labelGrossClass = document.getElementById("state_gross");
 
 let subWeight = document.querySelectorAll(".sub_weight span");
 // 컴퍼레이터 설정값
@@ -256,10 +257,12 @@ const setCompValue = function(flag, value) {
 // 2단 투입 시작 버튼
 let startBtn = document.getElementById("start");
 let stopBtn = document.getElementById("stop");
-let onoffBtn = document.getElementById("onoff");
+// let onoffBtn = document.getElementById("onoff");
 let grossnetBtn = document.getElementById("grossnet");
 let zeroBtn = document.getElementById("zero");
+let tareBtn = document.getElementById("tare");
 let printBtn = document.getElementById("print");
+let onandoffBtn = document.getElementById("onandoff");
 
 // 시퀀스 상태
 let seqStateNearZero = document.getElementById("seq_state_near_zero");
@@ -287,10 +290,10 @@ openConfigWindowButton.addEventListener('click', function(){
     ipcRenderer.send('open_config_window', 'ok');
 })
 
-closeMainWindowButton.addEventListener('click', function(){
-    ipcRenderer.send('set_stream_mode', 'ok');
-    closeWindow();
-})
+// closeMainWindowButton.addEventListener('click', function(){
+//     ipcRenderer.send('set_stream_mode', 'ok');
+//     closeWindow();
+// })
 
 ipcRenderer.on('set_font_color', (event, data) => {
     log.info('ipcRenderer.on: set_font_color');
@@ -381,6 +384,13 @@ ipcRenderer.on('rx_data', (event, data) => {
         labelNetClass.style.color = COLOR['WHITE'];
     }
 
+    if(data.isGross) {
+        labelGrossClass.style.color = colorName;
+    }
+    else {
+        labelGrossClass.style.color = COLOR['WHITE'];
+    }
+
     // 컴퍼레이터 초기 설정
     if(data.comparator) {
         comS1Title.innerHTML = data.s1_title;
@@ -458,6 +468,7 @@ ipcRenderer.on('set_comp_mode', (event, data) => {
 
     // 2단 투입, 2단 배출
     if(data == CONSTANT['COMP_MODE_INPUT'] || data == CONSTANT['COMP_MODE_EMISSION']) {
+        console.log('here input or emission');
         comS1Title.innerHTML = 'Fi';
         comS2Title.innerHTML = 'Fr';
         comS3Title.innerHTML = 'Pl';
@@ -466,13 +477,16 @@ ipcRenderer.on('set_comp_mode', (event, data) => {
 
         startBtn.parentElement.style.display = "inline-block";
         stopBtn.parentElement.style.display = "inline-block";
-        onoffBtn.parentElement.style.display = "inline-block";
+        // onoffBtn.parentElement.style.display = "inline-block";
         grossnetBtn.parentElement.style.display = "inline-block";
         zeroBtn.parentElement.style.display = "inline-block";
+        tareBtn.parentElement.style.display = "inline-block";
         printBtn.parentElement.style.display = "inline-block";
+        onandoffBtn.parentElement.style.display = "inline-block";
     }
     // 리미트
     else if(data == CONSTANT['COMP_MODE_LIMIT']) {
+        console.log('here limit');
         comS1Title.innerHTML = 'Fi';
         comS2Title.innerHTML = 'SP1';
         comS3Title.innerHTML = 'SP2';
@@ -481,14 +495,17 @@ ipcRenderer.on('set_comp_mode', (event, data) => {
 
         startBtn.parentElement.style.display = "none";
         stopBtn.parentElement.style.display = "none";
-        onoffBtn.parentElement.style.display = "inline-block";
+        // onoffBtn.parentElement.style.display = "inline-block";
         grossnetBtn.parentElement.style.display = "inline-block";
         zeroBtn.parentElement.style.display = "inline-block";
+        tareBtn.parentElement.style.display = "inline-block";
         printBtn.parentElement.style.display = "inline-block";
+        onandoffBtn.parentElement.style.display = "inline-block";
 
     }
     // 체커
     else if(data == CONSTANT['COMP_MODE_CHECKER']) {
+        console.log('here checker');
         comS1Title.style.display = 'none';
         comS1Value.style.display = 'none';
 
@@ -499,10 +516,12 @@ ipcRenderer.on('set_comp_mode', (event, data) => {
 
         startBtn.parentElement.style.display = "none";
         stopBtn.parentElement.style.display = "none";
-        onoffBtn.parentElement.style.display = "inline-block";
+        // onoffBtn.parentElement.style.display = "inline-block";
         grossnetBtn.parentElement.style.display = "inline-block";
         zeroBtn.parentElement.style.display = "inline-block";
+        tareBtn.parentElement.style.display = "inline-block";
         printBtn.parentElement.style.display = "inline-block";
+        onandoffBtn.parentElement.style.display = "inline-block";
     }
 });
 
@@ -520,18 +539,23 @@ ipcRenderer.on('main_button_active', (event, isActive) => {
     log.info('ipcRenderer.on: main_button_active');
 
     let stopBtn = document.getElementById("stop");
-    let onoffBtn = document.getElementById("onoff");
+    // let onoffBtn = document.getElementById("onoff");
     let grossnetBtn = document.getElementById("grossnet");
     let zeroBtn = document.getElementById("zero");
+    let tareBtn = document.getElementById("tare");
     let printBtn = document.getElementById("print");
+    let onandoffBtn = document.getElementById("onandoff");
+
     // 프로그램 OFF 상태
     if(!isActive) {
         startBtn.disabled = true;
         stopBtn.disabled = true;
-        onoffBtn.disabled = true;
+        // onoffBtn.disabled = true;
         grossnetBtn.disabled = true;
         zeroBtn.disabled = true;
+        tareBtn.disabled = true;
         printBtn.disabled = true;
+        onandoffBtn.disabled = true;
         openConfigWindowButton.disabled = true;
         isProgramOn = false;
     }
@@ -539,10 +563,12 @@ ipcRenderer.on('main_button_active', (event, isActive) => {
     else {
         startBtn.disabled = false;
         stopBtn.disabled = false;
-        onoffBtn.disabled = false;
+        // onoffBtn.disabled = false;
         grossnetBtn.disabled = false;
         zeroBtn.disabled = false;
+        tareBtn.disabled = false;
         printBtn.disabled = false;
+        onandoffBtn.disabled = false;
         openConfigWindowButton.disabled = false;
         isProgramOn = true;
     }
@@ -556,9 +582,9 @@ stopBtn.addEventListener('click', function(){
     ipcRenderer.send('stop', 'ok');
 })
 
-onoffBtn.addEventListener('click', function(){
-    ipcRenderer.send('onoff', 'ok');
-})
+// onoffBtn.addEventListener('click', function(){
+//     ipcRenderer.send('onoff', 'ok');
+// })
 
 grossnetBtn.addEventListener('click', function(){
     ipcRenderer.send('grossnet', 'ok');
@@ -568,9 +594,19 @@ zeroBtn.addEventListener('click', function(){
     ipcRenderer.send('zero', 'ok');
 })
 
+tareBtn.addEventListener('click', function(){
+    ipcRenderer.send('tare', 'ok');
+})
+
 printBtn.addEventListener('click', function(){
     ipcRenderer.send('print', 'ok');
 })
+
+onandoffBtn.addEventListener('click', function(){
+    ipcRenderer.send('onandoff', 'ok');
+})
+
+
 
 powerButton.addEventListener('click', function(){
     setOnOffView();
@@ -586,13 +622,13 @@ const setOnOffView = function() {
     let onoffLabel = powerButton.innerHTML;
 
     // 프로그램 시작
-    if(onoffLabel == 'ON') {
-        powerButton.innerHTML = 'OFF';
+    if(onoffLabel == 'POWER ON') {
+        powerButton.innerHTML = 'POWER OFF';
         openPCConfigWindowButton.disabled = true;
     }
     // 프로그램 종료
     else {
-        powerButton.innerHTML = 'ON';
+        powerButton.innerHTML = 'POWER ON';
         openPCConfigWindowButton.disabled = false;
 
         displayMsg.innerHTML = 'Standby';
@@ -602,6 +638,7 @@ const setOnOffView = function() {
         labelHoldClass.style.color = COLOR['WHITE'];
         labelZeroClass.style.color = COLOR['WHITE'];
         labelNetClass.style.color = COLOR['WHITE'];
+        labelGrossClass.style.color = COLOR['WHITE'];
 
         seqStateFinish.className = "seq_state_off";
         seqStateInputLittle.className = "seq_state_off";

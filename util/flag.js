@@ -6,6 +6,7 @@ class scaleFlag {
         this.isNet = false;
         this.isHold = false;
         this.isHg = false;
+        this.isGross = false;
 
         // 표시 데이터
         this.displayMsg = '000000';

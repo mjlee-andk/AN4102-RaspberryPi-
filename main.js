@@ -309,25 +309,25 @@ const readHeader = function(rx) {
         if(sec_cnt == 10) {
             sec_cnt = 0;
             scale.displayMsg = makeFormat(body);
-            console.log('current weight', scale.displayMsg);
+            // console.log('current weight', scale.displayMsg);
         }
 
         // 안정
         if(header1 == 'ST') {
             scale.isStable = true;
             scale.isZero = false;
-            if(header2 == 'NT') {
-                scale.isNet = true;
-            }
+            // if(header2 == 'NT') {
+            //     scale.isNet = true;
+            // }
         }
 
         // 불안정
         else if(header1 == 'US') {
             scale.isStable = false;
             scale.isZero = false;
-            if(header2 == 'NT') {
-                scale.isNet = true;
-            }
+            // if(header2 == 'NT') {
+            //     scale.isNet = true;
+            // }
         }
 
         else if(header1 == 'ZT') {
@@ -348,6 +348,16 @@ const readHeader = function(rx) {
         else {
             scale.block = true;
         }
+
+        if(header2 == 'GS') {
+            scale.isGross = true;
+            scale.isNet = false;
+        }
+        else if(header2 == 'NT') {
+            scale.isGross = false;
+            scale.isNet = true;
+        }
+
         rx = '';
     }
 
@@ -736,7 +746,7 @@ const setStreamMode = function() {
 
 ipcMain.on('set_comp_mode', (event, data) => {
     log.info('ipcMain.on: set_comp_mode');
-    setCompMode(f0Config.f003);
+    setCompMode(f0Config.F003);
 })
 const setCompMode = function(param) {
     // 2단 투입, 2단 배출
@@ -757,7 +767,7 @@ const setCompMode = function(param) {
     }
     // 체커
     else if(param == CONSTANT['COMP_MODE_CHECKER']) {
-        scale.s1_title = 'Fi';
+        scale.s1_title = '';
         scale.s2_title = 'SP1';
         scale.s3_title = 'SP2';
         scale.s4_title = 'Ov';
@@ -1284,21 +1294,21 @@ const stop = function() {
     })
 }
 
-ipcMain.on('onoff', (event, arg) =>{
-    log.info('ipcMain.on: onoff');
-    onoff();
-})
-const onoff = function() {
-    log.info('function: onoff');
-    const command = 'SW3' + '\r\n';
-    sp.write(command, function(err){
-        if(err) {
-            log.error('command: SW3');
-            log.error(err);
-            return;
-        }
-    })
-}
+// ipcMain.on('onoff', (event, arg) =>{
+//     log.info('ipcMain.on: onoff');
+//     onoff();
+// })
+// const onoff = function() {
+//     log.info('function: onoff');
+//     const command = 'SW3' + '\r\n';
+//     sp.write(command, function(err){
+//         if(err) {
+//             log.error('command: SW3');
+//             log.error(err);
+//             return;
+//         }
+//     })
+// }
 
 ipcMain.on('grossnet', (event, arg) =>{
     log.info('ipcMain.on: grossnet');
@@ -1306,10 +1316,10 @@ ipcMain.on('grossnet', (event, arg) =>{
 })
 const grossnet = function() {
     log.info('function: grossnet');
-    const command = 'SW4' + '\r\n';
+    const command = 'SW3' + '\r\n';
     sp.write(command, function(err){
         if(err) {
-            log.error('command: SW4');
+            log.error('command: SW3');
             log.error(err);
             return;
         }
@@ -1322,6 +1332,22 @@ ipcMain.on('zero', (event, arg) =>{
 })
 const zero = function() {
     log.info('function: zero');
+    const command = 'SW4' + '\r\n';
+    sp.write(command, function(err){
+        if(err) {
+            log.error('command: SW4');
+            log.error(err);
+            return;
+        }
+    })
+}
+
+ipcMain.on('tare', (event, arg) =>{
+    log.info('ipcMain.on: tare');
+    tare();
+})
+const tare = function() {
+    log.info('function: tare');
     const command = 'SW5' + '\r\n';
     sp.write(command, function(err){
         if(err) {
@@ -1348,11 +1374,27 @@ const print = function() {
     })
 }
 
+ipcMain.on('onandoff', (event, arg) =>{
+    log.info('ipcMain.on: onandoff');
+    onandoff();
+})
+const onandoff = function() {
+    log.info('function: onandoff');
+    const command = 'SW7' + '\r\n';
+    sp.write(command, function(err){
+        if(err) {
+            log.error('command: SW7');
+            log.error(err);
+            return;
+        }
+    })
+}
+
 ipcMain.on('power', (event, arg) => {
     log.info('ipcMain.on: power');
     try {
         // 프로그램 시작
-        if(arg == 'ON') {
+        if(arg == 'POWER ON') {
             startWaitTimer();   // 대기 타이머 시작 - 2초 이상 데이터 수신 안될 경우를 체크하기 위한 타이머
             startProgram(); // 프로그램 시작
             pcConfigGetLocalStorage(event); // 로컬저장소에 저장된 pc config 값 불러오기
@@ -1384,10 +1426,6 @@ const stopWaitTimer = function() {
     clearInterval(timer);
     isPause = true;
 }
-
-
-
-
 
 const startProgram = function() {
     log.info('function: startProgram');
@@ -1422,7 +1460,7 @@ const stopProgram = function() {
     if(sp != undefined) {
         sp.close(function(err){
             if(socketServer != undefined) {
-                socketServer.close();    
+                socketServer.close();
             }
 
             setStreamMode();
