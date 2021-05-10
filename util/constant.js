@@ -27,6 +27,7 @@ const FIVE_HUNDRED_MS = 500;
 const DEFAULT_SERIAL_PORT_WINDOW = 'COM1';
 const DEFAULT_SERIAL_PORT_LINUX = '/dev/tty_AMA0';
 
+const COMP_MODE_NONE = 0; // 사용안함
 const COMP_MODE_INPUT = 1; // 2단 투입
 const COMP_MODE_EMISSION = 2; // 2단 배출
 const COMP_MODE_LIMIT = 3; // 리미트 모드
@@ -58,6 +59,7 @@ module.exports = {
     DEFAULT_SERIAL_PORT_WINDOW,
     DEFAULT_SERIAL_PORT_LINUX,
     SERVER_PORT,
+    COMP_MODE_NONE,
     COMP_MODE_INPUT,
     COMP_MODE_EMISSION,
     COMP_MODE_LIMIT,

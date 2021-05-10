@@ -63,7 +63,7 @@ const createWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
     win.loadFile('index.html');
 
@@ -88,7 +88,7 @@ const openConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
 
     configWin.loadFile('view/config.html');
@@ -112,7 +112,7 @@ const openPCConfigWindow = function() {
             enableRemoteModule: true
         },
         frame: false,
-        fullscreen: false
+        fullscreen: true
     })
 
     pcConfigWin.loadFile('view/pcconfig.html');
@@ -582,6 +582,10 @@ const makeFormat = function(data) {
     else if(unit == 'lb') {
         scale.unit = 3;
     }
+
+    if(value == null || isNaN(value)) {
+        return '------';
+    }
     return parseFloat(value).toFixed(decimalPoint);
 }
 
@@ -772,6 +776,19 @@ const setCompMode = function(param) {
         scale.s3_title = 'SP2';
         scale.s4_title = 'Ov';
         scale.s5_title = 'Ud';
+    }
+    else if(param == CONSTANT['COMP_MODE_NONE']) {
+        scale.s1_title = '';
+        scale.s2_title = '';
+        scale.s3_title = '';
+        scale.s4_title = '';
+        scale.s5_title = '';
+
+        scale.s1_value = '';
+        scale.s2_value = '';
+        scale.s3_value = '';
+        scale.s4_value = '';
+        scale.s5_value = '';
     }
 
     win.webContents.send('set_comp_mode', param);

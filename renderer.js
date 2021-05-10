@@ -35,6 +35,9 @@ let comS4Value = document.getElementById("s4_value");
 let comS5Title = document.getElementById("s5_title");
 let comS5Value = document.getElementById("s5_value");
 
+// 시퀀스 상태 상태표시창 컨테이너
+let seq_state_container = document.getElementById("sequence_state_container");
+
 // 컴퍼레이터 키패드
 let keypad_subweight = document.getElementById("keypad_subweight");
 let key_subweight_list = document.querySelectorAll(".key_subweight");
@@ -465,6 +468,16 @@ ipcRenderer.on('print', (event, data) => {
 ipcRenderer.on('set_comp_mode', (event, data) => {
     comS1Title.style.display = 'inline-block';
     comS1Value.style.display = 'inline-block';
+    comS2Title.style.display = 'inline-block';
+    comS2Value.style.display = 'inline-block';
+    comS3Title.style.display = 'inline-block';
+    comS3Value.style.display = 'inline-block';
+    comS4Title.style.display = 'inline-block';
+    comS4Value.style.display = 'inline-block';
+    comS5Title.style.display = 'inline-block';
+    comS5Value.style.display = 'inline-block';
+
+    seq_state_container.style.display = "inline-block";
 
     // 2단 투입, 2단 배출
     if(data == CONSTANT['COMP_MODE_INPUT'] || data == CONSTANT['COMP_MODE_EMISSION']) {
@@ -505,7 +518,7 @@ ipcRenderer.on('set_comp_mode', (event, data) => {
     }
     // 체커
     else if(data == CONSTANT['COMP_MODE_CHECKER']) {
-        console.log('here checker');
+
         comS1Title.style.display = 'none';
         comS1Value.style.display = 'none';
 
@@ -522,6 +535,24 @@ ipcRenderer.on('set_comp_mode', (event, data) => {
         tareBtn.parentElement.style.display = "inline-block";
         printBtn.parentElement.style.display = "inline-block";
         onandoffBtn.parentElement.style.display = "inline-block";
+    }
+    // 사용안함
+    else {
+        comS1Title.style.display = 'none';
+        comS1Value.style.display = 'none';
+        comS2Title.style.display = 'none';
+        comS2Value.style.display = 'none';
+        comS3Title.style.display = 'none';
+        comS3Value.style.display = 'none';
+        comS4Title.style.display = 'none';
+        comS4Value.style.display = 'none';
+        comS5Title.style.display = 'none';
+        comS5Value.style.display = 'none';
+
+        startBtn.parentElement.style.display = "none";
+        stopBtn.parentElement.style.display = "none";
+
+        seq_state_container.style.display = "none";
     }
 });
 
