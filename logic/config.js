@@ -81,50 +81,75 @@ const f4f5Btn = document.getElementById("f4f5Btn");
 const calBtn = document.getElementById("calBtn");
 
 cfBtn.addEventListener('click', function(){
-    ipcRenderer.send('get_cf_data', 'ok');
+    ipcRenderer.send('set_command_mode', 'ok');
+
+    setTimeout(function() {
+        ipcRenderer.send('get_cf_data', 'ok');
+    }, CONSTANT['FIVE_HUNDRED_MS']);
 
     setDivDisplay('cfBtn');
     setButtonActive('cfBtn');
 })
 
 f0_1Btn.addEventListener('click', function(){
-    ipcRenderer.send('get_f0_1_data', 'ok');
+    ipcRenderer.send('set_command_mode', 'ok');
+
+    setTimeout(function() {
+        ipcRenderer.send('get_f0_1_data', 'ok');
+    }, CONSTANT['FIVE_HUNDRED_MS']);
 
     setDivDisplay('f0_1Btn');
     setButtonActive('f0_1Btn');
 })
 
 f0_2Btn.addEventListener('click', function(){
-    ipcRenderer.send('get_f0_2_data', 'ok');
+    ipcRenderer.send('set_command_mode', 'ok');
+
+    setTimeout(function() {
+        ipcRenderer.send('get_f0_2_data', 'ok');
+    }, CONSTANT['FIVE_HUNDRED_MS']);
 
     setDivDisplay('f0_2Btn');
     setButtonActive('f0_2Btn');
 })
 
 f1Btn.addEventListener('click', function(){
-    ipcRenderer.send('get_f1_data', 'ok');
+    ipcRenderer.send('set_command_mode', 'ok');
+
+    setTimeout(function() {
+        ipcRenderer.send('get_f1_data', 'ok');
+    }, CONSTANT['FIVE_HUNDRED_MS']);
 
     setDivDisplay('f1Btn');
     setButtonActive('f1Btn');
 })
 
 f3Btn.addEventListener('click', function(){
-    ipcRenderer.send('get_f3_data', 'ok');
+    ipcRenderer.send('set_command_mode', 'ok');
+
+    setTimeout(function() {
+        ipcRenderer.send('get_f3_data', 'ok');
+    }, CONSTANT['FIVE_HUNDRED_MS']);
 
     setDivDisplay('f3Btn');
     setButtonActive('f3Btn');
 })
 
 f4f5Btn.addEventListener('click', function(){
-    ipcRenderer.send('get_f4_data', 'ok');
-    ipcRenderer.send('get_f5_data', 'ok');
+    ipcRenderer.send('set_command_mode', 'ok');
+
+    setTimeout(function() {
+        ipcRenderer.send('get_f4_data', 'ok');
+        ipcRenderer.send('get_f5_data', 'ok');
+    }, CONSTANT['FIVE_HUNDRED_MS']);
 
     setDivDisplay('f4f5Btn');
     setButtonActive('f4f5Btn');
 })
 
 calBtn.addEventListener('click', function(){
-    ipcRenderer.send('get_cal_data', 'ok');
+    // ipcRenderer.send('get_cal_data', 'ok');
+    ipcRenderer.send('set_stream_mode', 'ok');
 
     setDivDisplay('calBtn');
     setButtonActive('calBtn');

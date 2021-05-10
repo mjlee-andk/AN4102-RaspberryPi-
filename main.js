@@ -642,9 +642,8 @@ ipcMain.on('open_pc_config_window', (event, arg) => {
     openPCConfigWindow();
 })
 
-// 커맨드 모드로 변경
-const setCommandMode = function() {
-    log.info('function: setCommandMode');
+const clickOpenConfigWindow = function() {
+    log.info('function: clickOpenConfigWindow');
 
     const command = 'F205,1' + '\r\n';
     sp.write(command, function(err){
@@ -656,9 +655,23 @@ const setCommandMode = function() {
         openConfigWindow();
     });
 }
+
+// 커맨드 모드로 변경
+const setCommandMode = function() {
+    log.info('function: setCommandMode');
+    const command = 'F205,1' + '\r\n';
+    sp.write(command, function(err){
+        if(err) {
+            log.error('command: F205,1');
+            log.error(err);
+            return;
+        }
+    });
+}
+
 ipcMain.on('open_config_window', (event, arg) => {
     log.info('ipcMain.on: open_config_window');
-    setCommandMode();
+    clickOpenConfigWindow();
 })
 
 ipcMain.on('window_close', (event, arg) => {
@@ -725,6 +738,15 @@ const commandCalspan = function() {
         }
     });
 }
+
+// 커맨드 모드로 변경
+ipcMain.on('set_command_mode', (event, data) => {
+    log.info('ipcMain.on: set_command_mode');
+    if(sp == undefined) {
+        return;
+    }
+    setCommandMode();
+})
 
 // 스트림 모드로 변경
 ipcMain.on('set_stream_mode', (event, data) => {
@@ -1462,6 +1484,11 @@ const startProgram = function() {
         lineStream.on('data', function(rx) {
             readHeader(rx);
             win.webContents.send('rx_data', scale);
+            if(configWin != undefined) {
+                if(!configWin.isDestroyed()) {
+                    configWin.webContents.send('rx_data', scale);
+                }
+            }
             scale.waiting_sec = 0;
         });
 

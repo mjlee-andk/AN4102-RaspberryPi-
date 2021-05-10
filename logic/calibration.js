@@ -1,5 +1,6 @@
 const { ipcRenderer, remote } = require('electron');
 const log = require('electron-log'); // 로그 기록
+const COLOR = require('../util/color');
 
 // 교정
 const spanValueText = document.getElementById("spanValueText");
@@ -52,6 +53,20 @@ calSpanButton.addEventListener('click', function(){
             log.error(err);
         });
 })
+
+
+// 라벨 표시
+let labelStableClass = document.getElementById("state_stable");
+
+ipcRenderer.on('rx_data', (event, data) => {
+    // 상태 표시
+    if(data.isStable) {
+        labelStableClass.style.color = COLOR['BLUE'];
+    }
+    else {
+        labelStableClass.style.color = COLOR['WHITE'];
+    }
+});
 
 ipcRenderer.on('set_cal_zero', (event, arg) => {
     log.info('ipcRenderer.on: set_cal_zero');
