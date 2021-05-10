@@ -35,7 +35,7 @@ const makeKeypadSetting = function(element, ev) {
         }
     }
     else {
-        if(element != focused_input) {            
+        if(element != focused_input) {
             return;
         }
         if(ev.target.value == '') {
@@ -279,10 +279,14 @@ ipcRenderer.on('get_cf_data', (event, data) => {
 
     cf07.value = data.CF07;
 
-    cf08.value = data.CF08 / 10;
-    cf09.value = data.CF09 / 10;
-    cf10.value = data.CF10 / 10;
-    cf11.value = data.CF11 / 10;
+// parseFloat(value).toFixed(decimalPoint);
+    cf08.value = parseFloat(data.CF08 / 10).toFixed(1);
+    cf09.value = parseFloat(data.CF09 / 10).toFixed(1);
+    cf10.value = parseFloat(data.CF10 / 10).toFixed(1);
+    cf11.value = parseFloat(data.CF11 / 10).toFixed(1);
+    // cf09.value = data.CF09 / 10;
+    // cf10.value = data.CF10 / 10;
+    // cf11.value = data.CF11 / 10;
 
     cf12.checked = false;
     if(data.CF12 == 1) {
@@ -306,6 +310,11 @@ ipcRenderer.on('set_cf_data', (event, arg) => {
 const setCF = function() {
     log.info('function: setCF');
 
+    if(cf06.value > cf03.value) {
+        alert('Span 입력전압 표시값은 정격용량을 초과할 수 없습니다.')
+        return false;
+    }
+
     const cfConfigData = {
         CF01: cf01.options[cf01.selectedIndex].value,
         CF02: cf02.options[cf02.selectedIndex].value,
@@ -323,7 +332,7 @@ const setCF = function() {
     };
 
     ipcRenderer.send('set_cf_data', cfConfigData);
-    return;
+    return true;
 }
 
 module.exports = {

@@ -31,7 +31,9 @@ const loader = document.getElementById("loader");
 const configOkBtn = document.getElementById("configOk");
 configOkBtn.addEventListener('click', function(){
     if(cfDiv.style.display == DISPLAY_BLOCK) {
-        setCF();
+        if(!setCF()) {
+            return;
+        }
     }
     else if(f0_1Div.style.display == DISPLAY_BLOCK) {
         setF0_1Data();
