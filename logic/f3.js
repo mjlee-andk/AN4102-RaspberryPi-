@@ -48,7 +48,11 @@ key_f3_list.forEach((item, index) => {
         inputValueLength = inputValue.length;
 
         if(keyValue == 'C'){
-            inputDocument.value = '';
+            // inputDocument.value = '';
+            if(inputValueLength <= 0) {
+                return;
+            }
+            inputDocument.value = inputDocument.value.substring(0, inputValueLength - 1);
         }
         else if(keyValue == '+/-') {
             return;

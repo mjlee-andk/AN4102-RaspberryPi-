@@ -121,7 +121,11 @@ key_cf_list.forEach((item, index) => {
         inputValueLength = inputValue.length;
 
         if(keyValue == 'C'){
-            inputDocument.value = '';
+            // inputDocument.value = '';
+            if(inputValueLength <= 0) {
+                return;
+            }
+            inputDocument.value = inputDocument.value.substring(0, inputValueLength - 1);
         }
         else if(keyValue == '+/-') {
             if(focused_input == 'cf03'
@@ -177,6 +181,10 @@ key_cf_list.forEach((item, index) => {
             else if(focused_input == 'cf06') {
                 if(convertedValue > 999999 || convertedValue < -999999) {
                     alert('입력 범위 내의 값을 입력해주세요.(-999999 이상 999999 이하)');
+                    return;
+                }
+                if(inputValue > cf03.value) {
+                    alert('Span 입력전압 표시값은 정격용량을 초과할 수 없습니다.');
                     return;
                 }
                 cf06.value = inputValue;

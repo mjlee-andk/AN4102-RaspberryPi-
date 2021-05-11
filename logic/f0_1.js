@@ -103,7 +103,11 @@ key_f0_list.forEach((item, index) => {
         inputValueLength = inputValue.length;
 
         if(keyValue == 'C'){
-            inputDocument.value = '';
+            // inputDocument.value = '';
+            if(inputValueLength <= 0) {
+                return;
+            }
+            inputDocument.value = inputDocument.value.substring(0, inputValueLength - 1);
         }
         else if(keyValue == '+/-') {
             return;
@@ -220,10 +224,10 @@ ipcRenderer.on('get_f0_1_data', (event, data) => {
 
     f002.value = data.F002;
     f003.value = data.F003;
-    f004.value = data.F004 / 10;
-    f005.value = data.F005 / 10;
-    f006.value = data.F006 / 10;
-    f007.value = data.F007 / 10;
+    f004.value = parseFloat(data.F004 / 10).toFixed(1);
+    f005.value = parseFloat(data.F005 / 10).toFixed(1);
+    f006.value = parseFloat(data.F006 / 10).toFixed(1);
+    f007.value = parseFloat(data.F007 / 10).toFixed(1);
     f008.value = data.F008;
     f009.value = data.F009;
 });

@@ -32,7 +32,7 @@ const makeKeypadSetting = function(element, ev) {
             alert('값을 입력해주세요.');
             return;
         }
-        
+
         ev.target.style.background = '';
         keypad_f5.style.display = "none";
         focused_input = '';
@@ -85,7 +85,11 @@ key_f5_list.forEach((item, index) => {
         inputValueLength = inputValue.length;
 
         if(keyValue == 'C'){
-            inputDocument.value = '';
+            // inputDocument.value = '';
+            if(inputValueLength <= 0) {
+                return;
+            }
+            inputDocument.value = inputDocument.value.substring(0, inputValueLength - 1);
         }
         else if(keyValue == '+/-') {
             if(inputValue == '0' || inputValue == ''){
