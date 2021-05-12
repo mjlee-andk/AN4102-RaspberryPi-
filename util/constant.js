@@ -1,5 +1,5 @@
 const WINDOW_WIDTH = 807;
-const WINDOW_HEIGHT = 450;
+const WINDOW_HEIGHT = 490;
 
 const PARITY_NONE = '0';
 const PARITY_ODD = '1';
