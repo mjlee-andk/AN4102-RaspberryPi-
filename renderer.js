@@ -651,31 +651,32 @@ const setOnOffView = function() {
     log.info('function: setOnOffView');
 
     let onoffLabel = powerButton.innerHTML;
-
-    // 프로그램 시작
-    if(onoffLabel == 'POWER ON') {
-        powerButton.innerHTML = 'POWER OFF';
-        openPCConfigWindowButton.disabled = true;
-    }
-    // 프로그램 종료
-    else {
-        powerButton.innerHTML = 'POWER ON';
-        openPCConfigWindowButton.disabled = false;
-
-        displayMsg.innerHTML = 'Standby';
-        unitTag.innerHTML = '';
-
-        labelStableClass.style.color = COLOR['WHITE'];
-        labelHoldClass.style.color = COLOR['WHITE'];
-        labelZeroClass.style.color = COLOR['WHITE'];
-        labelNetClass.style.color = COLOR['WHITE'];
-        labelGrossClass.style.color = COLOR['WHITE'];
-
-        seqStateFinish.className = "seq_state_off";
-        seqStateInputLittle.className = "seq_state_off";
-        seqStateInputMuch.className = "seq_state_off";
-        seqStateNearZero.className = "seq_state_off";
-    }
-
     ipcRenderer.send('power', onoffLabel);
+
+    setTimeout(function() {
+        // 프로그램 시작
+        if(onoffLabel == 'POWER ON') {
+            powerButton.innerHTML = 'POWER OFF';
+            openPCConfigWindowButton.disabled = true;
+        }
+        // 프로그램 종료
+        else {
+            powerButton.innerHTML = 'POWER ON';
+            openPCConfigWindowButton.disabled = false;
+
+            displayMsg.innerHTML = 'Standby';
+            unitTag.innerHTML = '';
+
+            labelStableClass.style.color = COLOR['WHITE'];
+            labelHoldClass.style.color = COLOR['WHITE'];
+            labelZeroClass.style.color = COLOR['WHITE'];
+            labelNetClass.style.color = COLOR['WHITE'];
+            labelGrossClass.style.color = COLOR['WHITE'];
+
+            seqStateFinish.className = "seq_state_off";
+            seqStateInputLittle.className = "seq_state_off";
+            seqStateInputMuch.className = "seq_state_off";
+            seqStateNearZero.className = "seq_state_off";
+        }
+    }, CONSTANT['ONE_HUNDRED_MS']);
 }
