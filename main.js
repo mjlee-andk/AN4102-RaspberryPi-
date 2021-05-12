@@ -505,6 +505,11 @@ const readHeader = function(rx) {
                 }
             }
             else {
+                if(header == 'CF06') {
+                    configWin.webContents.send('set_cal_span_value_result', 'ok');
+                    cfConfig.isReadState = false;
+                }
+
                 if(header == 'CF13') {
                     configWin.webContents.send('set_cf_data', 'ok');
                     cfConfig.isReadState = false;
@@ -1450,6 +1455,24 @@ ipcMain.on('power', (event, arg) => {
         log.error('error: ipcMain.on / power');
     }
 })
+
+ipcMain.on('set_cal_span_value', (event, data) => {
+    log.info('ipcMain.on: set_cal_span_value');
+    setCalSpanValue(data);
+})
+
+const setCalSpanValue = function(value) {
+    log.info('function: setCalSpanValue');
+    const command = 'CF06,' + value + '\r\n';
+    sp.write(command, function(err){
+        if(err) {
+            log.error('command: CF06');
+            log.error(err);
+            return;
+        }
+    })
+}
+
 let isPause = false;
 let timer;
 
