@@ -10,7 +10,13 @@
 body {
     background-color: #d4cfbb;
     padding: 13px;
-    overflow: hidden;
+    overflow: hidden; /*스크롤 바 없애기*/
+
+    /*드래그 방지*/
+    -webkit-user-select: none; /*크롬, 사파리*/
+    -moz-user-select: none; /*파이어폭스*/
+    -ms-user-select: none; /*익스플로러*/
+    user-select: none;
 }
 
 .upper_container {
