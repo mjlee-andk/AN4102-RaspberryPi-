@@ -10,6 +10,7 @@
 body {
     background-color: #d4cfbb;
     padding: 13px;
+    overflow: hidden;
 }
 
 .upper_container {
