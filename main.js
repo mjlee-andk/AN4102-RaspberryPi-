@@ -305,12 +305,13 @@ const readHeader = function(rx) {
         scale.compStateLO = compStateBinary.charAt(2) == '1' ? true : false;
         scale.compStateNG = compStateBinary.charAt(3) == '1' ? true : false;
 
-        sec_cnt++;
-        if(sec_cnt == 10) {
-            sec_cnt = 0;
-            scale.displayMsg = makeFormat(body);
-            // console.log('current weight', scale.displayMsg);
-        }
+        // sec_cnt++;
+        // if(sec_cnt == 10) {
+        //     sec_cnt = 0;
+        //     scale.displayMsg = makeFormat(body);
+        //     // console.log('current weight', scale.displayMsg);
+        // }
+        scale.displayMsg = makeFormat(body);
 
         // 안정
         if(header1 == 'ST') {
