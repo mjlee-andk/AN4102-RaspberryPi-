@@ -121,7 +121,10 @@ key_cf_list.forEach((item, index) => {
         inputValueLength = inputValue.length;
 
         if(keyValue == 'C'){
-            // inputDocument.value = '';
+            inputDocument.value = '';
+            return;
+        }
+        else if (keyValue == 'del'){
             if(inputValueLength <= 0) {
                 return;
             }
